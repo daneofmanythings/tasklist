@@ -1,4 +1,14 @@
-from tasks import Task
+from tasks import Task, TaskEncoder
+
+
+class LedgerEncoder(TaskEncoder):
+    def default(self, arg):
+        if isinstance(arg, Ledger):
+            return {"ledger": list(arg._ledger)}
+        if isinstance(arg, Task):
+            return super().default(arg)
+
+        return super().default(arg)
 
 
 class Ledger:

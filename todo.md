@@ -3,6 +3,8 @@
 * mock some tests.
     * unit
     * integration
+* configure json serialization for the classes holding data
+* setup io for the data in json
 
 
 

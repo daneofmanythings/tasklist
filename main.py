@@ -1,4 +1,6 @@
-from ledger import Ledger
+import json
+from display import HEADER
+from ledger import Ledger, LedgerEncoder
 # from tasks import Task
 
 
@@ -15,8 +17,11 @@ def main():
 
     ledger.add_task(**d1)
     ledger.add_task(**d2)
+    padding = '\n' + ' ' * 20
+    print(padding.join(s for s in HEADER))
 
     print(ledger)
+    print(json.dumps(ledger, cls=LedgerEncoder, indent=2))
 
 
 if __name__ == "__main__":
