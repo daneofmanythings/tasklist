@@ -1,0 +1,16 @@
+[
+  {
+    "title": "vaccuum",
+    "importance": 5,
+    "duration": 15,
+    "desc": "do it",
+    "registered": "2023-05-27"
+  },
+  {
+    "title": "dishes",
+    "importance": null,
+    "duration": null,
+    "desc": "do them",
+    "registered": "2023-05-27"
+  }
+]
