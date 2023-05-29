@@ -6,8 +6,10 @@ class Registry:
     def __init__(self):
         self._ledger = set()
 
-    # TODO: Verify kwargs for task object
     def add_task(self, task) -> None:
+        if not isinstance(task, Task):
+            raise TypeError(
+                f"Tried to add a non-task object to the registry: {task}")
         self._ledger.add(task)
 
     def remove_task(self, task_title: str) -> None:
