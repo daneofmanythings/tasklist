@@ -47,7 +47,8 @@ def main():
     app = App(registry)
     # add_data_sample(registry)
     # save_registry(registry, SAVE_PATH)
-    app.run_current()
+    while True:
+        app.run_current()
 
     # print(registry)
 
