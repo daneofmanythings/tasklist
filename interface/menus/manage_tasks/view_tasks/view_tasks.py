@@ -1,12 +1,13 @@
 from interface.menu import Menu
 
-__all__ = ["ManageTasklists"]
+
+__all__ = ["ViewTasks"]
 
 
-class ManageTasklists(Menu):
+class ViewTasks(Menu):
     HEADER = (
         '',
-        'MAIN / MANAGE_TASKLISTS /',
+        'MAIN / MANAGE TASKS / VIEW TASKS',
     )
     MENU = (
         '',

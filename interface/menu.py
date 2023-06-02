@@ -21,11 +21,11 @@ class Menu:
     def show(self):
         padding = '\n' + ' ' * 10
         print(padding.join(s for s in self.HEADER))
-        print('\n'.join(s for s in self.MENU))
+        print('\n  '.join(s for s in self.MENU))
 
     @classmethod
     def run(self, registry: Registry) -> Menu:
         with utils.NoCursor():
             utils.clear_terminal()
             self.show()
-        return utils.get_menu_input("select from above", self.OPTIONS)
+        return utils.get_menu_input("", self.OPTIONS)
