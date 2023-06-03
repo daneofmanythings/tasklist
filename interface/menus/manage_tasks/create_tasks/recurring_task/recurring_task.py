@@ -1,5 +1,3 @@
-
-
 from interface.menu import Menu
 
 __all__ = ["RecurringTask"]
@@ -8,7 +6,7 @@ __all__ = ["RecurringTask"]
 class RecurringTask(Menu):
     HEADER = (
         '',
-        'MAIN / MANAGE TASKS / CREATE TASK',
+        'MAIN / MANAGE TASKS / CREATE TASK / RECURRING TASK',
     )
     MENU = (
         '',

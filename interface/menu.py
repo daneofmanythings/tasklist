@@ -19,13 +19,15 @@ class Menu:
 
     @classmethod
     def show(self):
+        result = ""
         padding = '\n' + ' ' * 10
-        print(padding.join(s for s in self.HEADER))
-        print('\n  '.join(s for s in self.MENU))
+        result += padding.join(s for s in self.HEADER)
+        result += '\n  '.join(s for s in self.MENU)
+        return result
 
     @classmethod
     def run(self, registry: Registry) -> Menu:
         with utils.NoCursor():
             utils.clear_terminal()
-            self.show()
+            print(self.show())
         return utils.get_menu_input("", self.OPTIONS)

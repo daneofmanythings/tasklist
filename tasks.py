@@ -3,30 +3,38 @@ import json
 
 
 class Task:
-    def __init__(self, title, importance=1, duration=1, desc=None, registered=None):
+    def __init__(
+            self,
+            title=None,
+            importance=None,
+            duration=None,
+            desc=None,
+            registered=None):
         self.title = title
         self.importance = importance
         self.duration = duration
         self.desc = desc
-        self.registered = registered
+        self._registered = registered
         if self.desc is None:
             self.desc = '(No description)'
-        if self.registered is None:
-            self.registered = date.today()
-        if isinstance(self.registered, str):
+        if self._registered is None:
+            self._registered = date.today()
+        if isinstance(self._registered, str):
             try:
-                self.registered = date.fromisoformat(self.registered)
+                self._registered = date.fromisoformat(self._registered)
             except Exception as ex:
                 raise ex('Invalid date string')
 
     def __str__(self):
-        if self.desc:
-            return f'{self.title}: {self.desc}'
-        else:
-            return f'{self.title}'
+        result = ""
+        for attr, val in vars(self).items():
+            if attr.startswith('_'):
+                continue
+            result += f'{attr}: {val}\n'
+        return result
 
     def __repr__(self):
-        return 'Task(title={0}, importance={1}, duration={2}, desc={3}, registered={4}'.format(self.title, self.importance, self.duration, self.desc, self.registered)
+        return 'Task(title={0}, importance={1}, duration={2}, desc={3}, registered={4}'.format(self.title, self.importance, self.duration, self.desc, self._registered)
 
     def __hash__(self):
         return hash(self.title)
