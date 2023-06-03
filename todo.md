@@ -8,3 +8,10 @@
 
 
 
+### ** Current tasks **
+* figure out how to gracefully handle input validation (menu-neutral)
+* create an editor paradigm
+
+
+
+

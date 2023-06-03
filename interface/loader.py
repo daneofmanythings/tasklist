@@ -4,7 +4,6 @@ import interface.utils as utils
 
 
 class Loader:
-    field_string = '{0}: {1}'
 
     def __init__(self, header, task):
 
