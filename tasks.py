@@ -3,20 +3,12 @@ import json
 
 
 class Task:
-    def __init__(self, title=None, length='0', notes=None, date_=None):
+    def __init__(self, title=None, length='0', notes=None, registered=None):
 
         self.title = title
         self.length = length
         self.notes = notes
-        self._date = date_
-
-        if self._date is None:
-            self._date = date.today()
-        if isinstance(self._date, str):
-            try:
-                self._date = date.fromisoformat(self._date)
-            except Exception as ex:
-                raise ex('Invalid date string')
+        self.registered = registered
 
     @property
     def length(self):
@@ -24,21 +16,40 @@ class Task:
 
     @length.setter
     def length(self, val):
-        if val.isdigit() and int(val) <= 0:
-            self._length = val
+        try:
+            if int(val) >= 0:
+                self._length = val
+        except Exception:
+            raise ValueError('Length must be a positive integer')
+
+    @property
+    def registered(self):
+        return self._registered
+
+    @registered.setter
+    def registered(self, val):
+        if not val:
+            self._registered = date.today()
         else:
-            raise TypeError('length must be a positive integer')
+            try:
+                self._registered = date.fromisoformat(self.registered)
+            except Exception:
+                raise ValueError(f'Invalid date string: {val}')
+
+    def listify(self):
+        result = list()
+        for attr, val in vars(self).items():
+            result.append(f"{attr.replace('_', '')}: {val}")
+        return result
 
     def __str__(self):
         result = ""
         for attr, val in vars(self).items():
-            if attr.startswith('_'):
-                continue
             result += f'{attr}: {val}\n'
         return result
 
     def __repr__(self):
-        return 'Task(title={0}, importance={1}, duration={2}, desc={3}, registered={4}'.format(self.title, self.importance, self.length, self.notes, self._date)
+        return 'Task(title={0}, importance={1}, duration={2}, desc={3}, registered={4}'.format(self.title, self.importance, self.length, self.notes, self.registered)
 
     def __hash__(self):
         return hash(self.title)
@@ -71,7 +82,7 @@ class TaskDecoder(json.JSONDecoder):
         return Task(**obj)
 
 
-def main():
+def ser_deser_test():
     task = Task('test', notes='testing')
     j_task = json.dumps(task, cls=TaskEncoder, indent=2)
     print(j_task)
@@ -87,5 +98,18 @@ def main():
     print(d_task)
 
 
+def property_testing():
+    t = Task(title='test', length='2', notes='work please')
+    s = str()
+    print(t)
+    try:
+        setattr(t, 'length', 's')
+    except ValueError as e:
+        s = str(e)
+
+    print(s)
+    print(t)
+
+
 if __name__ == "__main__":
-    main()
+    property_testing()

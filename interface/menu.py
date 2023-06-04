@@ -8,7 +8,6 @@ __all__ = ['Menu']
 class Menu:
 
     HEADER = (
-        '',
         ' _______        _    _ _     _   ',
         '|__   __|      | |  | (_)   | |  ',
         '   | | __ _ ___| | _| |_ ___| |_ ',
@@ -17,17 +16,19 @@ class Menu:
         '   |_|\\__,_|___/_|\\_\\_|_|___/\\__|',
     )
 
+    MENU = (
+    )
+
     @classmethod
-    def show(self):
-        result = ""
-        padding = '\n' + ' ' * 10
-        result += padding.join(s for s in self.HEADER)
-        result += '\n  '.join(s for s in self.MENU)
+    def display_string(self):
+        result = str()
+        result += utils.table_to_string(self.HEADER, 10)
+        result += utils.table_to_string(self.MENU, 3)
         return result
 
     @classmethod
     def run(self, registry: Registry) -> Menu:
         with utils.NoCursor():
             utils.clear_terminal()
-            print(self.show())
+            print(self.display_string())
         return utils.get_menu_input("", self.OPTIONS)

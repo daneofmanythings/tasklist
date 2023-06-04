@@ -9,28 +9,35 @@ class Loader:
 
         self.header = header
         self.task = task
+        self.help_string = ''
 
-    def display_info(self):
-        return self.header + '\n' + str(self.task)
+    def display_string(self):
+        result = str()
+        result += self.header
+        result += utils.table_to_string(self.task.listify(), 4)
+        result += self.help_string
+        return result
 
     def run(self) -> Optional[Task]:
         for attr in vars(self.task):
-            if attr.startswith('_'):
-                continue
-            utils.clear_terminal()
-            print(self.display_info())
-            response = input(f'Enter value for {attr} > ')
-            if response == '-c':
-                return
-            setattr(self.task, attr, response)
+            while True:
+                utils.clear_terminal()
+                print(self.display_string())
+                response = input(f'Enter value for {attr} > ')
+                if response == '-c':
+                    return
+                try:
+                    setattr(self.task, attr, response)
+                    self.help_string = ''
+                    break
+                except ValueError as ex:
+                    self.help_string = str(ex)
+                    continue
         return self.task
 
 
 def main():
-    header = 'Header'
-    field_list = ['test', 'pls']
-    loader = Loader(0, header, field_list)
-    print(loader.display_info())
+    pass
 
 
 if __name__ == "__main__":

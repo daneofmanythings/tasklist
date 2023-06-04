@@ -12,7 +12,11 @@ class Editor:
         self.help_string = ''
 
     def display_string(self):
-        return self.header + '\n' + str(self.task) + '\n' + self.help_string
+        result = str()
+        result += self.header
+        result += utils.table_to_string(self.task.listify(), 4)
+        result += self.help_string
+        return result
 
     def run(self):
 

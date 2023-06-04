@@ -2,25 +2,22 @@ from tasks import Task
 from interface.menu import Menu
 from interface.loader import Loader
 from interface.editor import Editor
+import interface.utils as utils
 
 __all__ = ["SingleTask"]
 
 
 class SingleTask(Menu):
     HEADER = (
-        '',
-        'MAIN / MANAGE TASKS / CREATE TASK / SINGLE TASK'
+        'MAIN / MANAGE TASKS / CREATE TASK / SINGLE TASK',
     )
-    MENU = (
-        '',
-    )
-    OPTIONS = {
-    }
+    MENU = ()
+    OPTIONS = {}
 
     @classmethod
     def run(self, registry):
         t = Task()
-        L = Loader(self.show(), t)
+        L = Loader(self.display_string(), t)
         result = L.run()
         if result is None:
             return 0
@@ -33,7 +30,7 @@ class SingleTask(Menu):
                 #####################
                 return 0
             elif will_edit == 'e':
-                e = Editor(self.show(), result)
-                result = e.run()
+                E = Editor(self.display_string(), result)
+                result = E.run()
             else:
                 return 0

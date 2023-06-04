@@ -7,14 +7,11 @@ __all__ = ['Main']
 
 class Main(Menu):
     HEADER = (
-        '',
         'MAIN /',
     )
     MENU = (
-        '',
         '1) Manage Tasks.',
         '2) Manage Tasklists.',
-        '',
     )
 
     OPTIONS = {
