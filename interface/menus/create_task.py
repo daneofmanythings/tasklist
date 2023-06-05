@@ -1,5 +1,5 @@
 from interface.menu import Menu
-from interface.menus.manage_tasks.create_tasks.single_task.single_task import SingleTask
+from interface.menus.single_task import SingleTask
 
 __all__ = ["CreateTask"]
 

@@ -1,6 +1,6 @@
 from interface.menu import Menu
-from interface.menus.manage_tasks.create_tasks.create_task import CreateTask
-from interface.menus.manage_tasks.view_tasks.view_tasks import ViewTasks
+from interface.menus.create_task import CreateTask
+from interface.menus.view_tasks import ViewTasks
 
 __all__ = ["ManageTasks"]
 
