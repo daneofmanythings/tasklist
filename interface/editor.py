@@ -1,5 +1,5 @@
 from typing import Optional
-from tasks import Task
+from structs.tasks import Task
 import interface.utils as utils
 
 

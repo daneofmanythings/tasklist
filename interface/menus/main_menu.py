@@ -1,6 +1,6 @@
 from interface.menu import Menu
-from interface.menus.manage_tasks.manage_tasks import ManageTasks
-from interface.menus.manage_tasklists.manage_tasklists import ManageTasklists
+from interface.menus.manage_tasks import ManageTasks
+from interface.menus.manage_tasklists import ManageTasklists
 
 __all__ = ['Main']
 

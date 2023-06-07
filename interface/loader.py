@@ -1,5 +1,6 @@
+from datetime import date
 from typing import Optional
-from tasks import Task
+from structs.tasks import Task
 import interface.utils as utils
 
 
@@ -37,7 +38,11 @@ class Loader:
 
 
 def main():
-    pass
+    HEADER = ('test',)
+    L = Loader(HEADER, Task())
+    t = L.run()
+    print(t)
+    print(date.today())
 
 
 if __name__ == "__main__":

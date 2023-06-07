@@ -1,8 +1,13 @@
-import json
-from registry import Registry, RegistryEncoder, RegistryDecoder
-from tasks import Task
-from app import App
-import os
+# import json
+from structs import Task
+from structs import App
+from structs import (
+    # Registry,
+    # RegistryEncoder,
+    # RegistryDecoder,
+    load_registry,
+    SAVE_PATH,
+)
 
 
 def add_data_sample(registry):
@@ -20,28 +25,6 @@ def add_data_sample(registry):
     registry.add_task(Task(**d3))
 
 
-SAVE_PATH = './data/'
-
-
-def load_registry(path):
-    try:
-        with open(path + 'data.json', 'r') as f:
-            json_str = f.read()
-        return json.loads(json_str, cls=RegistryDecoder)
-    except FileNotFoundError:
-        try:
-            os.makedirs(SAVE_PATH)
-        except FileExistsError:
-            pass
-        return Registry()
-
-
-def save_registry(registry, path):
-    j_registry = json.dumps(registry, cls=RegistryEncoder, indent=2)
-    with open(path + 'data.json', 'w') as f:
-        f.write(j_registry)
-
-
 def main():
     registry = load_registry(SAVE_PATH)
     app = App(registry)
@@ -50,7 +33,7 @@ def main():
     while True:
         app.run_current()
 
-    # print(registry)
+    # print(eegistry)
 
 
 if __name__ == "__main__":

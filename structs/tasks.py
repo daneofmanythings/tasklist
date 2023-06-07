@@ -1,6 +1,8 @@
 from datetime import date
 import json
 
+__all__ = ['Task', 'TaskEncoder', 'TaskDecoder']
+
 
 class Task:
     def __init__(self, title=None, length='0', notes=None, registered=None):

@@ -1,4 +1,4 @@
-from tasks import Task
+from structs.tasks import Task
 from interface.menu import Menu
 from interface.loader import Loader
 from interface.editor import Editor
