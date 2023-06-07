@@ -1,5 +1,5 @@
-from typing import Optional
-from structs.tasks import Task
+# from typing import Optional
+# from structs.tasks import Task
 import interface.utils as utils
 
 
@@ -37,7 +37,7 @@ class Editor:
                 setattr(self.task, field_to_edit, value_to_set)
                 self.help_string = ''
                 break
-            except TypeError as e:
+            except ValueError as e:
                 self.help_string = str(e)
 
         return self.task

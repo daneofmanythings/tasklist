@@ -1,4 +1,4 @@
-from interface import Main
+from interface.menus.main_menu import Main
 
 __all__ = ['App']
 

@@ -1,5 +1,11 @@
 import os
 
+SOFT_GREEN = (50, 200, 104)
+
+
+def color_text(text: str, r: int, g: int, b: int) -> str:
+    return f"\033[38;2;{r};{g};{b}m{text}\033[0m"
+
 
 def clear_terminal():
     if os.name == 'posix':

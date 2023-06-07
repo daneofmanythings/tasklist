@@ -1,6 +1,6 @@
 from __future__ import annotations
-from interface import utils
 from structs.registry import Registry
+import interface.utils as utils
 
 __all__ = ['Menu']
 

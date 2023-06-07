@@ -15,7 +15,7 @@ class Loader:
     def display_string(self):
         result = str()
         result += self.header
-        result += utils.table_to_string(self.task.listify(), 4)
+        result += utils.table_to_string(self.task.listify(), 3)
         result += self.help_string
         return result
 
@@ -27,13 +27,15 @@ class Loader:
                 response = input(f'Enter value for {attr} > ')
                 if response == '-c':
                     return
-                try:
-                    setattr(self.task, attr, response)
-                    self.help_string = ''
-                    break
-                except ValueError as ex:
-                    self.help_string = str(ex)
-                    continue
+                # try:
+                #     setattr(self.task, attr, response)
+                #     self.help_string = ''
+                #     break
+                # except ValueError as ex:
+                #     self.help_string = str(ex)
+                #     continue
+                setattr(self.task, attr, response)
+                break
         return self.task
 
 

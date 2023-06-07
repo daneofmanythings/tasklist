@@ -110,7 +110,7 @@ def property_testing():
         s = str(e)
 
     print(s)
-    print(t)
+    print(vars(t))
 
 
 if __name__ == "__main__":
