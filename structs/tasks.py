@@ -21,6 +21,8 @@ class Task:
         try:
             if int(val) >= 0:
                 self._length = val
+            else:
+                raise ValueError('Length must be a positive integer')
         except Exception:
             raise ValueError('Length must be a positive integer')
 
@@ -34,7 +36,7 @@ class Task:
             self._registered = date.today()
         else:
             try:
-                self._registered = date.fromisoformat(self.registered)
+                self._registered = date.fromisoformat(val)
             except Exception:
                 raise ValueError(f'Invalid date string: {val}')
 
@@ -101,17 +103,32 @@ def ser_deser_test():
 
 
 def property_testing():
-    t = Task(title='test', length='2', notes='work please')
-    s = str()
-    print(t)
-    try:
-        setattr(t, 'length', 's')
-    except ValueError as e:
-        s = str(e)
+    t = Task()
+    for val in vars(t):
+        val = val.replace('_', '')
+        while True:
+            response = input(f'{val}? >> ')
+            try:
+                setattr(t, val, response)
+                break
+            except ValueError as e:
+                print(e)
+                continue
 
-    print(s)
+
+def date_testing():
+    t = Task()
+    while True:
+        r = input('date >> ')
+        try:
+            setattr(t, 'registered', r)
+            break
+        except ValueError as e:
+            print(e)
+            continue
+
     print(vars(t))
 
 
 if __name__ == "__main__":
-    property_testing()
+    date_testing()

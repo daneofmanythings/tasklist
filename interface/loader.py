@@ -21,21 +21,22 @@ class Loader:
 
     def run(self) -> Optional[Task]:
         for attr in vars(self.task):
+            attr = attr.replace('_', '')  # Accesses properties correctly
+            attr_colored = utils.color_text(attr, *utils.SOFT_GREEN)
             while True:
                 utils.clear_terminal()
-                print(self.display_string())
-                response = input(f'Enter value for {attr} > ')
+                print(self.display_string().replace(
+                    f'   {attr}:', f'   {attr_colored}:'))
+                response = input(f'Enter value for {attr_colored} > ')
                 if response == '-c':
                     return
-                # try:
-                #     setattr(self.task, attr, response)
-                #     self.help_string = ''
-                #     break
-                # except ValueError as ex:
-                #     self.help_string = str(ex)
-                #     continue
-                setattr(self.task, attr, response)
-                break
+                try:
+                    setattr(self.task, attr, response)
+                    self.help_string = ''
+                    break
+                except ValueError as ex:
+                    self.help_string = str(ex)
+                    continue
         return self.task
 
 
