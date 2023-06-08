@@ -1,5 +1,7 @@
-from interface.utils import color_text, SOFT_GREEN
+from config.theme import MENU_HIGHLIGHT
+from interface.utils import color_text
 from interface.menu import Menu
+from interface.menus.view_all import ViewAll
 
 
 __all__ = ["ViewTasks"]
@@ -7,13 +9,17 @@ __all__ = ["ViewTasks"]
 
 class ViewTasks(Menu):
     HEADER = (
-        'MAIN / MANAGE TASKS / ' + color_text('VIEW TASKS', *SOFT_GREEN),
+        'MAIN / MANAGE TASKS / ' + color_text('VIEW TASKS', *MENU_HIGHLIGHT),
     )
     MENU = (
-        "1) Go Back",
-        "2) Main Menu",
+        "1) View All",
+        "2) Search All",
+        "3) Go Back",
+        "4) Main Menu",
     )
     OPTIONS = {
-        "1": 0,
-        "2": -1,
+        "1": ViewAll,
+        "2": 1,
+        "3": 0,
+        "4": -1,
     }

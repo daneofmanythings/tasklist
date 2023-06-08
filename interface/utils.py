@@ -1,7 +1,5 @@
 import os
 
-SOFT_GREEN = (50, 200, 104)
-
 
 def color_text(text: str, r: int, g: int, b: int) -> str:
     return f"\033[38;2;{r};{g};{b}m{text}\033[0m"
@@ -29,11 +27,11 @@ def get_menu_input(prompt, options_list):
             return options_list[response]
 
 
-def table_to_string(header, offset):
+def table_to_string(table, offset):
     padding = '\n' + ' ' * offset
     result = str()
     result += padding
-    result += padding.join(s for s in header)
+    result += padding.join(s for s in table)
     result += padding
     return result
 

@@ -1,14 +1,15 @@
-from interface.utils import color_text, SOFT_GREEN
+from interface.utils import color_text
 from interface.menu import Menu
 from interface.menus.create_task import CreateTask
 from interface.menus.view_tasks import ViewTasks
+from config.theme import MENU_HIGHLIGHT
 
 __all__ = ["ManageTasks"]
 
 
 class ManageTasks(Menu):
     HEADER = (
-        'MAIN / ' + color_text('MANAGE_TASKS', *SOFT_GREEN) + ' /',
+        'MAIN / ' + color_text('MANAGE_TASKS', *MENU_HIGHLIGHT) + ' /',
     )
     MENU = (
         "1) Create task",

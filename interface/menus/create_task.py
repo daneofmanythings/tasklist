@@ -1,8 +1,9 @@
-from interface.utils import color_text, SOFT_GREEN
+from interface.utils import color_text
 from interface.menu import Menu
 from interface.menus.single_task import SingleTask
 from interface.menus.repeat_task import RepeatTask
 from interface.menus.recurring_task import RecurringTask
+from config.theme import MENU_HIGHLIGHT
 
 __all__ = ["CreateTask"]
 
@@ -10,7 +11,7 @@ __all__ = ["CreateTask"]
 class CreateTask(Menu):
     HEADER = (
         'MAIN / MANAGE TASKS / ' +
-        color_text('CREATE TASK', *SOFT_GREEN) + ' /',
+        color_text('CREATE TASK', *MENU_HIGHLIGHT) + ' /',
     )
     MENU = (
         "1) Single Task",

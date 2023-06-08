@@ -2,6 +2,7 @@ from datetime import date
 from typing import Optional
 from structs.tasks import Task
 import interface.utils as utils
+from config.theme import EDITING_HIGHLIGHT
 
 
 class Loader:
@@ -22,7 +23,7 @@ class Loader:
     def run(self) -> Optional[Task]:
         for attr in vars(self.task):
             attr = attr.replace('_', '')  # Accesses properties correctly
-            attr_colored = utils.color_text(attr, *utils.SOFT_GREEN)
+            attr_colored = utils.color_text(attr, *EDITING_HIGHLIGHT)
             while True:
                 utils.clear_terminal()
                 print(self.display_string().replace(

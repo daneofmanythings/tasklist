@@ -1,9 +1,11 @@
-from interface.utils import color_text, SOFT_GREEN
-from structs.tasks import Task
+from config.theme import MENU_HIGHLIGHT
+from interface.utils import color_text
 from interface.menu import Menu
 from interface.loader import Loader
 from interface.editor import Editor
 import interface.utils as utils
+from structs.tasks import Task
+from structs.registry import save_registry, SAVE_PATH
 
 __all__ = ["SingleTask"]
 
@@ -11,7 +13,7 @@ __all__ = ["SingleTask"]
 class SingleTask(Menu):
     HEADER = (
         'MAIN / MANAGE TASKS / CREATE TASK / ' +
-        color_text('SINGLE TASK', *SOFT_GREEN),
+        color_text('SINGLE TASK', *MENU_HIGHLIGHT),
     )
     MENU = ()
     OPTIONS = {}
@@ -35,7 +37,7 @@ class SingleTask(Menu):
             if will_edit == 's':
                 registry.add_task(result)
                 #####################
-                # SAVE REGISTRY TOO #
+                save_registry(registry, SAVE_PATH)
                 #####################
                 return 0
             elif will_edit == 'e':

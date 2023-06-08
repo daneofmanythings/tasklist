@@ -1,9 +1,11 @@
+from functools import total_ordering
 from datetime import date
 import json
 
 __all__ = ['Task', 'TaskEncoder', 'TaskDecoder']
 
 
+@total_ordering
 class Task:
     def __init__(self, title=None, length='0', notes=None, registered=None):
 
@@ -64,11 +66,17 @@ class Task:
                 "Equality only implemented on type Task.")
         return self.title == other.title
 
+    def __lt__(self, other):
+        if not isinstance(other, Task):
+            raise NotImplementedError(
+                "Comparison only implemented on type Task.")
+        return self.title <= other.title
+
 
 class TaskEncoder(json.JSONEncoder):
     def default(self, arg):
         if isinstance(arg, Task):
-            return vars(arg)
+            return {k.replace('_', ''): v for k, v in vars(arg).items()}
         elif isinstance(arg, date):
             return date.isoformat(arg)
         else:

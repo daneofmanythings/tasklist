@@ -14,4 +14,13 @@
 
 
 
+### ** More current tasks **
+* make a separate edit menu
+    * handle cancelling
+* config file
+    * internal for now
+    * user config later
+* add theme support
+    * write catppuccin colors
+
 
