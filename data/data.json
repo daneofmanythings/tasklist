@@ -1,16 +1,26 @@
 [
   {
-    "title": "vaccuum",
-    "importance": 5,
-    "duration": 15,
-    "desc": "do it",
-    "registered": "2023-05-27"
+    "title": "test",
+    "length": "3",
+    "notes": "did it work",
+    "registered": "2023-06-07"
   },
   {
-    "title": "dishes",
-    "importance": null,
-    "duration": null,
-    "desc": "do them",
-    "registered": "2023-05-27"
+    "title": "dentist",
+    "length": "120",
+    "notes": "set up a dentist appointment",
+    "registered": "2023-06-08"
+  },
+  {
+    "title": "test number two",
+    "length": "55",
+    "notes": "again",
+    "registered": "2023-06-07"
+  },
+  {
+    "title": "test number two",
+    "length": "55",
+    "notes": "again",
+    "registered": "2023-06-07"
   }
 ]
