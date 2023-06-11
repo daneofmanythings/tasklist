@@ -2,6 +2,7 @@ from enum import Enum, auto
 from collections import namedtuple
 from structs.registry import Registry
 import interface.utils as utils
+from config.globals import HEADER_PADDING, MENU_PADDING
 
 __all__ = ['Menu', 'MenuReturnState', 'MenuReturn']
 
@@ -34,8 +35,8 @@ class Menu:
     @classmethod
     def display_string(self):
         result = str()
-        result += utils.table_to_string(self.HEADER, 10)
-        result += utils.table_to_string(self.MENU, 3)
+        result += utils.table_to_string(self.HEADER, HEADER_PADDING)
+        result += utils.table_to_string(self.MENU, MENU_PADDING)
         return result
 
     @classmethod

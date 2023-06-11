@@ -1,0 +1,4 @@
+
+SAVE_PATH = './data/'
+HEADER_PADDING = 10
+MENU_PADDING = 3

@@ -1,9 +1,10 @@
-import interface.utils as utils
+from interface import utils
+from interface.menu import Menu
 from interface.utils import color_text
 from interface.editor import Editor
-from structs.registry import save_registry, SAVE_PATH
+from structs.registry import save_registry
 from config.theme import MENU_HIGHLIGHT
-from interface.menu import Menu
+from config.globals import MENU_PADDING, HEADER_PADDING, SAVE_PATH
 
 
 __all__ = ["ViewAll"]
@@ -19,8 +20,9 @@ class ViewAll(Menu):
 
     @classmethod
     def display_string(self):
-        return utils.table_to_string(self.HEADER, 10)
+        return utils.table_to_string(self.HEADER, HEADER_PADDING)
 
+    # TODO: clean up this method. separate and validate
     @classmethod
     def run(self, registry):
         tasks = list(registry._ledger)
@@ -29,7 +31,7 @@ class ViewAll(Menu):
 
         utils.clear_terminal()
         print(self.display_string())
-        print(utils.table_to_string(tasks_header, 3))
+        print(utils.table_to_string(tasks_header, MENU_PADDING))
 
         response = input('Choose a task to edit > ')
         task = tasks[int(response) - 1]
@@ -37,7 +39,7 @@ class ViewAll(Menu):
         while True:
             utils.clear_terminal()
             print(self.display_string(), end='')
-            print(utils.table_to_string(task.listify(), 3))
+            print(utils.table_to_string(task.listify(), MENU_PADDING))
             will_edit = input('Save (s) | Edit (e) | Cancel (-c) > ')
             if will_edit == 's':
                 registry.add_task(task)

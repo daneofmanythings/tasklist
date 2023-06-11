@@ -1,5 +1,17 @@
 [
   {
+    "title": "test number two",
+    "length": "55",
+    "notes": "again",
+    "registered": "2023-06-07"
+  },
+  {
+    "title": "fresh task",
+    "length": "5",
+    "notes": "this is a fresh task",
+    "registered": "2023-06-10"
+  },
+  {
     "title": "test",
     "length": "3",
     "notes": "did it work",
@@ -10,17 +22,5 @@
     "length": "120",
     "notes": "set up a dentist appointment",
     "registered": "2023-06-08"
-  },
-  {
-    "title": "test number two",
-    "length": "55",
-    "notes": "again",
-    "registered": "2023-06-07"
-  },
-  {
-    "title": "test number two",
-    "length": "55",
-    "notes": "again",
-    "registered": "2023-06-07"
   }
 ]

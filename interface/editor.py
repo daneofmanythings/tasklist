@@ -3,6 +3,7 @@
 import interface.utils as utils
 from interface.utils import color_text
 from config.theme import ERROR_HINT, EDITING_HIGHLIGHT
+from config.globals import MENU_PADDING
 
 
 class Editor:
@@ -17,7 +18,7 @@ class Editor:
         task_list = self.task.listify()
         result = str()
         result += self.header
-        result += utils.table_to_string(task_list, 3)
+        result += utils.table_to_string(task_list, MENU_PADDING)
         result += self.help_string
         return result
 

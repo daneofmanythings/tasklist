@@ -2,11 +2,6 @@ from structs.tasks import Task, TaskEncoder, TaskDecoder
 import os
 import json
 
-__all__ = ['Registry', 'RegistryEncoder', 'RegistryDecoder',
-           'load_registry', 'save_registry', 'SAVE_PATH']
-
-SAVE_PATH = './data/'
-
 
 class Registry:
     def __init__(self):

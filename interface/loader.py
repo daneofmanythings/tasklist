@@ -3,6 +3,7 @@ from typing import Optional
 from structs.tasks import Task
 import interface.utils as utils
 from config.theme import EDITING_HIGHLIGHT
+from config.globals import MENU_PADDING
 
 
 class Loader:
@@ -16,7 +17,7 @@ class Loader:
     def display_string(self):
         result = str()
         result += self.header
-        result += utils.table_to_string(self.task.listify(), 3)
+        result += utils.table_to_string(self.task.listify(), MENU_PADDING)
         result += self.help_string
         return result
 
