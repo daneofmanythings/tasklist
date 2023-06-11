@@ -1,9 +1,13 @@
+from interface import utils
 from interface.utils import color_text
-from interface.menu import Menu
-from interface.menus.single_task import SingleTask
-from interface.menus.repeat_task import RepeatTask
-from interface.menus.recurring_task import RecurringTask
+from interface.loader import Loader
+from interface.editor import Editor
 from config.theme import MENU_HIGHLIGHT
+from structs.tasks import Task
+from structs.registry import save_registry, SAVE_PATH
+from interface.menu import MenuReturnState as state
+from interface.menu import Menu, MenuReturn
+
 
 __all__ = ["CreateTask"]
 
@@ -11,19 +15,38 @@ __all__ = ["CreateTask"]
 class CreateTask(Menu):
     HEADER = (
         'MAIN / MANAGE TASKS / ' +
-        color_text('CREATE TASK', *MENU_HIGHLIGHT) + ' /',
+        color_text('CREATE TASK', *MENU_HIGHLIGHT),
     )
-    MENU = (
-        "1) Single Task",
-        "2) Repeat Task",
-        "3) Recurring Task",
-        "4) Go Back",
-        "5) Main Menu",
-    )
-    OPTIONS = {
-        "1": SingleTask,
-        "2": RepeatTask,
-        "3": RecurringTask,
-        "4": 0,
-        "5": -1,
-    }
+    MENU = ()
+    OPTIONS = {}
+
+    @classmethod
+    def display_string(self):
+        return utils.table_to_string(self.HEADER, 10)
+
+    @classmethod
+    def run(self, registry):
+        t = Task()
+        L = Loader(utils.table_to_string(self.HEADER, 10), t)
+
+        result = L.run()
+
+        if result is None:
+            return MenuReturn(state.PREVIOUS_MENU, None)
+
+        while True:
+            utils.clear_terminal()
+            print(self.display_string(), end='')
+            print(utils.table_to_string(result.listify(), 3))
+            will_edit = input('Save (s) | Edit (e) | Cancel (-c) > ')
+            if will_edit == 's':
+                registry.add_task(result)
+                #####################
+                save_registry(registry, SAVE_PATH)
+                #####################
+                return MenuReturn(state.PREVIOUS_MENU, None)
+            elif will_edit == 'e':
+                E = Editor(self.display_string(), result)
+                result = E.run()
+            else:
+                return MenuReturn(state.PREVIOUS_MENU, None)

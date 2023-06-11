@@ -11,6 +11,7 @@ SAVE_PATH = './data/'
 class Registry:
     def __init__(self):
         self._ledger = set()
+        self._tasklists = set()
 
     def add_task(self, task) -> None:
         if not isinstance(task, Task):

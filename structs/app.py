@@ -1,21 +1,29 @@
-from interface.menus.main_menu import Main
+from interface.menu import MenuReturn
+from interface.menu import MenuReturnState as state
 
 __all__ = ['App']
 
 
 class App:
-    def __init__(self, registry):
+    def __init__(self, registry, starting_menu):
         self.registry = registry
-        self.menu_trace = [Main]
+        self.menu_stack = [starting_menu]
 
     def run_current(self):
-        print(self.menu_trace)
-        result = self.menu_trace[-1].run(self.registry)
-        if result == 1:
-            pass
-        elif result == 0:
-            self.menu_trace.pop()
-        elif result == -1:
-            self.menu_trace = [Main]
-        else:
-            self.menu_trace.append(result)
+        print(self.menu_stack)
+
+        current_menu = self.menu_stack[-1]
+        result: MenuReturn = current_menu.run(self.registry)
+
+        match result.return_state:
+            case state.NEXT_MENU:
+                self.menu_stack.append(result.returned_menu)
+            case state.PREVIOUS_MENU:
+                self.menu_stack.pop()
+            case state.STAY_CURRENT:
+                pass
+            case state.REPLACE_CURRENT:
+                self.menu_stack.pop()
+                self.menu_stack.append(result.returned_menu)
+            case state.BACK_TO_MAIN:
+                self.menu_stack = [self.menu_stack[0]]

@@ -29,8 +29,10 @@ class Loader:
                 print(self.display_string().replace(
                     f'   {attr}:', f'   {attr_colored}:'))
                 response = input(f'Enter value for {attr_colored} > ')
+
                 if response == '-c':
-                    return
+                    return None
+
                 try:
                     setattr(self.task, attr, response)
                     self.help_string = ''

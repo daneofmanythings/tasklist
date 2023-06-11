@@ -1,8 +1,20 @@
-from __future__ import annotations
+from enum import Enum, auto
+from collections import namedtuple
 from structs.registry import Registry
 import interface.utils as utils
 
-__all__ = ['Menu']
+__all__ = ['Menu', 'MenuReturnState', 'MenuReturn']
+
+
+class MenuReturnState(Enum):
+    NEXT_MENU = auto()
+    PREVIOUS_MENU = auto()
+    STAY_CURRENT = auto()
+    REPLACE_CURRENT = auto()
+    BACK_TO_MAIN = auto()
+
+
+MenuReturn = namedtuple('MenuReturn', 'return_state returned_menu')
 
 
 class Menu:
@@ -27,7 +39,7 @@ class Menu:
         return result
 
     @classmethod
-    def run(self, registry: Registry) -> Menu:
+    def run(self, registry: Registry) -> MenuReturn:
         with utils.NoCursor():
             utils.clear_terminal()
             print(self.display_string())

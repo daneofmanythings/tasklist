@@ -1,9 +1,9 @@
 import interface.utils as utils
 from interface.utils import color_text
-from interface.menu import Menu
 from interface.editor import Editor
 from structs.registry import save_registry, SAVE_PATH
 from config.theme import MENU_HIGHLIGHT
+from interface.menu import Menu
 
 
 __all__ = ["ViewAll"]

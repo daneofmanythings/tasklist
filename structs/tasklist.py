@@ -1,15 +1,18 @@
 from structs.tasks import Task
 
+__all__ = ['Tasklist']
+
 
 class Tasklist:
 
-    def __init__(self, tasks):
-        self.tasks = tasks
+    REGISTRY = None
 
-    @property
-    def tasks(self):
-        return self._tasks
+    def __init__(self):
+        self._tasks = dict()
 
-    @tasks.setter
-    def tasks(self, val):
-        pass
+    def add_task(self, task_name: str):
+        self._tasks[task_name] = 0
+
+    def toggle_status(self, task_name: str):
+        # letting potential key errors leak
+        self._tasks[task_name] = (self._tasks[task_name] + 1) % 2
