@@ -5,9 +5,6 @@ from interface.menu import Menu, MenuReturn
 from interface.menu import MenuReturnState as state
 
 
-__all__ = ["ViewTasks"]
-
-
 class ViewTasks(Menu):
     HEADER = (
         'MAIN / MANAGE TASKS / ' + color_text('VIEW TASKS', *MENU_HIGHLIGHT),

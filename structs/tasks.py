@@ -2,8 +2,6 @@ from functools import total_ordering
 from datetime import date
 import json
 
-__all__ = ['Task', 'TaskEncoder', 'TaskDecoder']
-
 
 @total_ordering
 class Task:

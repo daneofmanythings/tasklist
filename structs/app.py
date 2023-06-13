@@ -1,8 +1,6 @@
 from interface.menu import MenuReturn
 from interface.menu import MenuReturnState as state
 
-__all__ = ['App']
-
 
 class App:
     def __init__(self, registry, starting_menu):

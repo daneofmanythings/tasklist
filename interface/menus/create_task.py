@@ -10,9 +10,6 @@ from interface.menu import MenuReturnState as state
 from interface.menu import Menu, MenuReturn
 
 
-__all__ = ["CreateTask"]
-
-
 class CreateTask(Menu):
     HEADER = (
         'MAIN / MANAGE TASKS / ' +

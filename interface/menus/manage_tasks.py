@@ -5,8 +5,6 @@ from interface.menu import MenuReturnState as state
 from interface.menu import Menu, MenuReturn
 from config.theme import MENU_HIGHLIGHT
 
-__all__ = ["ManageTasks"]
-
 
 class ManageTasks(Menu):
     HEADER = (

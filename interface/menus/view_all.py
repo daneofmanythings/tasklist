@@ -7,9 +7,6 @@ from config.theme import MENU_HIGHLIGHT
 from config.globals import MENU_PADDING, HEADER_PADDING, SAVE_PATH
 
 
-__all__ = ["ViewAll"]
-
-
 class ViewAll(Menu):
     HEADER = (
         'MAIN / MANAGE TASKS / VIEW TASKS / ' +

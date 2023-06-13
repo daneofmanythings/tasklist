@@ -5,8 +5,6 @@ from interface.menus.manage_tasklists import ManageTasklists
 from interface.menu import Menu, MenuReturn
 from interface.menu import MenuReturnState as state
 
-__all__ = ['Main']
-
 
 class Main(Menu):
     HEADER = (

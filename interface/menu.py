@@ -4,8 +4,6 @@ from structs.registry import Registry
 import interface.utils as utils
 from config.globals import HEADER_PADDING, MENU_PADDING
 
-__all__ = ['Menu', 'MenuReturnState', 'MenuReturn']
-
 
 class MenuReturnState(Enum):
     NEXT_MENU = auto()

@@ -1,7 +1,5 @@
 from interface.menu import Menu
 
-__all__ = ["ManageTasklists"]
-
 
 class ManageTasklists(Menu):
     HEADER = (
