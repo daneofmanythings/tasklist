@@ -23,13 +23,13 @@ class Registry:
         if not isinstance(tasklist_title, Tasklist):
             raise TypeError(
                 f"Tried to add a non-tasklist object to the registry: {tasklist_title}")
-        self._tasks.add(tasklist_title)
+        self._tasklists.add(tasklist_title)
 
     def remove_tasklist(self, tasklist_title) -> None:
         self._tasklists.remove(tasklist_title)
 
     def set_current_tasklist(self, tasklist_title) -> None:
-        if tasklist_title in self._tasklists:
+        if tasklist_title in self._tasklists or tasklist_title is None:
             self._current_task = tasklist_title
         else:
             raise ValueError(
@@ -71,7 +71,8 @@ class RegistryDecoder(TaskDecoder):
         for task in obj['tasks']:
             result.add_task(Task(**task))
         for tasklist in obj['tasklists']:
-            result.add_task(Tasklist(**tasklist))
+
+            result.add_tasklist(Tasklist(**tasklist))
         result.set_current_tasklist(obj['current_tasklist'])
 
         return result

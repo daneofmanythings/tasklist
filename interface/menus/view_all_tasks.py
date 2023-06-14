@@ -22,7 +22,7 @@ class ViewAll(Menu):
     # TODO: clean up this method. separate and validate
     @classmethod
     def run(self, registry):
-        tasks = list(registry._ledger)
+        tasks = list(registry._tasks)
         tasks.sort()
         tasks_header = [f'{i + 1}) {t.title}' for i, t in enumerate(tasks)]
 

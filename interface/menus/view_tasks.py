@@ -1,6 +1,6 @@
 from config.theme import MENU_HIGHLIGHT
 from interface.utils import color_text
-from interface.menus.view_all import ViewAll
+from interface.menus.view_all_tasks import ViewAll
 from interface.menu import Menu, MenuReturn
 from interface.menu import MenuReturnState as state
 

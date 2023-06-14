@@ -59,10 +59,13 @@ class Task:
         return hash(self.title)
 
     def __eq__(self, other):
-        if not isinstance(other, Task):
+        if isinstance(other, Task):
+            return self.title == other.title
+        elif isinstance(other, str):
+            return self.title == other
+        else:
             raise NotImplementedError(
                 "Equality only implemented on type Task.")
-        return self.title == other.title
 
     def __lt__(self, other):
         if not isinstance(other, Task):
