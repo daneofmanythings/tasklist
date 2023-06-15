@@ -1,6 +1,8 @@
 import config.themes.catppuccin as cat
 
 
+CURRENT_ACTIVE = cat.YELLOW
 MENU_HIGHLIGHT = cat.GREEN
-ERROR_HINT = cat.RED
 EDITING_HIGHLIGHT = cat.BLUE
+ERROR = cat.RED
+GREYED_OUT = cat.OVERLAY0

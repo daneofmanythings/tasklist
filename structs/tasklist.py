@@ -25,9 +25,9 @@ class Tasklist:
 
     def listify(self):
         result = list()
-        result.append(f"{self.title}\n----------")
-        for attr, val in self.tasks.items():
-            result.append(f"{attr}: {val}")
+        result.append(f"<< {self.title} >>")
+        for attr in self.tasks:
+            result.append(f"{attr}")
         return result
 
     def __hash__(self):
@@ -49,3 +49,16 @@ class Tasklist:
 class TasklistEncoder(json.JSONEncoder):
     def default(self, arg):
         return vars(arg)
+
+
+class TasklistDecoder(json.JSONDecoder):
+    def decode(self, arg):
+        if isinstance(arg, str):
+            obj = json.loads(arg)
+        else:
+            obj = arg
+
+        result = Tasklist(obj['title'])
+        result.tasks = obj['tasks']
+
+        return result

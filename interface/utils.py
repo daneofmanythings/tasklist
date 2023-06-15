@@ -1,4 +1,5 @@
 import os
+from config import globals
 
 
 def color_text(text: str, r: int, g: int, b: int) -> str:
@@ -22,7 +23,7 @@ class NoCursor:
 
 def get_menu_input(prompt, options_list):
     while True:
-        response = input(prompt + " >>> ")
+        response = input(prompt + globals.PROMPT)
         if response in options_list:
             return options_list[response]
 

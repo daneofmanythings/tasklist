@@ -1,5 +1,5 @@
 from structs.tasks import Task, TaskEncoder, TaskDecoder
-from structs.tasklist import Tasklist, TasklistEncoder
+from structs.tasklist import Tasklist, TasklistEncoder, TasklistDecoder
 import os
 import json
 
@@ -19,21 +19,21 @@ class Registry:
     def remove_task(self, task_title: str) -> None:
         self._tasks.remove(task_title)
 
-    def add_tasklist(self, tasklist_title) -> None:
-        if not isinstance(tasklist_title, Tasklist):
+    def add_tasklist(self, tasklist) -> None:
+        if not isinstance(tasklist, Tasklist):
             raise TypeError(
-                f"Tried to add a non-tasklist object to the registry: {tasklist_title}")
-        self._tasklists.add(tasklist_title)
+                f"Tried to add a non-tasklist object to the registry: {tasklist}")
+        self._tasklists.add(tasklist)
 
-    def remove_tasklist(self, tasklist_title) -> None:
-        self._tasklists.remove(tasklist_title)
+    def remove_tasklist(self, tasklist) -> None:
+        self._tasklists.remove(tasklist)
 
-    def set_current_tasklist(self, tasklist_title) -> None:
-        if tasklist_title in self._tasklists or tasklist_title is None:
-            self._current_task = tasklist_title
+    def set_current_tasklist(self, tasklist) -> None:
+        if tasklist in self._tasklists or tasklist is None:
+            self._current_tasklist = tasklist
         else:
             raise ValueError(
-                f"Tasklist: {tasklist_title} not found in registry")
+                f"Tasklist: {tasklist} not found in registry")
 
     def __str__(self):
         result = ''
@@ -63,7 +63,7 @@ class RegistryEncoder(TaskEncoder, TasklistEncoder):
         return super().default(arg)
 
 
-class RegistryDecoder(TaskDecoder):
+class RegistryDecoder(TaskDecoder, TasklistDecoder):
     def decode(self, arg):
         obj = json.loads(arg)
         result = Registry()
@@ -71,9 +71,9 @@ class RegistryDecoder(TaskDecoder):
         for task in obj['tasks']:
             result.add_task(Task(**task))
         for tasklist in obj['tasklists']:
-
             result.add_tasklist(Tasklist(**tasklist))
-        result.set_current_tasklist(obj['current_tasklist'])
+
+        result.set_current_tasklist(Tasklist(**obj['current_tasklist']))
 
         return result
 

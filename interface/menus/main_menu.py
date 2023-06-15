@@ -2,6 +2,7 @@ from config.theme import MENU_HIGHLIGHT
 from interface.utils import color_text
 from interface.menus.manage_tasks import ManageTasks
 from interface.menus.manage_tasklists import ManageTasklists
+from interface.menus.current_tasklist import CurrentTasklist
 from interface.menu import Menu, MenuReturn
 from interface.menu import MenuReturnState as state
 
@@ -13,9 +14,11 @@ class Main(Menu):
     MENU = (
         '1) Manage Tasks.',
         '2) Manage Tasklists.',
+        '3) Open Current Tasklist'
     )
 
     OPTIONS = {
         "1": MenuReturn(state.NEXT_MENU, ManageTasks),
         "2": MenuReturn(state.NEXT_MENU, ManageTasklists),
+        "3": MenuReturn(state.NEXT_MENU, CurrentTasklist),
     }

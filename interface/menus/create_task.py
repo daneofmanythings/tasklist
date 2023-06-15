@@ -3,7 +3,7 @@ from interface.utils import color_text
 from interface.loader import Loader
 from interface.editor import Editor
 from config.theme import MENU_HIGHLIGHT
-from config.globals import HEADER_PADDING, MENU_PADDING, SAVE_PATH
+from config.globals import HEADER_PADDING, MENU_PADDING, SAVE_PATH, PROMPT
 from structs.tasks import Task
 from structs.registry import save_registry
 from interface.menu import MenuReturnState as state
@@ -36,7 +36,9 @@ class CreateTask(Menu):
             utils.clear_terminal()
             print(self.display_string(), end='')
             print(utils.table_to_string(result.listify(), MENU_PADDING))
-            will_edit = input('Save (s) | Edit (e) | Cancel (-c) > ')
+            print('Save (s) | Edit (e) | Cancel (-c)')
+
+            will_edit = input(PROMPT)
             if will_edit == 's':
                 registry.add_task(result)
                 #####################

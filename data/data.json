@@ -1,15 +1,9 @@
 {
   "tasks": [
     {
-      "title": "new",
-      "length": "2",
-      "notes": "this is a note",
-      "registered": "2023-06-13"
-    },
-    {
-      "title": "oien",
-      "length": "2",
-      "notes": "ntesiatnoeia",
+      "title": "neiaoinerastne",
+      "length": "30",
+      "notes": "tnserinire",
       "registered": "2023-06-13"
     },
     {
@@ -25,13 +19,69 @@
       "registered": "2023-06-13"
     },
     {
-      "title": "neiaoinerastne",
-      "length": "30",
-      "notes": "tnserinire",
+      "title": "headspace",
+      "length": "10",
+      "notes": "complete by friday",
+      "registered": "2023-06-14"
+    },
+    {
+      "title": "this task has been edited",
+      "length": "46",
+      "notes": "this is a note",
+      "registered": "2023-06-14"
+    },
+    {
+      "title": "new task",
+      "length": "2",
+      "notes": "this is a note",
+      "registered": "2023-06-13"
+    },
+    {
+      "title": "oien",
+      "length": "2",
+      "notes": "ntesiatnoeia",
       "registered": "2023-06-13"
     }
   ],
   "tasklists": [
+    {
+      "title": "2023-06-14 21:40:25.984508",
+      "tasks": {
+        "new": 0,
+        "oieaneiort": 0,
+        "oien": 0,
+        "tnneneaneinei": 0,
+        "neiaoinerastne": 0
+      }
+    },
+    {
+      "title": "2023-06-14 21:19:44.285886",
+      "tasks": {
+        "tnneneaneinei": 0,
+        "new": 0,
+        "neiaoinerastne": 0,
+        "oien": 0,
+        "oieaneiort": 0
+      }
+    },
+    {
+      "title": "2023-06-14 21:44:30.735183",
+      "tasks": {
+        "oieaneiort": 0,
+        "oien": 0,
+        "new": 0,
+        "tnneneaneinei": 0,
+        "neiaoinerastne": 0
+      }
+    },
+    {
+      "title": "2023-06-13 23:18:12.027981",
+      "tasks": {
+        "tnneneaneinei": 0,
+        "oieaneiort": 0,
+        "neiaoinerastne": 0
+      }
+    },
     {
       "title": "2023-06-13 23:26:00.248601",
       "tasks": {
@@ -43,13 +93,24 @@
       }
     },
     {
-      "title": "2023-06-13 23:18:12.027981",
+      "title": "2023-06-14 22:01:01.740146",
       "tasks": {
+        "neiaoinerastne": 0,
+        "new": 0,
+        "oien": 0,
         "tnneneaneinei": 0,
-        "oieaneiort": 0,
-        "neiaoinerastne": 0
+        "oieaneiort": 0
       }
     }
   ],
-  "current_tasklist": null
+  "current_tasklist": {
+    "title": "2023-06-14 22:01:01.740146",
+    "tasks": {
+      "neiaoinerastne": 0,
+      "new": 0,
+      "oien": 1,
+      "tnneneaneinei": 0,
+      "oieaneiort": 0
+    }
+  }
 }

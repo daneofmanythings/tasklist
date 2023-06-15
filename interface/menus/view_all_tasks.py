@@ -1,10 +1,11 @@
 from interface import utils
-from interface.menu import Menu
+from interface.menu import Menu, MenuReturn
+from interface.menu import MenuReturnState as state
 from interface.utils import color_text
 from interface.editor import Editor
 from structs.registry import save_registry
 from config.theme import MENU_HIGHLIGHT
-from config.globals import MENU_PADDING, HEADER_PADDING, SAVE_PATH
+from config.globals import MENU_PADDING, HEADER_PADDING, SAVE_PATH, PROMPT
 
 
 class ViewAll(Menu):
@@ -37,15 +38,17 @@ class ViewAll(Menu):
             utils.clear_terminal()
             print(self.display_string(), end='')
             print(utils.table_to_string(task.listify(), MENU_PADDING))
-            will_edit = input('Save (s) | Edit (e) | Cancel (-c) > ')
+            print(' ' * MENU_PADDING + 'Save (s) | Edit (e) | Cancel (-c)')
+
+            will_edit = input(PROMPT)
             if will_edit == 's':
                 registry.add_task(task)
                 #####################
                 save_registry(registry, SAVE_PATH)
                 #####################
-                return 0
+                return MenuReturn(state.PREVIOUS_MENU, None)
             elif will_edit == 'e':
                 E = Editor(self.display_string(), task)
                 task = E.run()
             else:
-                return 0
+                return MenuReturn(state.PREVIOUS_MENU, None)
