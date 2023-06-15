@@ -19,6 +19,12 @@ class Registry:
     def remove_task(self, task_title: str) -> None:
         self._tasks.remove(task_title)
 
+    def task_complete(self, task_title):
+        try:
+            self.remove_task(task_title)
+        except Exception:  # silently failing for now
+            pass
+
     def add_tasklist(self, tasklist) -> None:
         if not isinstance(tasklist, Tasklist):
             raise TypeError(
@@ -34,6 +40,9 @@ class Registry:
         else:
             raise ValueError(
                 f"Tasklist: {tasklist} not found in registry")
+
+    def remove_current_tasklist(self):
+        self._current_tasklist = None
 
     def __str__(self):
         result = ''
@@ -73,7 +82,12 @@ class RegistryDecoder(TaskDecoder, TasklistDecoder):
         for tasklist in obj['tasklists']:
             result.add_tasklist(Tasklist(**tasklist))
 
-        result.set_current_tasklist(Tasklist(**obj['current_tasklist']))
+        if obj['current_tasklist']:
+            current_tasklist = Tasklist(**obj['current_tasklist'])
+        else:
+            current_tasklist = None
+
+        result.set_current_tasklist(current_tasklist)
 
         return result
 

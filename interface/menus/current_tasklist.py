@@ -1,8 +1,9 @@
+from interface import utils
 from interface.menu import MenuReturn, Menu
 from interface.menu import MenuReturnState as state
 from config.theme import CURRENT_ACTIVE, MENU_HIGHLIGHT, GREYED_OUT, ERROR
-from config.globals import MENU_PADDING, HEADER_PADDING, PROMPT
-from interface import utils
+from config.globals import MENU_PADDING, HEADER_PADDING, PROMPT, SAVE_PATH
+from structs.registry import save_registry
 
 
 # @work_in_progress
@@ -38,27 +39,33 @@ class CurrentTasklist(Menu):
 
     @classmethod
     def run(self, registry):
-        TL = registry._current_tasklist
-        task_table = TL.listify()[1:]
+        task_table = registry._current_tasklist.listify()[1:]
         selection_nums = [f"{i + 1}) " for i in range(len(task_table))]
 
         while True:
             task_printable = [sn + ts + tt for sn, ts,
-                              tt in zip(selection_nums, self.task_status(TL, registry), task_table)]
+                              tt in zip(selection_nums, self.task_status(registry._current_tasklist, registry), task_table)]
             utils.clear_terminal()
             print(self.display_string())
             print(utils.table_to_string(task_printable, MENU_PADDING))
             print(' ' * MENU_PADDING +
-                  "Toggle completion (#) | Process tasklist (p) | Process as complete (c)")
+                  "Toggle completion (#) | Process tasklist (p) | Process all complete (c)")
 
             chosen_action = input(PROMPT)
 
             if chosen_action in [str(i + 1) for i in range(len(task_table))]:
-                TL.toggle_status(task_table[int(chosen_action) - 1])
+                registry._current_tasklist.toggle_status(
+                    task_table[int(chosen_action) - 1])
                 continue
-            elif chosen_action == 'p':
-                pass
-            elif chosen_action == 'c':
-                pass
-            else:
-                return MenuReturn(state.PREVIOUS_MENU, None)
+            if chosen_action == 'p':
+                for task in registry._current_tasklist.tasks:
+                    if registry._current_tasklist.tasks[task]:
+                        registry.task_complete(task)
+                registry.remove_current_tasklist()
+            if chosen_action == 'c':
+                for task in registry._current_tasklist.tasks:
+                    registry.task_complete(task)
+                registry.remove_current_tasklist()
+
+            save_registry(registry, SAVE_PATH)
+            return MenuReturn(state.PREVIOUS_MENU, None)
