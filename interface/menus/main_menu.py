@@ -1,4 +1,5 @@
 from config.theme import MENU_HIGHLIGHT
+from config.globals import MENU_PADDING, HEADER_PADDING
 from interface.utils import color_text
 from interface.menus.manage_tasks import ManageTasks
 from interface.menus.manage_tasklists import ManageTasklists
@@ -32,12 +33,17 @@ class Main(Menu):
         self.MENU = list(Main.MENU)
         self.OPTIONS = dict(Main.OPTIONS)
 
-    # TODO: fix visibility bug related to display_string
     def run_instance(self):
         if self.registry._current_tasklist:
             self.MENU.append('3) Open Current Tasklist')
             self.OPTIONS["3"] = MenuReturn(state.NEXT_MENU, CurrentTasklist)
         with utils.NoCursor():
             utils.clear_terminal()
-            print(self.display_string())
+            print(self.display_string_instance())
         return utils.get_menu_input("", self.OPTIONS)
+
+    def display_string_instance(self):
+        result = str()
+        result += utils.table_to_string(self.HEADER, HEADER_PADDING)
+        result += utils.table_to_string(self.MENU, MENU_PADDING)
+        return result
