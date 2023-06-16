@@ -2,8 +2,8 @@ from datetime import date
 from typing import Optional
 from structs.tasks import Task
 import interface.utils as utils
-from config.theme import EDITING_HIGHLIGHT
-from config.globals import MENU_PADDING
+from config.theme import EDITING_HIGHLIGHT, GREYED_OUT, ERROR
+from config.globals import MENU_PADDING, PROMPT
 
 
 class Loader:
@@ -22,6 +22,7 @@ class Loader:
         return result
 
     def run(self) -> Optional[Task]:
+        abort_prompt = utils.color_text(' [-c]ancel', *GREYED_OUT)
         for attr in vars(self.task):
             attr = attr.replace('_', '')  # Accesses properties correctly
             attr_colored = utils.color_text(attr, *EDITING_HIGHLIGHT)
@@ -29,8 +30,10 @@ class Loader:
                 utils.clear_terminal()
                 print(self.display_string().replace(
                     f'   {attr}:', f'   {attr_colored}:'))
-                response = input(f'Enter value for {attr_colored} > ')
+                print(' ' * MENU_PADDING +
+                      f'Enter value for {attr_colored}' + abort_prompt)
 
+                response = input(PROMPT)
                 if response == '-c':
                     return None
 
@@ -39,7 +42,7 @@ class Loader:
                     self.help_string = ''
                     break
                 except ValueError as ex:
-                    self.help_string = str(ex)
+                    self.help_string = utils.color_text(str(ex), *ERROR)
                     continue
         return self.task
 

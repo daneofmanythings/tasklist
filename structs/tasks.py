@@ -38,7 +38,7 @@ class Task:
             try:
                 self._registered = date.fromisoformat(val)
             except Exception:
-                raise ValueError(f'Invalid date string: {val}')
+                raise ValueError(f'Invalid date string (YYYY-MM-DD): "{val}"')
 
     def listify(self):
         result = list()

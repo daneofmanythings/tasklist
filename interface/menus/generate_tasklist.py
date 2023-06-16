@@ -1,7 +1,7 @@
 from random import sample
 from datetime import datetime
 import interface.utils as utils
-from interface.utils import color_text
+from interface.utils import color_text, hotkey
 from config.theme import MENU_HIGHLIGHT
 from config.globals import HEADER_PADDING, MENU_PADDING, SAVE_PATH, PROMPT
 from structs.tasklist import Tasklist
@@ -37,7 +37,8 @@ class GenerateTasklist(Menu):
                 continue
             break
         print(utils.table_to_string(TL.listify(), MENU_PADDING))
-        print('Save and set current (s) | Generate again (g) | Cancel (any)')
+        print(' ' * MENU_PADDING +
+              f"{hotkey('s')}ave | {hotkey('r')}edo | {hotkey('-c')}ancel")
 
         result = input(PROMPT)
         while True:
@@ -46,7 +47,9 @@ class GenerateTasklist(Menu):
                 registry.set_current_tasklist(TL)
                 save_registry(registry, SAVE_PATH)
                 return MenuReturn(state.PREVIOUS_MENU, None)
-            elif result == 'g':
+            elif result == 'r':
                 return MenuReturn(state.STAY_CURRENT, None)
-            else:
+            elif result == '-c':
                 return MenuReturn(state.PREVIOUS_MENU, None)
+            else:
+                continue

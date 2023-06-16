@@ -18,7 +18,7 @@ MenuReturn = namedtuple('MenuReturn', 'return_state returned_menu')
 
 def work_in_progress(cls):
     cls.HEADER = (f"{cls.__name__} / (WIP)",)
-    cls.MENU = ("1) Go Back",)
+    cls.MENU = ("[1] Go Back",)
     cls.OPTIONS = {"1": MenuReturn(MenuReturnState.PREVIOUS_MENU, None)}
     return cls
 

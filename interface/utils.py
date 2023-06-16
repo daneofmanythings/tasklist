@@ -1,9 +1,14 @@
 import os
 from config import globals
+from config.theme import HOTKEY
 
 
 def color_text(text: str, r: int, g: int, b: int) -> str:
     return f"\033[38;2;{r};{g};{b}m{text}\033[0m"
+
+
+def hotkey(hotkey: str):
+    return f"[{color_text(hotkey, *HOTKEY)}]"
 
 
 def clear_terminal():

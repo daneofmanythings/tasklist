@@ -1,6 +1,6 @@
 from config.theme import MENU_HIGHLIGHT
 from config.globals import MENU_PADDING, HEADER_PADDING
-from interface.utils import color_text
+from interface.utils import color_text, hotkey
 from interface.menus.manage_tasks import ManageTasks
 from interface.menus.manage_tasklists import ManageTasklists
 from interface.menus.current_tasklist import CurrentTasklist
@@ -14,8 +14,8 @@ class Main(Menu):
         color_text('MAIN', *MENU_HIGHLIGHT) + ' /',
     )
     MENU = (
-        '1) Manage Tasks.',
-        '2) Manage Tasklists.',
+        hotkey("1") + ' Manage Tasks.',
+        hotkey("2") + ' Manage Tasklists.',
     )
 
     OPTIONS = {
@@ -35,7 +35,7 @@ class Main(Menu):
 
     def run_instance(self):
         if self.registry._current_tasklist:
-            self.MENU.append('3) Open Current Tasklist')
+            self.MENU.append(f'{hotkey("3")} Open Current Tasklist')
             self.OPTIONS["3"] = MenuReturn(state.NEXT_MENU, CurrentTasklist)
         with utils.NoCursor():
             utils.clear_terminal()

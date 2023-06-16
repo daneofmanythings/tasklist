@@ -1,4 +1,5 @@
 from interface import utils
+from interface.utils import hotkey
 from interface.menu import MenuReturn, Menu
 from interface.menu import MenuReturnState as state
 from config.theme import CURRENT_ACTIVE, MENU_HIGHLIGHT, GREYED_OUT, ERROR
@@ -40,7 +41,8 @@ class CurrentTasklist(Menu):
     @classmethod
     def run(self, registry):
         task_table = registry._current_tasklist.listify()[1:]
-        selection_nums = [f"{i + 1}) " for i in range(len(task_table))]
+        selection_nums = [
+            f"{hotkey(str(i + 1))} " for i in range(len(task_table))]
 
         while True:
             task_printable = [sn + ts + tt for sn, ts,
@@ -49,7 +51,7 @@ class CurrentTasklist(Menu):
             print(self.display_string())
             print(utils.table_to_string(task_printable, MENU_PADDING))
             print(' ' * MENU_PADDING +
-                  "Toggle completion (#) | Process tasklist (p) | Process all complete (c)")
+                  f"toggle status {hotkey('#')} | {hotkey('p')}rocess | process {hotkey('a')}ll | {hotkey('s')}ave")
 
             chosen_action = input(PROMPT)
 
@@ -57,15 +59,21 @@ class CurrentTasklist(Menu):
                 registry._current_tasklist.toggle_status(
                     task_table[int(chosen_action) - 1])
                 continue
-            if chosen_action == 'p':
+            elif chosen_action == 'p':
                 for task in registry._current_tasklist.tasks:
                     if registry._current_tasklist.tasks[task]:
                         registry.task_complete(task)
                 registry.remove_current_tasklist()
-            if chosen_action == 'c':
+                break
+            elif chosen_action == 'a':
                 for task in registry._current_tasklist.tasks:
                     registry.task_complete(task)
                 registry.remove_current_tasklist()
+                break
+            elif chosen_action == 's':
+                break
+            else:
+                continue
 
-            save_registry(registry, SAVE_PATH)
-            return MenuReturn(state.PREVIOUS_MENU, None)
+        save_registry(registry, SAVE_PATH)
+        return MenuReturn(state.PREVIOUS_MENU, None)
