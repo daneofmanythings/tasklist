@@ -5,6 +5,7 @@ from interface.utils import color_text, hotkey
 from config.theme import MENU_HIGHLIGHT
 from config.globals import HEADER_PADDING, MENU_PADDING, SAVE_PATH, PROMPT
 from structs.tasklist import Tasklist
+from structs.task import is_due
 from interface.menu import Menu, MenuReturn
 from interface.menu import MenuReturnState as state
 from structs.registry import save_registry
@@ -30,7 +31,8 @@ class GenerateTasklist(Menu):
         time_alloted = 60  # TODO: pull this out to a config/selection
         tasklist_title = str(datetime.utcnow())
         TL = Tasklist(tasklist_title)
-        for task in sample(registry._tasks, k=len(registry._tasks)):
+        due_tasks = filter(is_due, registry._tasks)
+        for task in sample(due_tasks, k=len(registry._tasks)):
             if time_alloted >= 0:
                 TL.add_task(task.title)
                 time_alloted -= int(task.length)

@@ -1,4 +1,4 @@
-from structs.tasks import Task, TaskEncoder, TaskDecoder
+from structs.task import Task, TaskEncoder, TaskDecoder
 from structs.tasklist import Tasklist, TasklistEncoder, TasklistDecoder
 import os
 import json

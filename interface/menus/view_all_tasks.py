@@ -30,10 +30,17 @@ class ViewAll(Menu):
 
         utils.clear_terminal()
         print(self.display_string())
-        print(utils.table_to_string(tasks_header, MENU_PADDING))
+        print(utils.table_to_string(tasks_header, MENU_PADDING)[1:])
+        print(' ' * MENU_PADDING + f"{hotkey('g')}o back")
 
-        response = input(PROMPT)
-        task = tasks[int(response) - 1]
+        while True:
+            response = input(PROMPT)
+            # the following check should be done the other direction with a try
+            if response in [str(i + 1) for i in range(len(tasks_header))]:
+                task = tasks[int(response) - 1]
+                break
+            if response == 'g':
+                return MenuReturn(state.PREVIOUS_MENU, None)
 
         while True:
             utils.clear_terminal()

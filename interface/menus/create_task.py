@@ -4,7 +4,7 @@ from interface.loader import Loader
 from interface.editor import Editor
 from config.theme import MENU_HIGHLIGHT
 from config.globals import HEADER_PADDING, MENU_PADDING, SAVE_PATH, PROMPT
-from structs.tasks import Task
+from structs.task import Task
 from structs.registry import save_registry
 from interface.menu import MenuReturnState as state
 from interface.menu import Menu, MenuReturn
@@ -24,8 +24,8 @@ class CreateTask(Menu):
 
     @classmethod
     def run(self, registry):
-        t = Task()
-        L = Loader(utils.table_to_string(self.HEADER, HEADER_PADDING), t)
+        T = Task()
+        L = Loader(utils.table_to_string(self.HEADER, HEADER_PADDING), T)
 
         result = L.run()
 
@@ -35,7 +35,7 @@ class CreateTask(Menu):
         while True:
             utils.clear_terminal()
             print(self.display_string(), end='')
-            print(utils.table_to_string(result.listify(), MENU_PADDING))
+            print(utils.table_to_string(result.public_listify(), MENU_PADDING))
             print(' ' * MENU_PADDING +
                   f"{hotkey('s')}ave | {hotkey('e')}dit | {hotkey('-c')}ancel")
 

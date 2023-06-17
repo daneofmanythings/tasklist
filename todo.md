@@ -8,6 +8,8 @@
     * strict time period option
     * registry.task_complete handles all manner of task
 
+* Refactor dynamic menus to use header/menu/option paradigm
+
 ### ** More current tasks **
 * make a separate edit menu
     * handle cancelling

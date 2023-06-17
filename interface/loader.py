@@ -1,6 +1,6 @@
 from datetime import date
 from typing import Optional
-from structs.tasks import Task
+from structs.task import Task
 import interface.utils as utils
 from config.theme import EDITING_HIGHLIGHT, GREYED_OUT, ERROR
 from config.globals import MENU_PADDING, PROMPT
@@ -17,21 +17,22 @@ class Loader:
     def display_string(self):
         result = str()
         result += self.header
-        result += utils.table_to_string(self.task.listify(), MENU_PADDING)
+        result += utils.table_to_string(
+            self.task.public_listify(), MENU_PADDING)
         result += self.help_string
         return result
 
     def run(self) -> Optional[Task]:
-        abort_prompt = utils.color_text(' [-c]ancel', *GREYED_OUT)
-        for attr in vars(self.task):
-            attr = attr.replace('_', '')  # Accesses properties correctly
+        help_text = utils.color_text(' [-c]ancel', *GREYED_OUT)
+        for attr in self.task.public_vars():
+            attr = attr.removeprefix('_')  # Accesses properties correctly
             attr_colored = utils.color_text(attr, *EDITING_HIGHLIGHT)
             while True:
                 utils.clear_terminal()
                 print(self.display_string().replace(
                     f'   {attr}:', f'   {attr_colored}:'))
                 print(' ' * MENU_PADDING +
-                      f'Enter value for {attr_colored}' + abort_prompt)
+                      f'Enter value for {attr_colored}' + help_text)
 
                 response = input(PROMPT)
                 if response == '-c':
