@@ -2,8 +2,7 @@ from enum import Enum, auto
 from collections import namedtuple
 from structs.registry import Registry
 import interface.utils as utils
-
-__all__ = ['Menu', 'MenuReturnState', 'MenuReturn']
+from config.globals import HEADER_PADDING, MENU_PADDING
 
 
 class MenuReturnState(Enum):
@@ -15,6 +14,13 @@ class MenuReturnState(Enum):
 
 
 MenuReturn = namedtuple('MenuReturn', 'return_state returned_menu')
+
+
+def work_in_progress(cls):
+    cls.HEADER = (f"{cls.__name__} / (WIP)",)
+    cls.MENU = ("[1] Go Back",)
+    cls.OPTIONS = {"1": MenuReturn(MenuReturnState.PREVIOUS_MENU, None)}
+    return cls
 
 
 class Menu:
@@ -34,8 +40,8 @@ class Menu:
     @classmethod
     def display_string(self):
         result = str()
-        result += utils.table_to_string(self.HEADER, 10)
-        result += utils.table_to_string(self.MENU, 3)
+        result += utils.table_to_string(self.HEADER, HEADER_PADDING)
+        result += utils.table_to_string(self.MENU, MENU_PADDING)
         return result
 
     @classmethod

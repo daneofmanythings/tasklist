@@ -1,22 +1,19 @@
 from config.theme import MENU_HIGHLIGHT
-from interface.utils import color_text
-from interface.menus.view_all import ViewAll
+from interface.utils import color_text, hotkey
+from interface.menus.view_all_tasks import ViewAll
 from interface.menu import Menu, MenuReturn
 from interface.menu import MenuReturnState as state
 
 
-__all__ = ["ViewTasks"]
-
-
-class ViewTasks(Menu):
+class ViewEditTasks(Menu):
     HEADER = (
         'MAIN / MANAGE TASKS / ' + color_text('VIEW TASKS', *MENU_HIGHLIGHT),
     )
     MENU = (
-        "1) View All",
-        "2) Search All",
-        "3) Go Back",
-        "4) Main Menu",
+        hotkey('1') + " View All",
+        hotkey('2') + " Search All",
+        hotkey('3') + " Go Back",
+        hotkey('4') + " Main Menu",
     )
     OPTIONS = {
         "1": MenuReturn(state.NEXT_MENU, ViewAll),

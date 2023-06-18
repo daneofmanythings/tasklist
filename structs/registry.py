@@ -1,31 +1,63 @@
-from structs.tasks import Task, TaskEncoder, TaskDecoder
+from structs.task import Task, TaskEncoder, TaskDecoder
+from structs.tasklist import Tasklist, TasklistEncoder, TasklistDecoder
 import os
 import json
-
-__all__ = ['Registry', 'RegistryEncoder', 'RegistryDecoder',
-           'load_registry', 'save_registry', 'SAVE_PATH']
-
-SAVE_PATH = './data/'
 
 
 class Registry:
     def __init__(self):
-        self._ledger = set()
-        self._tasklists = set()
+        self._tasks = dict()
+        self._tasklists = dict()
+        self._current_tasklist = None
+
+    @property
+    def tasks(self):
+        return self._tasks.values()
 
     def add_task(self, task) -> None:
         if not isinstance(task, Task):
             raise TypeError(
                 f"Tried to add a non-task object to the registry: {task}")
-        self._ledger.add(task)
+        self._tasks[task.title] = task
 
-    def remove_task(self, task_title: str) -> None:
-        self._ledger.remove(task_title)
+    def remove_task(self, task):
+        del self._tasks[task.title]
+
+    def task_complete(self, task_title):
+        if task_title not in self._tasks:
+            return
+
+        task = self._tasks[task_title]
+        if task.period == 0:
+            self.remove_task(task)
+        else:
+            # this attr can only be set to todays date because properties
+            task.last_completed = 1
+
+    def add_tasklist(self, tasklist) -> None:
+        if not isinstance(tasklist, Tasklist):
+            raise TypeError(
+                f"Tried to add a non-tasklist object to the registry: {tasklist}")
+        self._tasklists[tasklist.title] = tasklist
+
+    def remove_tasklist(self, tasklist) -> None:
+        del self._tasklists[tasklist.title]
+
+    def set_current_tasklist(self, tasklist) -> None:
+        if tasklist in self._tasklists.values() or tasklist is None:
+            self._current_tasklist = tasklist
+        else:
+            raise ValueError(
+                f"Tasklist: {tasklist} not found in registry")
+
+    def remove_current_tasklist(self):
+        self.remove_tasklist(self._current_tasklist)
+        self._current_tasklist = None
 
     def __str__(self):
         result = ''
 
-        for task in self._ledger:
+        for task in self._tasks:
             result += str(task)
             result += '\n'
 
@@ -33,25 +65,40 @@ class Registry:
 
     def __repr__(self):
         result = str()
-        for task in self._ledger:
+        for task in self._tasks:
             result += task.__repr__() + '\n'
         return result
 
 
-class RegistryEncoder(TaskEncoder):
+class RegistryEncoder(TaskEncoder, TasklistEncoder):
     def default(self, arg):
         if isinstance(arg, Registry):
-            return list(arg._ledger)
+            return {
+                'tasks': list(arg.tasks),
+                'tasklists': list(arg._tasklists.values()),
+                'current_tasklist': arg._current_tasklist
+            }
 
         return super().default(arg)
 
 
-class RegistryDecoder(TaskDecoder):
+class RegistryDecoder(TaskDecoder, TasklistDecoder):
     def decode(self, arg):
         obj = json.loads(arg)
         result = Registry()
-        for task in obj:
+
+        for task in obj['tasks']:
             result.add_task(Task(**task))
+        for tasklist in obj['tasklists']:
+            result.add_tasklist(Tasklist(**tasklist))
+
+        if obj['current_tasklist']:
+            current_tasklist = Tasklist(**obj['current_tasklist'])
+        else:
+            current_tasklist = None
+
+        result.set_current_tasklist(current_tasklist)
+
         return result
 
 

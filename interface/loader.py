@@ -1,8 +1,9 @@
 from datetime import date
 from typing import Optional
-from structs.tasks import Task
+from structs.task import Task
 import interface.utils as utils
-from config.theme import EDITING_HIGHLIGHT
+from config.theme import EDITING_HIGHLIGHT, GREYED_OUT, ERROR
+from config.globals import MENU_PADDING, PROMPT
 
 
 class Loader:
@@ -16,29 +17,35 @@ class Loader:
     def display_string(self):
         result = str()
         result += self.header
-        result += utils.table_to_string(self.task.listify(), 3)
+        result += utils.table_to_string(
+            self.task.public_listify(), MENU_PADDING)
         result += self.help_string
         return result
 
     def run(self) -> Optional[Task]:
-        for attr in vars(self.task):
-            attr = attr.replace('_', '')  # Accesses properties correctly
-            attr_colored = utils.color_text(attr, *EDITING_HIGHLIGHT)
+        space = " "
+        cancel_text = utils.color_text(' [-c]ancel', *GREYED_OUT)
+        for attr in self.task.public_vars():
+            # Accesses properties correctly
+            attr_trimmed = attr.removeprefix('_')
+            attr_colored = utils.color_text(attr_trimmed, *EDITING_HIGHLIGHT)
             while True:
                 utils.clear_terminal()
                 print(self.display_string().replace(
-                    f'   {attr}:', f'   {attr_colored}:'))
-                response = input(f'Enter value for {attr_colored} > ')
+                    f'{space * MENU_PADDING}{attr_trimmed}:', f'{space*MENU_PADDING}{attr_colored}:'))
+                print(' ' * MENU_PADDING +
+                      f'Enter value for {attr_colored}' + cancel_text)
 
+                response = input(PROMPT)
                 if response == '-c':
                     return None
 
                 try:
-                    setattr(self.task, attr, response)
+                    setattr(self.task, attr_trimmed, response)
                     self.help_string = ''
                     break
                 except ValueError as ex:
-                    self.help_string = str(ex)
+                    self.help_string = utils.color_text(str(ex), *ERROR)
                     continue
         return self.task
 

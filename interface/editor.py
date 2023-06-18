@@ -1,8 +1,9 @@
 # from typing import Optional
-# from structs.tasks import Task
+# from structs.task import Task
 import interface.utils as utils
-from interface.utils import color_text
-from config.theme import ERROR_HINT, EDITING_HIGHLIGHT
+from interface.utils import color_text, hotkey
+from config.theme import ERROR, EDITING_HIGHLIGHT, GREYED_OUT
+from config.globals import MENU_PADDING, PROMPT
 
 
 class Editor:
@@ -13,40 +14,55 @@ class Editor:
         self.task = task
         self.help_string = ''
 
-    def display_string(self):
-        task_list = self.task.listify()
+    def display_string(self, listed_task):
+        numbered_task = [hotkey(str(i + 1)) + ' ' + t.removeprefix('_') for i,
+                         t in enumerate(listed_task)]
         result = str()
         result += self.header
-        result += utils.table_to_string(task_list, 3)
+        result += utils.table_to_string(numbered_task, MENU_PADDING)
         result += self.help_string
         return result
 
     def run(self):
 
-        while True:
-            utils.clear_terminal()
-            print(self.display_string())
-            field_to_edit = input('Enter the name of the field to edit > ')
-            # replacing '_' to correctly use properties
-            if field_to_edit in [s.replace('_', '') for s in vars(self.task)]:
-                self.help_string = ''
-                break
-            self.help_string = color_text('\'-c\' to cancel', *ERROR_HINT)
+        task_attrs = list(self.task.public_vars().keys())
 
-        field_to_edit_colored = utils.color_text(
-            field_to_edit, *EDITING_HIGHLIGHT)
-
+        # TODO : Fix this madness
         while True:
+            listed_task = self.task.public_listify()
             utils.clear_terminal()
-            print(self.display_string().replace(
-                f'   {field_to_edit}:', f'   {field_to_edit_colored}:'))
-            value_to_set = input(
-                f'Enter new value for {field_to_edit_colored} > ')
+            print(self.display_string(listed_task))
+            print(' ' * MENU_PADDING + f"{hotkey('g')}o back")
+            field_num = input(PROMPT)
+            if field_num == 'g':
+                return self.task
+
             try:
-                setattr(self.task, field_to_edit, value_to_set)
-                self.help_string = ''
-                break
-            except ValueError as e:
-                self.help_string = color_text(str(e), *ERROR_HINT)
+                field_to_edit = task_attrs[int(field_num) - 1]
+            except:  # DEAL WITH IT
+                continue
+
+            field_to_edit_trimmed = field_to_edit.removeprefix('_')
+            field_to_edit_colored = utils.color_text(
+                field_to_edit_trimmed, *EDITING_HIGHLIGHT)
+
+            while True:
+                utils.clear_terminal()
+                print(self.display_string(listed_task).replace(
+                    f'] {field_to_edit}:', f'] {field_to_edit_colored}:'))
+                print(' ' * MENU_PADDING +
+                      color_text('[-g]o back', *GREYED_OUT))
+                print(' ' * MENU_PADDING +
+                      f'Enter new value for {field_to_edit_colored}')
+
+                value_to_set = input(PROMPT)
+                if value_to_set == '-g':
+                    break
+                try:
+                    setattr(self.task, field_to_edit_trimmed, value_to_set)
+                    self.help_string = ''
+                    break
+                except ValueError as e:
+                    self.help_string = color_text(str(e), *ERROR)
 
         return self.task
