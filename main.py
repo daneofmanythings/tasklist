@@ -9,10 +9,12 @@ def main():
     registry = load_registry(SAVE_PATH)
     Tasklist.REGISTRY = registry
     app = App(registry, Main)
-    # add_data_sample(registry)
-    # save_registry(registry, SAVE_PATH)
-    while True:
-        app.run_current()
+
+    try:
+        while True:
+            app.run_current()
+    except KeyboardInterrupt:
+        pass
 
     # print(eegistry)
 

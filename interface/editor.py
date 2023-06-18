@@ -25,42 +25,44 @@ class Editor:
 
     def run(self):
 
-        listed_task = self.task.public_listify()
         task_attrs = list(self.task.public_vars().keys())
 
         # TODO : Fix this madness
         while True:
+            listed_task = self.task.public_listify()
             utils.clear_terminal()
             print(self.display_string(listed_task))
-            print(' ' * MENU_PADDING + color_text('[-c]ancel', *GREYED_OUT))
+            print(' ' * MENU_PADDING + f"{hotkey('g')}o back")
             field_num = input(PROMPT)
-            if field_num == '-c':
+            if field_num == 'g':
                 return self.task
 
             try:
                 field_to_edit = task_attrs[int(field_num) - 1]
-                break
             except:  # DEAL WITH IT
                 continue
 
-        field_to_edit_colored = utils.color_text(
-            field_to_edit.removeprefix('_'), *EDITING_HIGHLIGHT)
+            field_to_edit_trimmed = field_to_edit.removeprefix('_')
+            field_to_edit_colored = utils.color_text(
+                field_to_edit_trimmed, *EDITING_HIGHLIGHT)
 
-        while True:
-            utils.clear_terminal()
-            print(self.display_string(listed_task).replace(
-                f'] {field_to_edit}:', f'] {field_to_edit_colored}:'))
-            print(' ' * MENU_PADDING + color_text('[-c]ancel', *GREYED_OUT))
-            print(f'Enter new value for {field_to_edit_colored}')
+            while True:
+                utils.clear_terminal()
+                print(self.display_string(listed_task).replace(
+                    f'] {field_to_edit}:', f'] {field_to_edit_colored}:'))
+                print(' ' * MENU_PADDING +
+                      color_text('[-g]o back', *GREYED_OUT))
+                print(' ' * MENU_PADDING +
+                      f'Enter new value for {field_to_edit_colored}')
 
-            value_to_set = input(PROMPT)
-            if value_to_set == '-c':
-                return self.task
-            try:
-                setattr(self.task, field_to_edit, value_to_set)
-                self.help_string = ''
-                break
-            except ValueError as e:
-                self.help_string = color_text(str(e), *ERROR)
+                value_to_set = input(PROMPT)
+                if value_to_set == '-g':
+                    break
+                try:
+                    setattr(self.task, field_to_edit_trimmed, value_to_set)
+                    self.help_string = ''
+                    break
+                except ValueError as e:
+                    self.help_string = color_text(str(e), *ERROR)
 
         return self.task

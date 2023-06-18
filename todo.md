@@ -22,3 +22,5 @@
 * update field editing to use integers
 * enable task viewing from current tasklist screen
 
+### ** Known issues **
+* can edit task names to be the same. shouldn't be allowed.

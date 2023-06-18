@@ -23,23 +23,25 @@ class Loader:
         return result
 
     def run(self) -> Optional[Task]:
-        help_text = utils.color_text(' [-c]ancel', *GREYED_OUT)
+        space = " "
+        cancel_text = utils.color_text(' [-c]ancel', *GREYED_OUT)
         for attr in self.task.public_vars():
-            attr = attr.removeprefix('_')  # Accesses properties correctly
-            attr_colored = utils.color_text(attr, *EDITING_HIGHLIGHT)
+            # Accesses properties correctly
+            attr_trimmed = attr.removeprefix('_')
+            attr_colored = utils.color_text(attr_trimmed, *EDITING_HIGHLIGHT)
             while True:
                 utils.clear_terminal()
                 print(self.display_string().replace(
-                    f'   {attr}:', f'   {attr_colored}:'))
+                    f'{space * MENU_PADDING}{attr_trimmed}:', f'{space*MENU_PADDING}{attr_colored}:'))
                 print(' ' * MENU_PADDING +
-                      f'Enter value for {attr_colored}' + help_text)
+                      f'Enter value for {attr_colored}' + cancel_text)
 
                 response = input(PROMPT)
                 if response == '-c':
                     return None
 
                 try:
-                    setattr(self.task, attr, response)
+                    setattr(self.task, attr_trimmed, response)
                     self.help_string = ''
                     break
                 except ValueError as ex:

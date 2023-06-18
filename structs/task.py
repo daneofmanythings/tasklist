@@ -1,14 +1,21 @@
 from functools import total_ordering
+from collections import defaultdict
 from datetime import date, timedelta
 import json
+
+
+def putter(val):
+    return lambda: val
 
 
 @total_ordering
 class Task:
 
-    recurrence_trans_table = {
-        True: ('y', 'yes', 'true', '1'),
-        False: ('n', 'no', 'false', '0', None),
+    recurrence_response_table = {
+        'y': True,
+        'yes': True,
+        'n': False,
+        'no': False
     }
 
     hidden_attrs = (
@@ -44,13 +51,16 @@ class Task:
 
     @length.setter
     def length(self, val):
-        try:
-            if int(val) >= 0:
-                self._length = val
-            else:
-                raise ValueError('Length must be a non-negative integer')
-        except Exception:
-            raise ValueError('Length must be a non-negative integer')
+        if val is None or val == '\n':
+            self._length = 0
+        else:
+            try:
+                int_val = int(val)
+                if int_val >= 0:
+                    self._length = int_val
+                    return
+            except Exception:
+                raise ValueError('Length must be a non-negative integer (1)')
 
     @property
     def start_date(self):
@@ -72,18 +82,16 @@ class Task:
 
     @period.setter
     def period(self, val):
-        if val is None:
+        if val is None or val == '\n':
             self._period = 0
-            return
-        try:
-            if int(val) >= 0:
-                self._period = val
-            else:
-                raise ValueError(
-                    'period must be a non-negative integer')
-        except Exception:
-            raise ValueError(
-                'period must be a non-negative integer')
+        else:
+            try:
+                int_val = int(val)
+                if int_val >= 0:
+                    self._period = int_val
+                    return
+            except Exception:
+                raise ValueError('period must be a non-negative integer (1)')
 
     @property
     def strict_recurrence(self):
@@ -93,33 +101,37 @@ class Task:
     def strict_recurrence(self, val):
         if val is True or val is False:
             self._strict_recurrence = val
-        elif val in self.recurrence_trans_table[True]:
-            self._strict_recurrence = True
-        elif val in self.recurrence_trans_table[False]:
+        elif val is None:
             self._strict_recurrence = False
         else:
-            raise ValueError(
-                'Acceptable values > n, no, false, 0, y, yes, true, 1')
+            try:
+                self._strict_recurrence = self.recurrence_response_table[val.strip(
+                )]
+            except KeyError:
+                raise ValueError(
+                    'Acceptable values: ' + f'{str(self.recurrence_response_table.keys())}')
 
-    @property
+    @ property
     def created_date(self):
         return self._created_date
 
-    @created_date.setter
+    @ created_date.setter
     def created_date(self, val):
         if not val:
             self._created_date = date.today()
+        elif isinstance(val, date):
+            self._created_date = val
         else:
             try:
                 self._created_date = date.fromisoformat(val)
             except Exception:
                 raise ValueError(f'Invalid date string (YYYY-MM-DD): "{val}"')
 
-    @property
+    @ property
     def last_completed(self):
         return self._last_completed
 
-    @last_completed.setter
+    @ last_completed.setter
     def last_completed(self, val):
         if val is None:
             self._last_completed = None
@@ -131,7 +143,7 @@ class Task:
         for attr, val in vars(self).items():
             if attr in self.hidden_attrs:
                 continue
-            result.append(f"{attr}: {val}")
+            result.append(f"{attr.removeprefix('_')}: {val}")
         return result
 
     def listify(self):
@@ -148,9 +160,6 @@ class Task:
         for attr, val in vars(self).items():
             result += f'{attr}: {val}\n'
         return result
-
-    def __repr__(self):
-        return 'Task(title={0}, importance={1}, duration={2}, desc={3}, registered={4}'.format(self.title, self.importance, self.length, self.notes, self.created_date)
 
     def __hash__(self):
         return hash(self.title)
@@ -191,6 +200,7 @@ class TaskDecoder(json.JSONDecoder):
 
         return Task(**obj)
 
+
 ####################
 # HELPER FUNCTIONS #
 ####################
@@ -204,7 +214,7 @@ def is_due(task):
         if task.strict_recurrence:
             # how far off the last completion was from periods cadence
             offset = (
-                task.last_completed - task.start_date).days // task.period
+                task.last_completed - task.start_date).days % task.period
             # the latest cadenced day
             offset_date = task.last_completed - timedelta(days=offset)
             return (date.today() - offset_date).days >= task.period
@@ -213,3 +223,21 @@ def is_due(task):
 
     # if there is no period, strict doesn't matter
     return (date.today() - task.start_date).days >= 0
+
+
+def testing():
+    T = Task(
+        title='a',
+        notes='a',
+        length=1,
+        start_date='2023-06-01',
+        period=15,
+        strict_recurrence=True,
+        created_date=None,
+    )
+    T._last_completed = date.fromisoformat('2023-06-11')
+    print(list(filter(is_due, [T])))
+
+
+if __name__ == "__main__":
+    testing()

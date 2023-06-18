@@ -3,7 +3,7 @@ import config.themes.catppuccin as cat
 
 CURRENT_ACTIVE = cat.YELLOW
 MENU_HIGHLIGHT = cat.GREEN
-EDITING_HIGHLIGHT = cat.BLUE
+EDITING_HIGHLIGHT = cat.PEACH
 ERROR = cat.RED
 GREYED_OUT = cat.OVERLAY0
 HOTKEY = cat.SAPPHIRE

@@ -1,4 +1,4 @@
-from random import sample
+from random import shuffle
 from datetime import datetime
 import interface.utils as utils
 from interface.utils import color_text, hotkey
@@ -31,8 +31,9 @@ class GenerateTasklist(Menu):
         time_alloted = 60  # TODO: pull this out to a config/selection
         tasklist_title = str(datetime.utcnow())
         TL = Tasklist(tasklist_title)
-        due_tasks = filter(is_due, registry._tasks)
-        for task in sample(due_tasks, k=len(registry._tasks)):
+        due_tasks = list(filter(is_due, registry._tasks.values()))
+        shuffle(due_tasks)
+        for task in due_tasks:
             if time_alloted >= 0:
                 TL.add_task(task.title)
                 time_alloted -= int(task.length)
@@ -42,8 +43,8 @@ class GenerateTasklist(Menu):
         print(' ' * MENU_PADDING +
               f"{hotkey('s')}ave | {hotkey('r')}edo | {hotkey('-c')}ancel")
 
-        result = input(PROMPT)
         while True:
+            result = input(PROMPT)
             if result == 's':
                 registry.add_tasklist(TL)
                 registry.set_current_tasklist(TL)

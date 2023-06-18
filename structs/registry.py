@@ -6,42 +6,52 @@ import json
 
 class Registry:
     def __init__(self):
-        self._tasks = set()
-        self._tasklists = set()
+        self._tasks = dict()
+        self._tasklists = dict()
         self._current_tasklist = None
+
+    @property
+    def tasks(self):
+        return self._tasks.values()
 
     def add_task(self, task) -> None:
         if not isinstance(task, Task):
             raise TypeError(
                 f"Tried to add a non-task object to the registry: {task}")
-        self._tasks.add(task)
+        self._tasks[task.title] = task
 
-    def remove_task(self, task_title: str) -> None:
-        self._tasks.remove(task_title)
+    def remove_task(self, task):
+        del self._tasks[task.title]
 
     def task_complete(self, task_title):
-        try:
-            self.remove_task(task_title)
-        except Exception:  # silently failing for now
-            pass
+        if task_title not in self._tasks:
+            return
+
+        task = self._tasks[task_title]
+        if task.period == 0:
+            self.remove_task(task)
+        else:
+            # this attr can only be set to todays date because properties
+            task.last_completed = 1
 
     def add_tasklist(self, tasklist) -> None:
         if not isinstance(tasklist, Tasklist):
             raise TypeError(
                 f"Tried to add a non-tasklist object to the registry: {tasklist}")
-        self._tasklists.add(tasklist)
+        self._tasklists[tasklist.title] = tasklist
 
     def remove_tasklist(self, tasklist) -> None:
-        self._tasklists.remove(tasklist)
+        del self._tasklists[tasklist.title]
 
     def set_current_tasklist(self, tasklist) -> None:
-        if tasklist in self._tasklists or tasklist is None:
+        if tasklist in self._tasklists.values() or tasklist is None:
             self._current_tasklist = tasklist
         else:
             raise ValueError(
                 f"Tasklist: {tasklist} not found in registry")
 
     def remove_current_tasklist(self):
+        self.remove_tasklist(self._current_tasklist)
         self._current_tasklist = None
 
     def __str__(self):
@@ -64,8 +74,8 @@ class RegistryEncoder(TaskEncoder, TasklistEncoder):
     def default(self, arg):
         if isinstance(arg, Registry):
             return {
-                'tasks': list(arg._tasks),
-                'tasklists': list(arg._tasklists),
+                'tasks': list(arg.tasks),
+                'tasklists': list(arg._tasklists.values()),
                 'current_tasklist': arg._current_tasklist
             }
 

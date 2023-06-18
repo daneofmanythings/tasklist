@@ -23,41 +23,43 @@ class ViewAll(Menu):
     # TODO: clean up this method. separate and validate
     @classmethod
     def run(self, registry):
-        tasks = list(registry._tasks)
+        tasks = list(registry._tasks.values())
         tasks.sort()
         tasks_header = [
             f'{hotkey(i + 1)} {t.title}' for i, t in enumerate(tasks)]
 
-        utils.clear_terminal()
-        print(self.display_string())
-        print(utils.table_to_string(tasks_header, MENU_PADDING)[1:])
-        print(' ' * MENU_PADDING + f"{hotkey('g')}o back")
-
         while True:
+            utils.clear_terminal()
+            print(self.display_string())
+            print(utils.table_to_string(tasks_header,
+                  MENU_PADDING)[1:])  # removing a '\n'
+            print(' ' * MENU_PADDING + f"{hotkey('g')}o back")
+
             response = input(PROMPT)
             # the following check should be done the other direction with a try
             if response in [str(i + 1) for i in range(len(tasks_header))]:
                 task = tasks[int(response) - 1]
-                break
-            if response == 'g':
-                return MenuReturn(state.PREVIOUS_MENU, None)
-
-        while True:
-            utils.clear_terminal()
-            print(self.display_string(), end='')
-            print(utils.table_to_string(task.listify(), MENU_PADDING))
-            print(' ' * MENU_PADDING +
-                  f'{hotkey("s")}ave | {hotkey("e")}dit | {hotkey("-c")}ancel')
-
-            will_edit = input(PROMPT)
-            if will_edit == 's':
-                registry.add_task(task)
-                save_registry(registry, SAVE_PATH)
-                return MenuReturn(state.PREVIOUS_MENU, None)
-            elif will_edit == 'e':
-                E = Editor(self.display_string(), task)
-                task = E.run()
-            elif will_edit == "-c":
+            elif response == 'g':
                 return MenuReturn(state.PREVIOUS_MENU, None)
             else:
                 continue
+
+            while True:
+                utils.clear_terminal()
+                print(self.display_string(), end='')
+                print(utils.table_to_string(task.listify(), MENU_PADDING))
+                print(' ' * MENU_PADDING +
+                      f'{hotkey("s")}ave | {hotkey("e")}dit | {hotkey("g")}o back')
+
+                will_edit = input(PROMPT)
+                if will_edit == 's':
+                    registry.add_task(task)
+                    save_registry(registry, SAVE_PATH)
+                    break
+                elif will_edit == 'e':
+                    E = Editor(self.display_string(), task)
+                    task = E.run()
+                elif will_edit == "g":
+                    break
+                else:
+                    continue
