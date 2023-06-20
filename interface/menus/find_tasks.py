@@ -1,13 +1,13 @@
-from config.theme import MENU_HIGHLIGHT
+from config.theme import CURRENT_MENU
 from interface.utils import color_text, hotkey
 from interface.menus.view_all_tasks import ViewAll
 from interface.menu import Menu, MenuReturn
 from interface.menu import MenuReturnState as state
 
 
-class ViewEditTasks(Menu):
+class FindTasks(Menu):
     HEADER = (
-        'MAIN / MANAGE TASKS / ' + color_text('VIEW TASKS', *MENU_HIGHLIGHT),
+        'MAIN / MANAGE TASKS / ' + color_text('VIEW TASKS', CURRENT_MENU),
     )
     MENU = (
         hotkey('1') + " View All",

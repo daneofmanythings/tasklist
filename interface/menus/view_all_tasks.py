@@ -4,21 +4,21 @@ from interface.menu import MenuReturnState as state
 from interface.utils import color_text, hotkey
 from interface.editor import Editor
 from structs.registry import save_registry
-from config.theme import MENU_HIGHLIGHT
-from config.globals import MENU_PADDING, HEADER_PADDING, SAVE_PATH, PROMPT
+from config.theme import CURRENT_MENU
+from config.globals import MENU_OFFSET, HEADER_OFFSET, SAVE_PATH, PROMPT
 
 
 class ViewAll(Menu):
     HEADER = (
         'MAIN / MANAGE TASKS / VIEW TASKS / ' +
-        color_text('VIEW ALL', *MENU_HIGHLIGHT),
+        color_text('VIEW ALL', CURRENT_MENU),
     )
     MENU = ()
     OPTIONS = {}
 
     @classmethod
     def display_string(self):
-        return utils.table_to_string(self.HEADER, HEADER_PADDING)
+        return utils.table_to_string(self.HEADER, HEADER_OFFSET)
 
     # TODO: clean up this method. separate and validate
     @classmethod
@@ -32,8 +32,8 @@ class ViewAll(Menu):
             utils.clear_terminal()
             print(self.display_string())
             print(utils.table_to_string(tasks_header,
-                  MENU_PADDING)[1:])  # removing a '\n'
-            print(' ' * MENU_PADDING + f"{hotkey('g')}o back")
+                  MENU_OFFSET)[1:])  # removing a '\n'
+            print(' ' * MENU_OFFSET + f"{hotkey('g')}o back")
 
             response = input(PROMPT)
             # the following check should be done the other direction with a try
@@ -47,8 +47,8 @@ class ViewAll(Menu):
             while True:
                 utils.clear_terminal()
                 print(self.display_string(), end='')
-                print(utils.table_to_string(task.listify(), MENU_PADDING))
-                print(' ' * MENU_PADDING +
+                print(utils.table_to_string(task.listify(), MENU_OFFSET))
+                print(' ' * MENU_OFFSET +
                       f'{hotkey("s")}ave | {hotkey("e")}dit | {hotkey("g")}o back')
 
                 will_edit = input(PROMPT)

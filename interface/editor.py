@@ -3,7 +3,7 @@
 import interface.utils as utils
 from interface.utils import color_text, hotkey
 from config.theme import ERROR, EDITING_HIGHLIGHT, GREYED_OUT
-from config.globals import MENU_PADDING, PROMPT
+from config.globals import MENU_OFFSET, PROMPT
 
 
 class Editor:
@@ -19,7 +19,7 @@ class Editor:
                          t in enumerate(listed_task)]
         result = str()
         result += self.header
-        result += utils.table_to_string(numbered_task, MENU_PADDING)
+        result += utils.table_to_string(numbered_task, MENU_OFFSET)
         result += self.help_string
         return result
 
@@ -32,7 +32,7 @@ class Editor:
             listed_task = self.task.public_listify()
             utils.clear_terminal()
             print(self.display_string(listed_task))
-            print(' ' * MENU_PADDING + f"{hotkey('g')}o back")
+            print(' ' * MENU_OFFSET + f"{hotkey('g')}o back")
             field_num = input(PROMPT)
             if field_num == 'g':
                 return self.task
@@ -44,15 +44,15 @@ class Editor:
 
             field_to_edit_trimmed = field_to_edit.removeprefix('_')
             field_to_edit_colored = utils.color_text(
-                field_to_edit_trimmed, *EDITING_HIGHLIGHT)
+                field_to_edit_trimmed, EDITING_HIGHLIGHT)
 
             while True:
                 utils.clear_terminal()
                 print(self.display_string(listed_task).replace(
                     f'] {field_to_edit}:', f'] {field_to_edit_colored}:'))
-                print(' ' * MENU_PADDING +
-                      color_text('[-g]o back', *GREYED_OUT))
-                print(' ' * MENU_PADDING +
+                print(' ' * MENU_OFFSET +
+                      color_text('[-g]o back', GREYED_OUT))
+                print(' ' * MENU_OFFSET +
                       f'Enter new value for {field_to_edit_colored}')
 
                 value_to_set = input(PROMPT)
@@ -63,6 +63,6 @@ class Editor:
                     self.help_string = ''
                     break
                 except ValueError as e:
-                    self.help_string = color_text(str(e), *ERROR)
+                    self.help_string = color_text(str(e), ERROR)
 
         return self.task

@@ -2,8 +2,8 @@ from random import shuffle
 from datetime import datetime
 import interface.utils as utils
 from interface.utils import color_text, hotkey
-from config.theme import MENU_HIGHLIGHT
-from config.globals import HEADER_PADDING, MENU_PADDING, SAVE_PATH, PROMPT
+from config.theme import CURRENT_MENU
+from config.globals import HEADER_OFFSET, MENU_OFFSET, SAVE_PATH, PROMPT
 from structs.tasklist import Tasklist
 from structs.task import is_due
 from interface.menu import Menu, MenuReturn
@@ -15,14 +15,14 @@ class GenerateTasklist(Menu):
 
     HEADER = (
         'MAIN / MANAGE TASKLISTS / ' +
-        color_text('GENERATE TASKLIST', *MENU_HIGHLIGHT),
+        color_text('GENERATE TASKLIST', CURRENT_MENU),
     )
     MENU = ()
     OPTIONS = {}
 
     @classmethod
     def display_string(self):
-        return utils.table_to_string(self.HEADER, HEADER_PADDING)
+        return utils.table_to_string(self.HEADER, HEADER_OFFSET)
 
     @classmethod
     def run(self, registry):
@@ -39,8 +39,8 @@ class GenerateTasklist(Menu):
                 time_alloted -= int(task.length)
                 continue
             break
-        print(utils.table_to_string(TL.listify(), MENU_PADDING))
-        print(' ' * MENU_PADDING +
+        print(utils.table_to_string(TL.listify(), MENU_OFFSET))
+        print(' ' * MENU_OFFSET +
               f"{hotkey('s')}ave | {hotkey('r')}edo | {hotkey('-c')}ancel")
 
         while True:

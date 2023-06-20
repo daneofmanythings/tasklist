@@ -1,14 +1,14 @@
 from interface.utils import color_text, hotkey
 from interface.menus.create_task import CreateTask
-from interface.menus.view_edit_tasks import ViewEditTasks
+from interface.menus.find_tasks import FindTasks
 from interface.menu import MenuReturnState as state
 from interface.menu import Menu, MenuReturn
-from config.theme import MENU_HIGHLIGHT
+from config.theme import CURRENT_MENU
 
 
 class ManageTasks(Menu):
     HEADER = (
-        'MAIN / ' + color_text('MANAGE_TASKS', *MENU_HIGHLIGHT) + ' /',
+        'MAIN / ' + color_text('MANAGE_TASKS', CURRENT_MENU) + ' /',
     )
     MENU = (
         hotkey('1') + " Create task",
@@ -17,6 +17,6 @@ class ManageTasks(Menu):
     )
     OPTIONS = {
         "1": MenuReturn(state.NEXT_MENU, CreateTask),
-        "2": MenuReturn(state.NEXT_MENU, ViewEditTasks),
+        "2": MenuReturn(state.NEXT_MENU, FindTasks),
         "3": MenuReturn(state.PREVIOUS_MENU, None)
     }

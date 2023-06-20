@@ -2,16 +2,18 @@ from interface import utils
 from interface.utils import hotkey
 from interface.menu import MenuReturn, Menu
 from interface.menu import MenuReturnState as state
-from config.theme import CURRENT_ACTIVE, MENU_HIGHLIGHT, GREYED_OUT, ERROR
-from config.globals import MENU_PADDING, HEADER_PADDING, PROMPT, SAVE_PATH
+from config.theme import CURRENT_ACTIVE, CURRENT_MENU, GREYED_OUT, ERROR
+from config.globals import MENU_OFFSET, HEADER_OFFSET, PROMPT, SAVE_PATH, MENU_PADDING
 from structs.registry import save_registry
 
 
 # @work_in_progress
 class CurrentTasklist(Menu):
 
+    TITLE = "CURRENT TASKLIST"
+
     HEADER = (
-        utils.color_text('CURRENT TASKLIST', *CURRENT_ACTIVE),
+        utils.color_text('CURRENT TASKLIST', CURRENT_ACTIVE),
     )
 
     MENU = ()
@@ -20,7 +22,7 @@ class CurrentTasklist(Menu):
 
     @classmethod
     def display_string(self):
-        return utils.table_to_string(self.HEADER, HEADER_PADDING)
+        return utils.table_to_string(self.HEADER, HEADER_OFFSET)
 
     @classmethod
     def task_status(self, tasklist, registry):
@@ -29,12 +31,12 @@ class CurrentTasklist(Menu):
             if task in registry._tasks:
                 if tasklist.tasks[task]:
                     result.append(utils.color_text(
-                        "(COMPLETE) ", *MENU_HIGHLIGHT))
+                        "(COMPLETE) ", CURRENT_MENU))
                 else:
                     result.append(utils.color_text(
-                        "(in progress) ", *GREYED_OUT))
+                        "(in progress) ", GREYED_OUT))
             else:
-                result.append(utils.color_text("(NOT FOUND) ", *ERROR))
+                result.append(utils.color_text("(NOT FOUND) ", ERROR))
 
         return result
 
@@ -49,8 +51,8 @@ class CurrentTasklist(Menu):
                               tt in zip(selection_nums, self.task_status(registry._current_tasklist, registry), task_table)]
             utils.clear_terminal()
             print(self.display_string())
-            print(utils.table_to_string(task_printable, MENU_PADDING))
-            print(' ' * MENU_PADDING +
+            print(utils.table_to_string(task_printable, MENU_OFFSET))
+            print(MENU_PADDING +
                   f"toggle status {hotkey('#')} | {hotkey('p')}rocess | process {hotkey('a')}ll | {hotkey('s')}ave")
 
             chosen_action = input(PROMPT)

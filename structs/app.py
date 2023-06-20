@@ -7,11 +7,14 @@ class App:
         self.registry = registry
         self.menu_stack = [starting_menu]
 
+    @property
+    def header_list(self):
+        return [menu.TITLE for menu in self.menu_stack]
+
     def run_current(self):
-        print(self.menu_stack)
 
         current_menu = self.menu_stack[-1]
-        result: MenuReturn = current_menu.run(self.registry)
+        result: MenuReturn = current_menu.run(self.registry, self.header_list)
 
         match result.return_state:
             case state.NEXT_MENU:

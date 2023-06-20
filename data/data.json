@@ -8,7 +8,7 @@
       "period": 1,
       "strict_recurrence": false,
       "created_date": "2023-06-17",
-      "last_completed": "2023-06-17"
+      "last_completed": "2023-06-19"
     },
     {
       "title": "noat",
@@ -18,7 +18,7 @@
       "period": 2,
       "strict_recurrence": true,
       "created_date": "2023-06-17",
-      "last_completed": "2023-06-17"
+      "last_completed": "2023-06-19"
     }
   ],
   "tasklists": [],

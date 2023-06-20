@@ -2,7 +2,7 @@ from enum import Enum, auto
 from collections import namedtuple
 from structs.registry import Registry
 import interface.utils as utils
-from config.globals import HEADER_PADDING, MENU_PADDING
+from config.globals import HEADER_OFFSET, MENU_OFFSET
 
 
 class MenuReturnState(Enum):
@@ -13,6 +13,7 @@ class MenuReturnState(Enum):
     BACK_TO_MAIN = auto()
 
 
+# Mimicing rust enums
 MenuReturn = namedtuple('MenuReturn', 'return_state returned_menu')
 
 
@@ -40,8 +41,8 @@ class Menu:
     @classmethod
     def display_string(self):
         result = str()
-        result += utils.table_to_string(self.HEADER, HEADER_PADDING)
-        result += utils.table_to_string(self.MENU, MENU_PADDING)
+        result += utils.table_to_string(self.HEADER, HEADER_OFFSET)
+        result += utils.table_to_string(self.MENU, MENU_OFFSET)
         return result
 
     @classmethod

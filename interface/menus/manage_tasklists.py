@@ -3,12 +3,12 @@ from interface.menu import MenuReturnState as state
 from interface.menus.generate_tasklist import GenerateTasklist
 from interface.menus.view_all_tasklists import ViewAllTasklists
 from interface.utils import color_text, hotkey
-from config.theme import MENU_HIGHLIGHT
+from config.theme import CURRENT_MENU
 
 
 class ManageTasklists(Menu):
     HEADER = (
-        'MAIN / ' + color_text('MANAGE_TASKLISTS', *MENU_HIGHLIGHT),
+        'MAIN / ' + color_text('MANAGE_TASKLISTS', CURRENT_MENU),
     )
     MENU = (
         hotkey('1') + " Generate new list",
