@@ -7,14 +7,34 @@ from config.globals import HEADER_OFFSET, MENU_OFFSET
 
 class MenuReturnState(Enum):
     NEXT_MENU = auto()
+    REPLACE_CURRENT = auto()
     PREVIOUS_MENU = auto()
     STAY_CURRENT = auto()
-    REPLACE_CURRENT = auto()
     BACK_TO_MAIN = auto()
 
 
 # Mimicing rust enums
 MenuReturn = namedtuple('MenuReturn', 'return_state returned_menu')
+
+
+def NextMenu(menu):
+    return MenuReturn(MenuReturnState.NEXT_MENU, menu)
+
+
+def ReplaceCurrent(menu):
+    return MenuReturn(MenuReturnState.REPLACE_CURRENT, menu)
+
+
+def PreviousMenu():
+    return MenuReturn(MenuReturnState.PREVIOUS_MENU, None)
+
+
+def StayCurrent():
+    return MenuReturn(MenuReturnState.STAY_CURRENT, None)
+
+
+def BackToMain():
+    return MenuReturn(MenuReturnState.BACK_TO_MAIN, None)
 
 
 def work_in_progress(cls):

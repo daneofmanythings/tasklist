@@ -1,11 +1,9 @@
-from interface.utils import hotkey
 from interface.menus.manage_tasklists import ManageTasklists
 from interface.menus.current_tasklist import CurrentTasklist
 from interface.menus.create_task import CreateTask
 from interface.menus.find_tasks import FindTasks
 from interface.menus.generate_tasklist import GenerateTasklist
-from interface.menu import Menu, MenuReturn
-from interface.menu import MenuReturnState as state
+from interface.menu import Menu, NextMenu
 from interface import utils
 from config.globals import MENU_OFFSET
 
@@ -22,20 +20,20 @@ class Main(Menu):
         self.current_tasklist = False
         self.registry = registry
         self.header_list = header_list
-        self.menu_contents = {
-            f"{hotkey('1')} Create Task": MenuReturn(state.NEXT_MENU, CreateTask),
-            f"{hotkey('2')} Find Task": MenuReturn(state.NEXT_MENU, FindTasks),
-            f"{hotkey('3')} Generate Tasklist": MenuReturn(state.NEXT_MENU, GenerateTasklist),
-            f"{hotkey('4')} Manage Tasklists": MenuReturn(state.NEXT_MENU, ManageTasklists)
+        self.menu = {
+            f"{utils.hotkey('1')} Create Task": NextMenu(CreateTask),
+            f"{utils.hotkey('2')} Find Task": NextMenu(FindTasks),
+            f"{utils.hotkey('3')} Generate Tasklist": NextMenu(GenerateTasklist),
+            f"{utils.hotkey('4')} Manage Tasklists": NextMenu(ManageTasklists),
         }
 
         if self.registry._current_tasklist:
-            self.menu_contents["Open Current Tasklist"] = MenuReturn(
-                state.NEXT_MENU, CurrentTasklist)
+            self.menu[f"{utils.hotkey('5')}Open Current Tasklist"] = NextMenu(
+                CurrentTasklist)
             self.current_tasklist = True
 
         self.options = {f"{i + 1}": mr
-                        for i, mr in enumerate(self.menu_contents.values())}
+                        for i, mr in enumerate(self.menu.values())}
 
     def run_instance(self):
         utils.clear_terminal()
@@ -47,5 +45,5 @@ class Main(Menu):
         result += "\n"
         result += utils.header_string(utils.current_menu(self.header_list))
         result += "\n"
-        result += utils.table_to_string(self.menu_contents.keys(), MENU_OFFSET)
+        result += utils.table_to_string(self.menu.keys(), MENU_OFFSET)
         return result
