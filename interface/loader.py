@@ -16,18 +16,20 @@ class Loader:
 
     def display_string(self):
         result = str()
+        result += "\n"
         result += self.header
+        result += "\n"
         result += utils.table_to_string(
             self.task.public_listify(), MENU_OFFSET)
         result += self.help_string
         return result
 
     def run(self) -> Optional[Task]:
-        cancel_text = utils.color_text(' [-c]ancel', GREYED_OUT)
+        cancel_text = utils.paint_text(' [-c]ancel', GREYED_OUT)
         for attr in self.task.public_vars():
             # Accesses properties correctly
             attr_trimmed = attr.removeprefix('_')
-            attr_colored = utils.color_text(attr_trimmed, EDITING_HIGHLIGHT)
+            attr_colored = utils.paint_text(attr_trimmed, EDITING_HIGHLIGHT)
             while True:
                 utils.clear_terminal()
                 print(self.display_string().replace(
@@ -44,6 +46,6 @@ class Loader:
                     self.help_string = ''
                     break
                 except ValueError as ex:
-                    self.help_string = utils.color_text(str(ex), ERROR)
+                    self.help_string = utils.paint_text(str(ex), ERROR)
                     continue
         return self.task

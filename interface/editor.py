@@ -1,7 +1,7 @@
 # from typing import Optional
 # from structs.task import Task
 import interface.utils as utils
-from interface.utils import color_text, hotkey
+from interface.utils import paint_text, hotkey
 from config.theme import ERROR, EDITING_HIGHLIGHT, GREYED_OUT
 from config.globals import MENU_OFFSET, PROMPT
 
@@ -43,7 +43,7 @@ class Editor:
                 continue
 
             field_to_edit_trimmed = field_to_edit.removeprefix('_')
-            field_to_edit_colored = utils.color_text(
+            field_to_edit_colored = utils.paint_text(
                 field_to_edit_trimmed, EDITING_HIGHLIGHT)
 
             while True:
@@ -51,7 +51,7 @@ class Editor:
                 print(self.display_string(listed_task).replace(
                     f'] {field_to_edit}:', f'] {field_to_edit_colored}:'))
                 print(' ' * MENU_OFFSET +
-                      color_text('[-g]o back', GREYED_OUT))
+                      paint_text('[-g]o back', GREYED_OUT))
                 print(' ' * MENU_OFFSET +
                       f'Enter new value for {field_to_edit_colored}')
 
@@ -63,6 +63,6 @@ class Editor:
                     self.help_string = ''
                     break
                 except ValueError as e:
-                    self.help_string = color_text(str(e), ERROR)
+                    self.help_string = paint_text(str(e), ERROR)
 
         return self.task

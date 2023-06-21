@@ -7,13 +7,15 @@ from config.globals import MENU_OFFSET, HEADER_OFFSET, PROMPT, SAVE_PATH, MENU_P
 from structs.registry import save_registry
 
 
-# @work_in_progress
+__all__ = ['CurrentTasklist']
+
+
 class CurrentTasklist(Menu):
 
     TITLE = "CURRENT TASKLIST"
 
     HEADER = (
-        utils.color_text('CURRENT TASKLIST', CURRENT_ACTIVE),
+        utils.paint_text('CURRENT TASKLIST', CURRENT_ACTIVE),
     )
 
     MENU = ()
@@ -30,13 +32,13 @@ class CurrentTasklist(Menu):
         for task in tasklist.tasks:
             if task in registry._tasks:
                 if tasklist.tasks[task]:
-                    result.append(utils.color_text(
+                    result.append(utils.paint_text(
                         "(COMPLETE) ", CURRENT_MENU))
                 else:
-                    result.append(utils.color_text(
+                    result.append(utils.paint_text(
                         "(in progress) ", GREYED_OUT))
             else:
-                result.append(utils.color_text("(NOT FOUND) ", ERROR))
+                result.append(utils.paint_text("(NOT FOUND) ", ERROR))
 
         return result
 
@@ -78,4 +80,4 @@ class CurrentTasklist(Menu):
                 continue
 
         save_registry(registry, SAVE_PATH)
-        return MenuReturn(state.PREVIOUS_MENU, None)
+        return MenuReturn(state.PreviousMenu, None)

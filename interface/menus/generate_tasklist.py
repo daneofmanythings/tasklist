@@ -1,7 +1,7 @@
 from random import shuffle
 from datetime import datetime
 import interface.utils as utils
-from interface.utils import color_text, hotkey
+from interface.utils import paint_text, hotkey
 from config.theme import CURRENT_MENU
 from config.globals import HEADER_OFFSET, MENU_OFFSET, SAVE_PATH, PROMPT
 from structs.tasklist import Tasklist
@@ -11,11 +11,14 @@ from interface.menu import MenuReturnState as state
 from structs.registry import save_registry
 
 
+__all__ = ['GenerateTasklist']
+
+
 class GenerateTasklist(Menu):
 
     HEADER = (
         'MAIN / MANAGE TASKLISTS / ' +
-        color_text('GENERATE TASKLIST', CURRENT_MENU),
+        paint_text('GENERATE TASKLIST', CURRENT_MENU),
     )
     MENU = ()
     OPTIONS = {}
@@ -49,10 +52,10 @@ class GenerateTasklist(Menu):
                 registry.add_tasklist(TL)
                 registry.set_current_tasklist(TL)
                 save_registry(registry, SAVE_PATH)
-                return MenuReturn(state.PREVIOUS_MENU, None)
+                return MenuReturn(state.PreviousMenu, None)
             elif result == 'r':
-                return MenuReturn(state.STAY_CURRENT, None)
+                return MenuReturn(state.StayCurrent, None)
             elif result == '-c':
-                return MenuReturn(state.PREVIOUS_MENU, None)
+                return MenuReturn(state.PreviousMenu, None)
             else:
                 continue

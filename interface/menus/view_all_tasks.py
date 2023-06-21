@@ -1,46 +1,61 @@
+from collections import ChainMap as cmap
 from interface import utils
-from interface.menu import Menu, MenuReturn
-from interface.menu import MenuReturnState as state
-from interface.utils import color_text, hotkey
+from interface.menu import PreviousMenu
+from interface.utils import paint_text, hotkey
 from interface.editor import Editor
 from structs.registry import save_registry
 from config.theme import CURRENT_MENU
 from config.globals import MENU_OFFSET, HEADER_OFFSET, SAVE_PATH, PROMPT
 
 
-class ViewAll(Menu):
-    HEADER = (
-        'MAIN / MANAGE TASKS / VIEW TASKS / ' +
-        color_text('VIEW ALL', CURRENT_MENU),
-    )
-    MENU = ()
-    OPTIONS = {}
+__all__ = ['ViewAllTasks']
+
+
+class ViewAllTasks:
+
+    TITLE = "View All Tasks"
 
     @classmethod
+    def run(self, registry, header_list):
+        M = ViewAllTasks(registry, header_list)
+        return M.run_instance()
+
+    def __init__(self, registry, header_list):
+        self.registry = registry
+        self.header_list = header_list
+
+        tasks = list(self.registry.tasks)
+        tasks.sort()
+        self.task_menu = [f"{hotkey(i + 1)} {t.title}"
+                          for i, t in enumerate(tasks)]
+
+        self.submenu = [
+            f"{utils.hotkey('g')}o back",
+        ]
+        self.options = dict(cmap(self.task_menu, self.submenu)).values()
+
     def display_string(self):
-        return utils.table_to_string(self.HEADER, HEADER_OFFSET)
+        result = "\n"
+        result += utils.header_string(self.header_list)
+        result += "\n"
+        result += utils.menu_string(self.task_menu)
+        result += "\n"
+        result += utils.submenu_string()
+        return result
 
     # TODO: clean up this method. separate and validate
-    @classmethod
-    def run(self, registry):
-        tasks = list(registry._tasks.values())
-        tasks.sort()
-        tasks_header = [
-            f'{hotkey(i + 1)} {t.title}' for i, t in enumerate(tasks)]
+    def run_instance(self):
 
         while True:
             utils.clear_terminal()
             print(self.display_string())
-            print(utils.table_to_string(tasks_header,
-                  MENU_OFFSET)[1:])  # removing a '\n'
-            print(' ' * MENU_OFFSET + f"{hotkey('g')}o back")
 
             response = input(PROMPT)
             # the following check should be done the other direction with a try
             if response in [str(i + 1) for i in range(len(tasks_header))]:
                 task = tasks[int(response) - 1]
             elif response == 'g':
-                return MenuReturn(state.PREVIOUS_MENU, None)
+                return PreviousMenu()
             else:
                 continue
 
