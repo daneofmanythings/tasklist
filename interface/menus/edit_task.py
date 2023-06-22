@@ -1,8 +1,8 @@
 from copy import copy
-from config.theme import ERROR, EDITING_HIGHLIGHT
+from config.theme import ERROR, EDITING_HIGHLIGHT, GREYED_OUT
 from config.globals import PROMPT, MENU_PADDING
 from interface import utils
-from interface.menu import PreviousMenu
+from interface.menu import PreviousMenu, BackToMain
 
 __all__ = ['EditTask']
 
@@ -26,15 +26,17 @@ class EditTask:
         self.task_attributes = list(self.task.public_vars().keys())
 
         self.sub_menu = [
-            f"{utils.hotkey('-f')}inished",
-            f"{utils.hotkey('-c')}ancel edits",
+            f"{utils.hotkey('f')}inished",
+            f"{utils.hotkey('c')}ancel edits",
+            f"{utils.hotkey('h')}ome",
         ]
 
     @property
     def options(self):
         return {
-            '-f': PreviousMenu(task=self.task),
-            '-c': PreviousMenu(task=self.pre_edit_task),
+            'f': PreviousMenu(task=self.task),
+            'c': PreviousMenu(task=self.pre_edit_task),
+            'h': BackToMain()
         }
 
     # TODO: this is displaying weirdly. fix it
@@ -45,9 +47,7 @@ class EditTask:
         result += utils.header_string(self.header_list)
         result += "\n"
         result += utils.menu_string(menu)
-        result += "\n"
         result += self.help_string
-        result += utils.sub_menu_string(self.sub_menu)
         return result
 
     # TODO : Fix this madness maybe. its a little better.
@@ -56,6 +56,7 @@ class EditTask:
         while True:
             utils.clear_terminal()
             print(self.display_string())
+            print(utils.sub_menu_string(self.sub_menu))
             response = input(PROMPT)
 
             if response in self.options:
@@ -69,18 +70,22 @@ class EditTask:
             field_trimmed = field.removeprefix('_')
             field_colored = utils.paint_text(field_trimmed, EDITING_HIGHLIGHT)
 
+            field_prompt = MENU_PADDING + \
+                "Enter new value for {0} " + \
+                utils.paint_text("[-c]ancel", GREYED_OUT)
+
             while True:
                 utils.clear_terminal()
                 print(self.display_string().replace(
                     f'] {field}:',
                     f'] {field_colored}:'))
 
-                print(MENU_PADDING + f'Enter new value for {field_colored}')
+                print(field_prompt.format(field_colored))
 
                 response = input(PROMPT)
 
-                if response in self.options:
-                    return self.options[response]
+                if response == "-c":
+                    break
 
                 try:
                     setattr(self.task, field_trimmed, response)
