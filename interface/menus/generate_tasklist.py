@@ -6,7 +6,6 @@ from config.theme import CURRENT_MENU
 from config.globals import HEADER_OFFSET, MENU_OFFSET, SAVE_PATH, PROMPT
 from structs.tasklist import Tasklist
 from structs.task import is_due
-from interface.menu import Menu, MenuReturn
 from interface.menu import MenuReturnState as state
 from structs.registry import save_registry
 
@@ -14,7 +13,7 @@ from structs.registry import save_registry
 __all__ = ['GenerateTasklist']
 
 
-class GenerateTasklist(Menu):
+class GenerateTasklist:
 
     HEADER = (
         'MAIN / MANAGE TASKLISTS / ' +

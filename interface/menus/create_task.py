@@ -3,14 +3,8 @@ from typing import Optional
 from config.theme import GREYED_OUT, EDITING_HIGHLIGHT, ERROR
 from config.globals import PROMPT, MENU_PADDING
 from structs.task import Task
-from interface.menu import (
-    PreviousMenu,
-    ReplaceCurrent,
-)
-from interface.menus import (
-    EditTask,
-    SaveRegistry,
-)
+from interface.menu import ReplaceCurrent, PreviousMenu
+from interface.menus.view_task import ViewTask
 
 __all__ = ['CreateTask']
 
@@ -29,20 +23,6 @@ class CreateTask:
         self.help_string = str()
         self.task = None
 
-        self.submenu = [
-            f"{utils.hotkey('s')}ave",
-            f"{utils.hotkey('e')}dit",
-            f"{utils.hotkey('-c')}ancel",
-        ]
-
-    @property
-    def options(self):
-        return {
-            's': ReplaceCurrent(SaveRegistry, task=self.task),
-            'e': ReplaceCurrent(EditTask, task=self.task),
-            '-c': PreviousMenu(),
-        }
-
     def display_string(self, task):
         result = "\n"
         result += utils.header_string(self.header_list)
@@ -59,7 +39,7 @@ class CreateTask:
         if self.task is None:
             return PreviousMenu()
 
-        return utils.get_menu_input(self.options)
+        return ReplaceCurrent(ViewTask, task=self.task)
 
     def task_creation(self, task) -> Optional[Task]:
         cancel_text = utils.paint_text(' [-c]ancel', GREYED_OUT)

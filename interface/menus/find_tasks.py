@@ -1,10 +1,8 @@
 from collections import ChainMap as cmap
 from interface import utils
 from interface.menu import PreviousMenu, NextMenu
-from interface.menus import (
-    ViewAllTasks,
-    SearchTaskTitles,
-)
+from interface.menus.view_all_tasks import ViewAllTasks
+from interface.menus.search_task_titles import SearchTaskTitles
 
 
 __all__ = ['FindTasks']
@@ -13,7 +11,7 @@ __all__ = ['FindTasks']
 class FindTasks:
     TITLE = "FIND TASKS"
 
-    @classmethod
+    @ classmethod
     def run(self, registry, header_list):
         M = FindTasks(registry, header_list)
         return M.run_instance()

@@ -1,11 +1,9 @@
 from interface import utils
 from interface.menu import NextMenu
-from interface.menus import (
-    CreateTask,
-    FindTasks,
-    GenerateTasklist,
-    CurrentTasklist,
-)
+from interface.menus.create_task import CreateTask
+from interface.menus.find_tasks import FindTasks
+from interface.menus.generate_tasklist import GenerateTasklist
+from interface.menus.current_tasklist import CurrentTasklist
 
 
 __all__ = ['MainMenu']
@@ -15,7 +13,7 @@ class MainMenu:
     TITLE = "TASKLIST"
 
     @classmethod
-    def run(self, registry, header_list, task, tasklist):
+    def run(self, registry, header_list, task=None, tasklist=None):
         M = MainMenu(registry, header_list)
         return M.run_instance()
 
@@ -43,7 +41,7 @@ class MainMenu:
         painted_header = utils.paint_header(self.header_list)
         result += utils.header_string(painted_header)
         result += "\n"
-        result += utils.menu_string(self.menu.keys())
+        result += utils.menu_string(self.menu)
         return result
 
     def run_instance(self):

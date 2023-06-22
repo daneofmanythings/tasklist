@@ -14,6 +14,8 @@ class MenuReturnState(Enum):
 MenuReturn = namedtuple('MenuReturn', 'return_state returned_menu')
 
 
+# The return 'types' for menus.
+# TODO: optionals put into the 'rust enum'?
 def NextMenu(menu, task=None, tasklist=None):
     optionals = {
         'task': task,
@@ -30,7 +32,7 @@ def ReplaceCurrent(menu, task=None, tasklist=None):
     return MenuReturn(MenuReturnState.ReplaceCurrent, menu), optionals
 
 
-def PreviousMenu(menu, task=None, tasklist=None):
+def PreviousMenu(menu=None, task=None, tasklist=None):
     optionals = {
         'task': task,
         'tasklist': tasklist,
@@ -38,7 +40,7 @@ def PreviousMenu(menu, task=None, tasklist=None):
     return MenuReturn(MenuReturnState.PreviousMenu, None), optionals
 
 
-def StayCurrent(menu, task=None, tasklist=None):
+def StayCurrent(menu=None, task=None, tasklist=None):
     optionals = {
         'task': task,
         'tasklist': tasklist,

@@ -13,11 +13,11 @@ class App:
     def run_current(self):
 
         current_menu = self.menu_stack[-1]
-        menu_return, optionals = current_menu.run(
+
+        # storing the optional args to be used with the next menu
+        menu_return, self.optionals = current_menu.run(
             self.registry, self.header_list(), **self.optionals
         )
-
-        self.optionals = optionals
 
         match menu_return.return_state:
             case state.NextMenu:

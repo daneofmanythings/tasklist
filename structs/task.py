@@ -11,14 +11,14 @@ def putter(val):
 @total_ordering
 class Task:
 
-    recurrence_response_table = {
+    recurrence_responses = {
         'y': True,
         'yes': True,
         'n': False,
         'no': False
     }
 
-    hidden_attrs = (
+    private_attrs = (
         '_created_date',
         '_last_completed'
     )
@@ -70,6 +70,8 @@ class Task:
     def start_date(self, val):
         if not val:
             self._start_date = date.today()
+        elif isinstance(val, date):
+            self._created_date = val
         else:
             try:
                 self._start_date = date.fromisoformat(val)
@@ -105,11 +107,11 @@ class Task:
             self._strict_recurrence = False
         else:
             try:
-                self._strict_recurrence = self.recurrence_response_table[val.strip(
+                self._strict_recurrence = self.recurrence_responses[val.strip(
                 )]
             except KeyError:
                 raise ValueError(
-                    'Acceptable values: ' + f'{str(self.recurrence_response_table.keys())}')
+                    'Acceptable values: ' + f'{list(self.recurrence_responses.keys())}')
 
     @ property
     def created_date(self):
@@ -141,7 +143,7 @@ class Task:
     def public_listify(self):
         result = list()
         for attr, val in vars(self).items():
-            if attr in self.hidden_attrs:
+            if attr in self.private_attrs:
                 continue
             result.append(f"{attr.removeprefix('_')}: {val}")
         return result
@@ -153,7 +155,7 @@ class Task:
         return result
 
     def public_vars(self):
-        return {attr: val for attr, val in vars(self).items() if attr not in self.hidden_attrs}
+        return {attr: val for attr, val in vars(self).items() if attr not in self.private_attrs}
 
     def __str__(self):
         result = ""
@@ -178,6 +180,9 @@ class Task:
             raise NotImplementedError(
                 "Comparison only implemented on type Task.")
         return self.title <= other.title
+
+    def __copy__(self):
+        return Task(**{k.removeprefix('_'): v for k, v in vars(self).items()})
 
 
 class TaskEncoder(json.JSONEncoder):

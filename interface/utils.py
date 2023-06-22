@@ -4,6 +4,7 @@ from config.theme import HOTKEY, CURRENT_MENU
 
 
 def header_string(header_list):
+    header_list = paint_header(header_list)
     return HEADER_PADDING + " / ".join(header for header in header_list)
 
 

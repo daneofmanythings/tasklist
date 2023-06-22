@@ -24,3 +24,4 @@
 
 ### ** Known issues **
 * can edit task names to be the same. shouldn't be allowed.
+* when creating tasks, defaults for length, period, and strict recurrence are not properpy applying.

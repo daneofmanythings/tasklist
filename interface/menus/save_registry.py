@@ -22,10 +22,9 @@ class SaveRegistry:
 
     def display_string(self):
         result = "\n"
-        result += utils.header_string(utils.paint_header(self.header_list))
+        result += utils.header_string(self.header_list)
         result += "\n"
         result += utils.menu_string(self.menu)
-        result += "\n"
         return result
 
     def run_instance(self):
@@ -39,4 +38,4 @@ class SaveRegistry:
         utils.clear_terminal()
         print(self.display_string())
         input(PROMPT)
-        return PreviousMenu()
+        return PreviousMenu(task=self.task, tasklist=self.tasklist)

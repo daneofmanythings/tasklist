@@ -1,6 +1,5 @@
 from interface import utils
 from interface.utils import hotkey
-from interface.menu import MenuReturn, Menu
 from interface.menu import MenuReturnState as state
 from config.theme import CURRENT_ACTIVE, CURRENT_MENU, GREYED_OUT, ERROR
 from config.globals import MENU_OFFSET, HEADER_OFFSET, PROMPT, SAVE_PATH, MENU_PADDING
@@ -10,7 +9,7 @@ from structs.registry import save_registry
 __all__ = ['CurrentTasklist']
 
 
-class CurrentTasklist(Menu):
+class CurrentTasklist:
 
     TITLE = "CURRENT TASKLIST"
 

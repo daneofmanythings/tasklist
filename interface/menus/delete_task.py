@@ -1,0 +1,2 @@
+class DeleteTask:
+    pass
