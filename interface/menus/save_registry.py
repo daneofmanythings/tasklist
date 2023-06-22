@@ -9,11 +9,11 @@ class SaveRegistry:
     TITLE = "SAVING REGISTRY"
 
     @classmethod
-    def run(self, registry, header_list, task, tasklist):
-        M = SaveRegistry(registry, header_list, task, tasklist)
+    def run(self, registry, header_list, **optionals):
+        M = SaveRegistry(registry, header_list, **optionals)
         return M.run_instance()
 
-    def __init__(self, registry, header_list, task, tasklist):
+    def __init__(self, registry, header_list, task=None, tasklist=None):
         self.registry = registry
         self.header_list = header_list
         self.task = task

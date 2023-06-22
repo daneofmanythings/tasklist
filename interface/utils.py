@@ -37,7 +37,7 @@ def menu_string(table):
     return table_to_string(table, MENU_OFFSET)
 
 
-def submenu_string(table):
+def sub_menu_string(table):
     return MENU_PADDING + " | ".join(table)
 
 

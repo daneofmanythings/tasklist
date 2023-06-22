@@ -13,7 +13,7 @@ class MainMenu:
     TITLE = "TASKLIST"
 
     @classmethod
-    def run(self, registry, header_list, task=None, tasklist=None):
+    def run(self, registry, header_list, **optionals):
         M = MainMenu(registry, header_list)
         return M.run_instance()
 

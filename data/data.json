@@ -1,72 +1,13 @@
 {
   "tasks": [
     {
-      "title": "title",
-      "notes": "notes",
-      "length": 0,
-      "start_date": "2023-06-21",
-      "period": 0,
-      "strict_recurrence": true,
-      "created_date": "2023-06-21",
-      "last_completed": null
-    },
-    {
-      "title": "nirt",
-      "notes": "trni",
-      "length": 3,
-      "start_date": "2023-06-21",
-      "period": 3,
-      "strict_recurrence": true,
-      "created_date": "2023-06-21",
-      "last_completed": null
-    },
-    {
-      "title": "noat",
-      "notes": "atno",
-      "length": 2,
-      "start_date": "2023-06-21",
-      "period": 2,
-      "strict_recurrence": true,
-      "created_date": "2023-06-21",
-      "last_completed": null
-    },
-    {
-      "title": "notaoe",
-      "notes": "tsienr",
+      "title": "aaaa",
+      "notes": "aaaaa",
       "length": 2,
       "start_date": "2023-06-21",
       "period": 2,
       "strict_recurrence": false,
       "created_date": "2023-06-21",
-      "last_completed": null
-    },
-    {
-      "title": "irni",
-      "notes": "nteisa",
-      "length": 2,
-      "start_date": "2023-06-21",
-      "period": 2,
-      "strict_recurrence": false,
-      "created_date": "2023-06-21",
-      "last_completed": null
-    },
-    {
-      "title": "riiiri",
-      "notes": "inrt",
-      "length": 2,
-      "start_date": "2023-06-21",
-      "period": 2,
-      "strict_recurrence": false,
-      "created_date": "2023-06-21",
-      "last_completed": null
-    },
-    {
-      "title": "neirst",
-      "notes": "tsrnei",
-      "length": 2,
-      "created_date": "2023-06-21",
-      "period": 2,
-      "strict_recurrence": false,
       "last_completed": null
     }
   ],

@@ -1,9 +1,8 @@
-import interface.utils as utils
 from copy import copy
 from config.theme import ERROR, EDITING_HIGHLIGHT
 from config.globals import PROMPT, MENU_PADDING
-from interface.menus.save_registry import SaveRegistry
-from interface.menu import ReplaceCurrent, PreviousMenu
+from interface import utils
+from interface.menu import PreviousMenu
 
 __all__ = ['EditTask']
 
@@ -13,8 +12,8 @@ class EditTask:
     TITLE = "EDIT TASK"
 
     @classmethod
-    def run(self, registry, header_list, task=None, tasklist=None):
-        M = EditTask(registry, header_list, task)
+    def run(self, registry, header_list, **optionals):
+        M = EditTask(registry, header_list, optionals['task'])
         return M.run_instance()
 
     def __init__(self, registry, header_list, task):
@@ -27,14 +26,14 @@ class EditTask:
         self.task_attributes = list(self.task.public_vars().keys())
 
         self.sub_menu = [
-            f"{utils.hotkey('-g')}o back",
+            f"{utils.hotkey('-f')}inished",
             f"{utils.hotkey('-c')}ancel edits",
         ]
 
     @property
     def options(self):
         return {
-            '-g': PreviousMenu(task=self.task),
+            '-f': PreviousMenu(task=self.task),
             '-c': PreviousMenu(task=self.pre_edit_task),
         }
 
@@ -48,10 +47,10 @@ class EditTask:
         result += utils.menu_string(menu)
         result += "\n"
         result += self.help_string
-        result += utils.submenu_string(self.sub_menu)
+        result += utils.sub_menu_string(self.sub_menu)
         return result
 
-    # TODO : Fix this madness
+    # TODO : Fix this madness maybe. its a little better.
     def run_instance(self):
 
         while True:

@@ -13,7 +13,7 @@ class CreateTask:
     TITLE = "CREATE TASK"
 
     @classmethod
-    def run(self, registry, header_list, task, tasklist):
+    def run(self, registry, header_list, **optionals):
         M = CreateTask(registry, header_list)
         return M.run_instance()
 

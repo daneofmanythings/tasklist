@@ -16,41 +16,21 @@ MenuReturn = namedtuple('MenuReturn', 'return_state returned_menu')
 
 # The return 'types' for menus.
 # TODO: optionals put into the 'rust enum'?
-def NextMenu(menu, task=None, tasklist=None):
-    optionals = {
-        'task': task,
-        'tasklist': tasklist,
-    }
+def NextMenu(menu, **optionals):
     return MenuReturn(MenuReturnState.NextMenu, menu), optionals
 
 
-def ReplaceCurrent(menu, task=None, tasklist=None):
-    optionals = {
-        'task': task,
-        'tasklist': tasklist,
-    }
+def ReplaceCurrent(menu, **optionals):
     return MenuReturn(MenuReturnState.ReplaceCurrent, menu), optionals
 
 
-def PreviousMenu(menu=None, task=None, tasklist=None):
-    optionals = {
-        'task': task,
-        'tasklist': tasklist,
-    }
+def PreviousMenu(menu=None, **optionals):
     return MenuReturn(MenuReturnState.PreviousMenu, None), optionals
 
 
-def StayCurrent(menu=None, task=None, tasklist=None):
-    optionals = {
-        'task': task,
-        'tasklist': tasklist,
-    }
+def StayCurrent(menu=None, **optionals):
     return MenuReturn(MenuReturnState.StayCurrent, None), optionals
 
 
-def BackToMain(menu, task=None, tasklist=None):
-    optionals = {
-        'task': task,
-        'tasklist': tasklist,
-    }
+def BackToMain(menu=None, **optionals):
     return MenuReturn(MenuReturnState.BackToMain, None), optionals
