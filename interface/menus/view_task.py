@@ -41,7 +41,7 @@ class ViewTask:
         result = "\n"
         result += utils.header_string(self.header_list)
         result += "\n"
-        result += utils.menu_string(self.task.public_listify())
+        result += utils.menu_string(self.task.listify())
         return result
 
     def run_instance(self):
@@ -50,7 +50,4 @@ class ViewTask:
             print(self.display_string())
             print(utils.sub_menu_string(self.sub_menu))
 
-            try:
-                return utils.get_menu_input(self.options)
-            except KeyError:
-                continue
+            return utils.get_menu_input(self.options)

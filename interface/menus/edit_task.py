@@ -1,5 +1,6 @@
+from datetime import date
 from copy import copy
-from config.theme import ERROR, EDITING_HIGHLIGHT, GREYED_OUT
+from config.theme import ERROR, EDITING_HIGHLIGHT, GREYED_OUT, CONFIRMATION
 from config.globals import PROMPT, MENU_PADDING
 from interface import utils
 from interface.menu import PreviousMenu, BackToMain
@@ -27,6 +28,8 @@ class EditTask:
 
         self.sub_menu = [
             f"{utils.hotkey('f')}inished",
+            f"{utils.hotkey('r')}efresh",
+            f"{utils.hotkey('l')}og completion",
             f"{utils.hotkey('c')}ancel edits",
             f"{utils.hotkey('h')}ome",
         ]
@@ -39,7 +42,6 @@ class EditTask:
             'h': BackToMain()
         }
 
-    # TODO: this is displaying weirdly. fix it
     def display_string(self):
         menu = [utils.hotkey(str(i + 1)) + ' ' + t.removeprefix('_')
                 for i, t in enumerate(self.task.public_listify())]
@@ -47,7 +49,7 @@ class EditTask:
         result += utils.header_string(self.header_list)
         result += "\n"
         result += utils.menu_string(menu)
-        result += self.help_string
+        result += MENU_PADDING + self.help_string
         return result
 
     # TODO : Fix this madness maybe. its a little better.
@@ -61,6 +63,18 @@ class EditTask:
 
             if response in self.options:
                 return self.options[response]
+
+            # TODO: FIX THIS IT IS ANNOYING. Try to incorperate it better into options
+            if response == 'r':
+                self.task.last_completed = None
+                self.help_string = utils.paint_text(
+                    "last completed set to None!", CONFIRMATION)
+                continue
+
+            if response == 'l':
+                self.task.last_completed = date.today()
+                self.help_string = utils.paint_text(
+                    "Task marked as completed today!", CONFIRMATION)
 
             try:
                 field = self.task_attributes[int(response) - 1]

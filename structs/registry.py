@@ -2,6 +2,7 @@ from structs.task import Task, TaskEncoder, TaskDecoder
 from structs.tasklist import Tasklist, TasklistEncoder, TasklistDecoder
 import os
 import json
+from datetime import date
 
 
 class Registry:
@@ -23,6 +24,23 @@ class Registry:
     def remove_task(self, task):
         del self._tasks[task.title]
 
+    def process_current_tasklist(self):
+        task_list = self._current_tasklist.tasks
+        for task_name in task_list:
+            if task_list[task_name] and task_name in self._tasks:
+                self._tasks[task_name].last_completed = task_list[task_name]
+
+        self.remove_current_tasklist()
+
+    def process_current_tasklist_full(self):
+        task_list = self._current_tasklist.tasks
+        for task_name in task_list:
+            if task_name in self._tasks:
+                self._tasks[task_name].last_completed = task_list[task_name]
+
+        self.remove_current_tasklist()
+
+    # TODO: update this method to work with new task paradigm
     def task_complete(self, task_title):
         if task_title not in self._tasks:
             return
@@ -31,8 +49,7 @@ class Registry:
         if task.period == 0:
             self.remove_task(task)
         else:
-            # this attr can only be set to todays date because properties
-            task.last_completed = 1
+            task.last_completed = date.today()
 
     def add_tasklist(self, tasklist) -> None:
         if not isinstance(tasklist, Tasklist):

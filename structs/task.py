@@ -1,6 +1,5 @@
 from functools import total_ordering
-from collections import defaultdict
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 import json
 
 
@@ -46,12 +45,23 @@ class Task:
         self.last_completed: date = last_completed
 
     @property
+    def title(self):
+        return self._title
+
+    @title.setter
+    def title(self, val):
+        if not val:
+            self._title = "task-" + str(abs(hash(datetime.utcnow())))
+        else:
+            self._title = val
+
+    @property
     def length(self):
         return self._length
 
     @length.setter
     def length(self, val):
-        if val is None or val == '\n':
+        if not val:
             self._length = 0
         else:
             try:
@@ -84,7 +94,7 @@ class Task:
 
     @period.setter
     def period(self, val):
-        if val is None or val == '\n':
+        if not val:
             self._period = 0
         else:
             try:
@@ -103,7 +113,7 @@ class Task:
     def strict_recurrence(self, val):
         if val is True or val is False:
             self._strict_recurrence = val
-        elif val is None:
+        elif not val:
             self._strict_recurrence = False
         else:
             try:
@@ -113,11 +123,11 @@ class Task:
                 raise ValueError(
                     'Acceptable values: ' + f'{list(self.recurrence_responses.keys())}')
 
-    @ property
+    @property
     def created_date(self):
         return self._created_date
 
-    @ created_date.setter
+    @created_date.setter
     def created_date(self, val):
         if not val:
             self._created_date = date.today()
@@ -129,16 +139,41 @@ class Task:
             except Exception:
                 raise ValueError(f'Invalid date string (YYYY-MM-DD): "{val}"')
 
-    @ property
+    @property
     def last_completed(self):
         return self._last_completed
 
-    @ last_completed.setter
+    @last_completed.setter
     def last_completed(self, val):
-        if val is None:
-            self._last_completed = None
+        try:
+            self._last_completed = date.fromisoformat(val)
+            return
+        except (TypeError, ValueError):
+            pass
+
+        if val is None or isinstance(val, date):
+            self._last_completed = val
         else:
-            self._last_completed = date.today()
+            raise ValueError(f'Invalid date string (YYYY-MM-DD): "{val}"')
+
+    @property
+    def is_due(self):
+        if self.period:
+            if self.last_completed is None:
+                return True
+
+            if self.strict_recurrence:
+                # how far off the last completion was from periods cadence
+                offset = (
+                    self.last_completed - self.start_date).days % self.period
+                # the latest cadenced day
+                offset_date = self.last_completed - timedelta(days=offset)
+                return (date.today() - offset_date).days >= self.period
+            else:
+                return (date.today() - self.last_completed).days >= self.period
+
+        # if there is no period, strict doesn't matter
+        return (date.today() - self.start_date).days >= 0
 
     def public_listify(self):
         result = list()
@@ -211,37 +246,20 @@ class TaskDecoder(json.JSONDecoder):
 ####################
 
 
-def is_due(task):
-    if task.period:
-        if task.last_completed is None:
-            return True
-
-        if task.strict_recurrence:
-            # how far off the last completion was from periods cadence
-            offset = (
-                task.last_completed - task.start_date).days % task.period
-            # the latest cadenced day
-            offset_date = task.last_completed - timedelta(days=offset)
-            return (date.today() - offset_date).days >= task.period
-        else:
-            return (date.today() - task.last_completed).days >= task.period
-
-    # if there is no period, strict doesn't matter
-    return (date.today() - task.start_date).days >= 0
-
-
 def testing():
     T = Task(
         title='a',
         notes='a',
         length=1,
-        start_date='2023-06-01',
+        start_date='2023-05-23',
         period=15,
         strict_recurrence=True,
         created_date=None,
+        last_completed='2023-06-21'
     )
-    T._last_completed = date.fromisoformat('2023-06-11')
-    print(list(filter(is_due, [T])))
+    L = ([str(task) for task in [T] if task.is_due])
+    for t in L:
+        print(t)
 
 
 if __name__ == "__main__":

@@ -2,8 +2,9 @@ from interface import utils
 from interface.menu import NextMenu
 from interface.menus.create_task import CreateTask
 from interface.menus.find_tasks import FindTasks
-from interface.menus.generate_tasklist import GenerateTasklist
+from interface.menus.generate_tl_parameters import GenerateTasklistParameters
 from interface.menus.current_tasklist import CurrentTasklist
+# from interface.menus.current_tasklist import ViewTasklist
 
 
 __all__ = ['MainMenu']
@@ -29,11 +30,11 @@ class MainMenu:
         self.options = {
             '1': NextMenu(CreateTask),
             '2': NextMenu(FindTasks),
-            '3': NextMenu(GenerateTasklist)
+            '3': NextMenu(GenerateTasklistParameters),
         }
 
         if self.registry._current_tasklist:
-            self.menu.append(f"{utils.hotkey('4')}Open Current Tasklist")
+            self.menu.append(f"{utils.hotkey('4')} Open Current Tasklist")
             self.options['4'] = NextMenu(CurrentTasklist)
 
     def display_string_instance(self):
