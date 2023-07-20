@@ -1,6 +1,6 @@
 import os
 from config.globals import MENU_PADDING, HEADER_PADDING, PROMPT, MENU_OFFSET
-from config.theme import HOTKEY, CURRENT_MENU
+from config.theme import HOTKEY, CURRENT_MENU, TITLE
 
 
 def header_string(header_list):
@@ -23,6 +23,12 @@ def paint_header(header_list):
     result = header_list.copy()
     result[-1] = paint_text(header_list[-1], CURRENT_MENU)
     return result
+
+
+def paint_title(title):
+    head = paint_text("<< ", TITLE)
+    tail = paint_text(" >>", TITLE)
+    return head + title + tail
 
 
 def table_to_string(table, offset):

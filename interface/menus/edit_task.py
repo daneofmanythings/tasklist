@@ -14,7 +14,7 @@ class EditTask:
 
     @classmethod
     def run(self, registry, header_list, **optionals):
-        M = EditTask(registry, header_list, optionals['task'])
+        M = EditTask(registry, header_list, **optionals)
         return M.run_instance()
 
     def __init__(self, registry, header_list, task):

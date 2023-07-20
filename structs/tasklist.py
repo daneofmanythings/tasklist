@@ -4,7 +4,7 @@ from functools import total_ordering
 
 from interface import utils
 # TODO: put these colors into the theming file
-from config.themes.rosepine import FOAM, ROSE, SUBTLE
+from config.themes.rosepine import PINE, ROSE, HIGHLIGHT_HIGH
 
 
 @total_ordering
@@ -35,7 +35,24 @@ class Tasklist:
 
     def current_listify(self):
         result = list()
-        result.append(f"<< {self.title} >>")
+        result.append(utils.paint_title(self.title))
+        for task_name in self.tasks:
+            if task_name in Tasklist.REGISTRY.tasks:
+                if self.tasks[task_name]:
+                    result.append(
+                        f"{task_completed(task_name)}")
+                else:
+                    result.append(
+                        f"{task_in_progress(task_name)}")
+            else:
+                result.append(
+                    f"{task_not_found(task_name)}")
+
+        return result
+
+    def current_listify_numbered(self):
+        result = list()
+        result.append(utils.paint_title(self.title))
         for i, task_name in enumerate(self.tasks):
             if task_name in Tasklist.REGISTRY.tasks:
                 if self.tasks[task_name]:
@@ -50,9 +67,9 @@ class Tasklist:
 
         return result
 
-    def listify(self):
+    def listify_numbered(self):
         result = list()
-        result.append(f"<< {self.title} >>")
+        result.append(utils.paint_title(self.title))
         for i, task_name in enumerate(self.tasks):
             result.append(f"{utils.hotkey(i + 1)} {task_name}")
         return result
@@ -98,11 +115,11 @@ class TasklistDecoder(json.JSONDecoder):
 
 def task_completed(task_name: str):
     result = task_name + " (COMPLETE)"
-    return utils.paint_text(result, SUBTLE)
+    return utils.paint_text(result, HIGHLIGHT_HIGH)
 
 
 def task_in_progress(task_name: str):
-    return task_name + utils.paint_text(" (in progress)", FOAM)
+    return task_name + utils.paint_text(" (in progress)", PINE)
 
 
 def task_not_found(task_name: str):

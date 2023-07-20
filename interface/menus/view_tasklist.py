@@ -17,10 +17,9 @@ class ViewTasklist:
     def __init__(self, registry, header_list, tasklist):
         self.registry = registry
         self.header_list = header_list
-        self.tasklist = registry._current_tasklist
+        self.tasklist = tasklist
 
         self.sub_menu = [
-            f"{utils.hotkey('#')} view task",
             f"{utils.hotkey('s')}ave",
             f"{utils.hotkey('g')}o back",
         ]
@@ -39,7 +38,7 @@ class ViewTasklist:
         result = "\n"
         result += utils.header_string(self.header_list)
         result += "\n"
-        result += utils.menu_string(self.tasklist.listify())
+        result += utils.menu_string(self.tasklist.listify_numbered())
         result += "\n"
         result += utils.sub_menu_string(self.sub_menu)
         return result

@@ -1,7 +1,7 @@
 from random import shuffle
 from interface import utils
 from structs.tasklist import Tasklist
-from interface.menus.save_registry import SaveRegistry
+from interface.menus.save_registry_confirmation import SaveRegistryConfirmation
 from interface.menu import ReplaceCurrent, StayCurrent, PreviousMenu
 
 
@@ -14,7 +14,7 @@ class GenerateTasklist:
 
     @classmethod
     def run(self, registry, header_list, **optionals):
-        M = GenerateTasklist(registry, header_list, optionals['parameters'])
+        M = GenerateTasklist(registry, header_list, **optionals)
         return M.run_instance()
 
     def __init__(self, registry, header_list, parameters):
@@ -42,7 +42,7 @@ class GenerateTasklist:
     @property
     def options(self):
         return {
-            's': ReplaceCurrent(SaveRegistry, tasklist=self.tasklist, current_tasklist=self.tasklist),
+            's': ReplaceCurrent(SaveRegistryConfirmation, tasklist_save=self.tasklist, current_tasklist_set=self.tasklist),
             'r': StayCurrent(parameters=self.parameters),
             '-c': PreviousMenu(),
         }
@@ -51,7 +51,7 @@ class GenerateTasklist:
         result = "\n"
         result += utils.header_string(self.header_list)
         result += "\n"
-        result += utils.menu_string(self.tasklist.listify())
+        result += utils.menu_string(self.tasklist.listify_numbered())
         result += "\n"
         result += utils.sub_menu_string(self.sub_menu)
         return result

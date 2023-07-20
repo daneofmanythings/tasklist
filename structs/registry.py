@@ -15,6 +15,10 @@ class Registry:
     def tasks(self):
         return self._tasks.values()
 
+    @property
+    def tasklists(self):
+        return self._tasklists.values()
+
     def add_task(self, task) -> None:
         if not isinstance(task, Task):
             raise TypeError(
@@ -29,16 +33,6 @@ class Registry:
         for task_name in task_list:
             if task_list[task_name] and task_name in self._tasks:
                 self._tasks[task_name].last_completed = task_list[task_name]
-
-        self.remove_current_tasklist()
-
-    def process_current_tasklist_full(self):
-        task_list = self._current_tasklist.tasks
-        for task_name in task_list:
-            if task_name in self._tasks:
-                self._tasks[task_name].last_completed = task_list[task_name]
-
-        self.remove_current_tasklist()
 
     # TODO: update this method to work with new task paradigm
     def task_complete(self, task_title):
@@ -61,7 +55,7 @@ class Registry:
         del self._tasklists[tasklist.title]
 
     def set_current_tasklist(self, tasklist) -> None:
-        if tasklist in self._tasklists.values() or tasklist is None:
+        if tasklist is None or tasklist in self._tasklists.values():
             self._current_tasklist = tasklist
         else:
             raise ValueError(

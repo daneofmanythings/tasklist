@@ -1,8 +1,9 @@
 from interface import utils
 
-from interface.menu import ReplaceCurrent, NextMenu
+from interface.menu import ReplaceCurrent, NextMenu, PreviousMenu
 from interface.menus.view_tasklist import ViewTasklist
-from interface.menus.save_registry import SaveRegistry
+from interface.menus.save_registry_confirmation import SaveRegistryConfirmation
+from interface.menus.process_tasklist import ProcessTasklist
 
 
 class CurrentTasklist:
@@ -23,11 +24,10 @@ class CurrentTasklist:
             self.tasklist.toggle_completion(task_name)
 
         self.sub_menu = [
-            f"{utils.hotkey('#')} toggle status",
             f"{utils.hotkey('v')}iew tasklist",
-            # f"{utils.hotkey('p')}rocess",
-            # f"process {utils.hotkey('a')}ll",
+            f"{utils.hotkey('p')}rocess tasklist",
             f"{utils.hotkey('s')}ave",
+            f"{utils.hotkey('g')}o back",
         ]
 
     @property
@@ -36,8 +36,9 @@ class CurrentTasklist:
                   for i, task_name in enumerate(self.tasklist.tasks.keys())}
         result.update({
             'v': NextMenu(ViewTasklist, tasklist=self.tasklist),
-            # 'p': ReplaceCurrent(Sa)
-            's': ReplaceCurrent(SaveRegistry, tasklist=self.tasklist)
+            'p': NextMenu(ProcessTasklist),
+            's': ReplaceCurrent(SaveRegistryConfirmation, tasklist_save=self.tasklist),
+            'g': PreviousMenu(),
         })
         return result
 
@@ -45,7 +46,7 @@ class CurrentTasklist:
         result = "\n"
         result += utils.header_string(self.header_list)
         result += "\n"
-        result += utils.menu_string(self.tasklist.current_listify())
+        result += utils.menu_string(self.tasklist.current_listify_numbered())
         result += "\n"
         result += utils.sub_menu_string(self.sub_menu)
         return result
