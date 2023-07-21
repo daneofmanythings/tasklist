@@ -158,9 +158,10 @@ class Task:
 
     @property
     def is_due(self):
+        if self.last_completed is None:
+            return True
+
         if self.period:
-            if self.last_completed is None:
-                return True
 
             if self.strict_recurrence:
                 # how far off the last completion was from periods cadence
@@ -172,8 +173,7 @@ class Task:
             else:
                 return (date.today() - self.last_completed).days >= self.period
 
-        # if there is no period, strict doesn't matter
-        return (date.today() - self.start_date).days >= 0
+        return False
 
     def public_listify(self):
         result = list()

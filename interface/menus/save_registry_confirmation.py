@@ -51,17 +51,18 @@ class SaveRegistryConfirmation:
             'c': ReplaceCurrent(SaveRegistry, **self.attrs_to_hand_off),
             'g': PreviousMenu(),
         }
-    # This is brute force. Make it prettier.
 
+    # TODO: This is brute force. Make it prettier.
     def populate_changes(self):
         if self.task_save:
             self.menu.append(f"Saving task: {self.task_save.title}")
         if self.task_delete:
-            self.menu.append(f"Deleting task: {self.task_save.title}")
+            self.menu.append(f"Deleting task: {self.task_delete.title}")
         if self.tasklist_save:
             self.menu.append(f"Saving tasklist: {self.tasklist_save.title}")
         if self.tasklist_delete:
-            self.menu.append(f"Deleting tasklist: {self.tasklist_save.title}")
+            self.menu.append(
+                f"Deleting tasklist: {self.tasklist_delete.title}")
         if self.current_tasklist_set:
             self.menu.append(
                 f"Setting current tasklist: {self.current_tasklist_set.title}")

@@ -1,8 +1,7 @@
 from interface import utils
 from interface.menu import ReplaceCurrent, NextMenu, PreviousMenu, BackToMain
-from interface.menus.save_registry import SaveRegistry
+from interface.menus.save_registry_confirmation import SaveRegistryConfirmation
 from interface.menus.edit_task import EditTask
-from interface.menus.delete_task import DeleteTask
 
 
 class ViewTask:
@@ -19,35 +18,47 @@ class ViewTask:
         self.header_list = header_list
         self.task = task
 
-        self.sub_menu = [
-            f"{utils.hotkey('s')}ave to registry",
+    @property
+    def sub_menu(self):
+        result = [
+            f"{utils.hotkey('s')}ave",
             f"{utils.hotkey('e')}dit",
-            f"{utils.hotkey('d')}elete task",
+        ]
+
+        if self.task in self.registry.tasks:
+            result.append(f"{utils.hotkey('d')}elete")
+
+        result.extend([
             f"{utils.hotkey('g')}o back",
             f"{utils.hotkey('h')}ome",
-        ]
+        ])
+
+        return result
 
     @property
     def options(self):
-        return {
-            's': ReplaceCurrent(SaveRegistry, task=self.task),
+        result = {
+            's': ReplaceCurrent(SaveRegistryConfirmation, task_save=self.task),
             'e': NextMenu(EditTask, task=self.task),
-            'd': ReplaceCurrent(DeleteTask, task=self.task),
             'g': PreviousMenu(task=self.task),
             'h': BackToMain()
         }
+        if self.task in self.registry.tasks:
+            result['d'] = ReplaceCurrent(
+                SaveRegistryConfirmation, task_delete=self.task)
+
+        return result
 
     def display_string(self):
         result = "\n"
         result += utils.header_string(self.header_list)
         result += "\n"
         result += utils.menu_string(self.task.listify())
+        result += "\n"
+        result += utils.sub_menu_string(self.sub_menu)
         return result
 
     def run_instance(self):
-        while True:
-            utils.clear_terminal()
-            print(self.display_string())
-            print(utils.sub_menu_string(self.sub_menu))
-
-            return utils.get_menu_input(self.options)
+        utils.clear_terminal()
+        print(self.display_string())
+        return utils.get_menu_input(self.options)

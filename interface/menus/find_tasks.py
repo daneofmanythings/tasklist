@@ -20,7 +20,7 @@ class FindTasks:
         self.header_list = header_list
         self.menu = [
             f"{utils.hotkey('1')} View All",
-            f"{utils.hotkey('2')} Search Titles",
+            # f"{utils.hotkey('2')} Search Titles",
         ]
 
         self.sub_menu = [
@@ -29,7 +29,7 @@ class FindTasks:
 
         self.options = {
             '1': NextMenu(ViewAllTasks),
-            '2': NextMenu(SearchTaskTitles),
+            # '2': NextMenu(SearchTaskTitles),
             'g': PreviousMenu(),
         }
 
