@@ -6,10 +6,6 @@ A tool to help guide you through choosing a task workload.
 
 Fully functional v1.
 
-## **COMING UP**
-
-Implementation of tags to sort tasks for more customized tasklist generation.
-
 ## **USAGE GUIDE**
 
 * Install the latest version of python. 
@@ -27,4 +23,13 @@ Implementation of tags to sort tasks for more customized tasklist generation.
     
     * Processing a tasklist updates the registry with the tasks' completion status.
     
+## **COMING UP**
+
+* Implementation of tags to sort tasks for more customized tasklist generation.
+* More features around managing tasklists
+
+## **BUG REPORTING**
+
+If you happen to get a crash, please submit the output of the crash (stacktrace) as copied text or a screenshot, and I will fix it.
+If you find a bug, please submit the intended behavior, what actually happened, and recreation steps.
 
