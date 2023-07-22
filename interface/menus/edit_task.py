@@ -64,7 +64,7 @@ class EditTask:
                 return self.options[response]
 
             # TODO: FIX THIS IT IS ANNOYING. Try to incorperate it into options
-            if response == 't':
+            if response == 'm':
                 if self.task.last_completed is None:
                     self.task.last_completed = date.today()
                     self.help_string = utils.paint_text(

@@ -19,6 +19,8 @@ Fully functional v1.
         - true: due status is calculated without regard for last completed date.
         - false: due status is calculated from last completed date
 
+    * mark completion date: removes or marks todays date into last completed. this will refresh one time tasks.
+
 ####    TASKLIST
     
     * Processing a tasklist updates the registry with the tasks' completion status.
