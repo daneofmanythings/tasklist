@@ -1,0 +1,13 @@
+MAIN
+  1. create task > active task creator
+  2. find task > sub
+    2a. search
+    2b. view all
+      -> active task view (edit/delete)
+  3. generate tasklist > active confirm settings, random generation
+  4. manage tasklists
+    4a. create custom
+    4b. find tasklist
+      4b1. search
+      4b2. view all
+        -> active tasklist view (edit/delete)

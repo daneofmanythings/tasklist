@@ -2,6 +2,7 @@ from structs.task import Task, TaskEncoder, TaskDecoder
 from structs.tasklist import Tasklist, TasklistEncoder, TasklistDecoder
 import os
 import json
+from datetime import date
 
 
 class Registry:
@@ -14,6 +15,10 @@ class Registry:
     def tasks(self):
         return self._tasks.values()
 
+    @property
+    def tasklists(self):
+        return self._tasklists.values()
+
     def add_task(self, task) -> None:
         if not isinstance(task, Task):
             raise TypeError(
@@ -23,16 +28,11 @@ class Registry:
     def remove_task(self, task):
         del self._tasks[task.title]
 
-    def task_complete(self, task_title):
-        if task_title not in self._tasks:
-            return
-
-        task = self._tasks[task_title]
-        if task.period == 0:
-            self.remove_task(task)
-        else:
-            # this attr can only be set to todays date because properties
-            task.last_completed = 1
+    def process_current_tasklist(self):
+        task_list = self._current_tasklist.tasks
+        for task_name in task_list:
+            if task_list[task_name] and task_name in self._tasks:
+                self._tasks[task_name].last_completed = task_list[task_name]
 
     def add_tasklist(self, tasklist) -> None:
         if not isinstance(tasklist, Tasklist):
@@ -44,7 +44,7 @@ class Registry:
         del self._tasklists[tasklist.title]
 
     def set_current_tasklist(self, tasklist) -> None:
-        if tasklist in self._tasklists.values() or tasklist is None:
+        if tasklist is None or tasklist in self._tasklists.values():
             self._current_tasklist = tasklist
         else:
             raise ValueError(

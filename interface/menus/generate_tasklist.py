@@ -1,58 +1,62 @@
 from random import shuffle
-from datetime import datetime
-import interface.utils as utils
-from interface.utils import color_text, hotkey
-from config.theme import MENU_HIGHLIGHT
-from config.globals import HEADER_PADDING, MENU_PADDING, SAVE_PATH, PROMPT
+from interface import utils
 from structs.tasklist import Tasklist
-from structs.task import is_due
-from interface.menu import Menu, MenuReturn
-from interface.menu import MenuReturnState as state
-from structs.registry import save_registry
+from interface.menus.save_registry_confirmation import SaveRegistryConfirmation
+from interface.menu import ReplaceCurrent, StayCurrent, PreviousMenu
 
 
-class GenerateTasklist(Menu):
+__all__ = ['GenerateTasklist']
 
-    HEADER = (
-        'MAIN / MANAGE TASKLISTS / ' +
-        color_text('GENERATE TASKLIST', *MENU_HIGHLIGHT),
-    )
-    MENU = ()
-    OPTIONS = {}
+
+class GenerateTasklist:
+
+    TITLE = "GENERATE TASKLIST"
 
     @classmethod
+    def run(self, registry, header_list, **optionals):
+        M = GenerateTasklist(registry, header_list, **optionals)
+        return M.run_instance()
+
+    def __init__(self, registry, header_list, parameters):
+        self.registry = registry
+        self.header_list = header_list
+        self.parameters = parameters
+
+        self.tasklist = Tasklist(self.parameters.title)
+
+        duration = self.parameters.duration
+        due_tasks = [t for t in self.registry.tasks if t.is_due]
+        shuffle(due_tasks)
+
+        for task in due_tasks:
+            if duration >= int(task.length):
+                self.tasklist.add_task(task.title)
+                duration -= int(task.length)
+
+        self.sub_menu = [
+            f"{utils.hotkey('s')}ave",
+            f"{utils.hotkey('r')}edo",
+            f"{utils.hotkey('-c')}ancel",
+        ]
+
+    @property
+    def options(self):
+        return {
+            's': ReplaceCurrent(SaveRegistryConfirmation, tasklist_save=self.tasklist, current_tasklist_set=self.tasklist),
+            'r': StayCurrent(parameters=self.parameters),
+            '-c': PreviousMenu(),
+        }
+
     def display_string(self):
-        return utils.table_to_string(self.HEADER, HEADER_PADDING)
+        result = "\n"
+        result += utils.header_string(self.header_list)
+        result += "\n"
+        result += utils.menu_string(self.tasklist.listify_numbered())
+        result += "\n"
+        result += utils.sub_menu_string(self.sub_menu)
+        return result
 
-    @classmethod
-    def run(self, registry):
+    def run_instance(self):
         utils.clear_terminal()
         print(self.display_string())
-        time_alloted = 60  # TODO: pull this out to a config/selection
-        tasklist_title = str(datetime.utcnow())
-        TL = Tasklist(tasklist_title)
-        due_tasks = list(filter(is_due, registry._tasks.values()))
-        shuffle(due_tasks)
-        for task in due_tasks:
-            if time_alloted >= 0:
-                TL.add_task(task.title)
-                time_alloted -= int(task.length)
-                continue
-            break
-        print(utils.table_to_string(TL.listify(), MENU_PADDING))
-        print(' ' * MENU_PADDING +
-              f"{hotkey('s')}ave | {hotkey('r')}edo | {hotkey('-c')}ancel")
-
-        while True:
-            result = input(PROMPT)
-            if result == 's':
-                registry.add_tasklist(TL)
-                registry.set_current_tasklist(TL)
-                save_registry(registry, SAVE_PATH)
-                return MenuReturn(state.PREVIOUS_MENU, None)
-            elif result == 'r':
-                return MenuReturn(state.STAY_CURRENT, None)
-            elif result == '-c':
-                return MenuReturn(state.PREVIOUS_MENU, None)
-            else:
-                continue
+        return utils.get_menu_input(self.options)

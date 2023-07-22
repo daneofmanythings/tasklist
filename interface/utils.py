@@ -1,14 +1,50 @@
 import os
-from config import globals
-from config.theme import HOTKEY
+from config.globals import MENU_PADDING, HEADER_PADDING, PROMPT, MENU_OFFSET
+from config.theme import HOTKEY, CURRENT_MENU, TITLE
 
 
-def color_text(text: str, r: int, g: int, b: int) -> str:
+def header_string(header_list):
+    header_list = paint_header(header_list)
+    return HEADER_PADDING + " / ".join(header for header in header_list)
+
+
+def paint_text(text: str, hex_str: str) -> str:
+    r, g, b = int(hex_str[1:3], 16), int(
+        hex_str[3:5], 16), int(hex_str[5:7], 16)
+
     return f"\033[38;2;{r};{g};{b}m{text}\033[0m"
 
 
 def hotkey(hotkey: str):
-    return f"[{color_text(hotkey, *HOTKEY)}]"
+    return f"[{paint_text(hotkey, HOTKEY)}]"
+
+
+def paint_header(header_list):
+    result = header_list.copy()
+    result[-1] = paint_text(header_list[-1], CURRENT_MENU)
+    return result
+
+
+def paint_title(title):
+    head = paint_text("<< ", TITLE)
+    tail = paint_text(" >>", TITLE)
+    return head + title + tail
+
+
+def table_to_string(table, offset):
+    padding = "\n" + " " * offset
+    result = padding
+    result += padding.join(s for s in table)
+    result += "\n"
+    return result
+
+
+def menu_string(table):
+    return table_to_string(table, MENU_OFFSET)
+
+
+def sub_menu_string(table):
+    return MENU_PADDING + " | ".join(table)
 
 
 def clear_terminal():
@@ -18,45 +54,8 @@ def clear_terminal():
         os.system('cls')
 
 
-class NoCursor:
-    def __enter__(self):
-        print('\033[?25l', end="")
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        print('\033[?25h', end="")
-
-
-def get_menu_input(prompt, options_list):
+def get_menu_input(options_list):
     while True:
-        response = input(prompt + globals.PROMPT)
+        response = input(PROMPT)
         if response in options_list:
             return options_list[response]
-
-
-def table_to_string(table, offset):
-    padding = '\n' + ' ' * offset
-    result = str()
-    result += padding
-    result += padding.join(s for s in table)
-    result += padding
-    return result
-
-
-def main():
-    menu1 = (
-        'a',
-        'b'
-    )
-    menu2 = (
-        'c',
-        'd',
-    )
-
-    string = ''
-    string += table_to_string(menu1, 10)
-    string += table_to_string(menu2, 4)
-    print(string)
-
-
-if __name__ == "__main__":
-    main()

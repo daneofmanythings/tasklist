@@ -1,9 +1,12 @@
-import config.themes.catppuccin as cat
+# import config.themes.catppuccin as cat
+import config.themes.rosepine as rp
 
 
-CURRENT_ACTIVE = cat.YELLOW
-MENU_HIGHLIGHT = cat.GREEN
-EDITING_HIGHLIGHT = cat.PEACH
-ERROR = cat.RED
-GREYED_OUT = cat.OVERLAY0
-HOTKEY = cat.SAPPHIRE
+CURRENT_ACTIVE = rp.GOLD
+CURRENT_MENU = rp.FOAM
+EDITING_HIGHLIGHT = rp.GOLD
+ERROR = rp.LOVE
+GREYED_OUT = rp.SUBTLE
+HOTKEY = rp.IRIS
+CONFIRMATION = rp.PINE
+TITLE = rp.ROSE
