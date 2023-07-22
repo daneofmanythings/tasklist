@@ -71,7 +71,8 @@ class Tasklist:
         result = list()
         result.append(utils.paint_title(self.title))
         for i, task_name in enumerate(self.tasks):
-            result.append(f"{utils.hotkey(i + 1)} {task_name}")
+            if task_name in Tasklist.REGISTRY._tasks:
+                result.append(f"{utils.hotkey(i + 1)} {task_name}")
         return result
 
     def __hash__(self):

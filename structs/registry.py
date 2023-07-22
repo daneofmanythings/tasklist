@@ -34,17 +34,6 @@ class Registry:
             if task_list[task_name] and task_name in self._tasks:
                 self._tasks[task_name].last_completed = task_list[task_name]
 
-    # TODO: update this method to work with new task paradigm
-    def task_complete(self, task_title):
-        if task_title not in self._tasks:
-            return
-
-        task = self._tasks[task_title]
-        if task.period == 0:
-            self.remove_task(task)
-        else:
-            task.last_completed = date.today()
-
     def add_tasklist(self, tasklist) -> None:
         if not isinstance(tasklist, Tasklist):
             raise TypeError(

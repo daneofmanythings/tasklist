@@ -52,7 +52,10 @@ class SaveRegistry:
         if self.tasklist_save:
             self.registry.add_tasklist(self.tasklist_save)
         if self.tasklist_delete:
-            self.registry.remove_tasklist(self.tasklist_delete)
+            if self.registry._current_tasklist and self.tasklist_delete == self.registry._current_tasklist:
+                self.registry.remove_current_tasklist()
+            else:
+                self.registry.remove_tasklist(self.tasklist_delete)
         if self.current_tasklist_set:
             self.registry.set_current_tasklist(self.current_tasklist_set)
         if self.current_tasklist_process_save:
