@@ -25,6 +25,6 @@ Implementation of tags to sort tasks for more customized tasklist generation.
 
 ####    TASKLIST
     
-    * Processing a tasklist updates the registry with the tasks completed from the list.
+    * Processing a tasklist updates the registry with the tasks' completion status.
     
 
