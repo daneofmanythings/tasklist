@@ -1,6 +1,7 @@
 from interface import utils
 from interface.menu import PreviousMenu, ReplaceCurrent
 from interface.menus.save_registry import SaveRegistry
+from config.theme import ERROR
 
 
 class SaveRegistryConfirmation:
@@ -41,6 +42,7 @@ class SaveRegistryConfirmation:
             f"{utils.hotkey('g')}o back",
         ]
 
+    # TODO: Make this less bad.
     @property
     def attrs_to_hand_off(self):
         return {k: v for k, v in vars(self).items() if "task" in k}
@@ -56,10 +58,24 @@ class SaveRegistryConfirmation:
     def populate_changes(self):
         if self.task_save:
             self.menu.append(f"Saving task: {self.task_save.title}")
+            if self.task_save in self.registry.tasks:
+                self.menu.append(
+                    utils.paint_text(
+                        f"This will overwrite task of the same name in registry.",
+                        ERROR
+                    )
+                )
         if self.task_delete:
             self.menu.append(f"Deleting task: {self.task_delete.title}")
         if self.tasklist_save:
             self.menu.append(f"Saving tasklist: {self.tasklist_save.title}")
+            if self.tasklist_save in self.registry.tasklists:
+                self.menu.append(
+                    utils.paint_text(
+                        f"This will overwrite tasklist of the same name in registry.",
+                        ERROR
+                    )
+                )
         if self.tasklist_delete:
             self.menu.append(
                 f"Deleting tasklist: {self.tasklist_delete.title}")

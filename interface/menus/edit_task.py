@@ -28,8 +28,7 @@ class EditTask:
 
         self.sub_menu = [
             f"{utils.hotkey('f')}inished",
-            f"{utils.hotkey('r')}efresh",
-            f"{utils.hotkey('l')}og completion",
+            f"{utils.hotkey('m')}ark completion date",
             f"{utils.hotkey('c')}ancel edits",
             f"{utils.hotkey('h')}ome",
         ]
@@ -64,17 +63,18 @@ class EditTask:
             if response in self.options:
                 return self.options[response]
 
-            # TODO: FIX THIS IT IS ANNOYING. Try to incorperate it better into options
-            if response == 'r':
-                self.task.last_completed = None
-                self.help_string = utils.paint_text(
-                    "last completed set to None!", CONFIRMATION)
-                continue
-
-            if response == 'l':
-                self.task.last_completed = date.today()
-                self.help_string = utils.paint_text(
-                    "Task marked as completed today!", CONFIRMATION)
+            # TODO: FIX THIS IT IS ANNOYING. Try to incorperate it into options
+            if response == 't':
+                if self.task.last_completed is None:
+                    self.task.last_completed = date.today()
+                    self.help_string = utils.paint_text(
+                        "last completed set to today", CONFIRMATION)
+                    continue
+                else:
+                    self.task.last_completed = None
+                    self.help_string = utils.paint_text(
+                        "last completed removed", CONFIRMATION)
+                    continue
 
             try:
                 field = self.task_attributes[int(response) - 1]

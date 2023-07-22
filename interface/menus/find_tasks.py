@@ -1,7 +1,7 @@
 from interface import utils
 from interface.menu import PreviousMenu, NextMenu
 from interface.menus.view_all_tasks import ViewAllTasks
-from interface.menus.search_task_titles import SearchTaskTitles
+from interface.menus.search_task_titles_parameters import SearchTaskTitlesParameters
 
 
 __all__ = ['FindTasks']
@@ -20,7 +20,7 @@ class FindTasks:
         self.header_list = header_list
         self.menu = [
             f"{utils.hotkey('1')} View All",
-            # f"{utils.hotkey('2')} Search Titles",
+            f"{utils.hotkey('2')} Search Titles",
         ]
 
         self.sub_menu = [
@@ -29,7 +29,7 @@ class FindTasks:
 
         self.options = {
             '1': NextMenu(ViewAllTasks),
-            # '2': NextMenu(SearchTaskTitles),
+            '2': NextMenu(SearchTaskTitlesParameters),
             'g': PreviousMenu(),
         }
 

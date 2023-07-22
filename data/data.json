@@ -1,43 +1,33 @@
 {
   "tasks": [
     {
-      "title": "this is a task",
-      "notes": "these are notes",
-      "length": 1,
-      "start_date": "2023-06-22",
-      "period": 1,
-      "strict_recurrence": false,
-      "created_date": "2023-06-22",
-      "last_completed": "2023-07-20"
-    },
-    {
-      "title": "iirnets",
-      "notes": "nesri",
-      "length": 0,
-      "start_date": "2023-06-23",
-      "period": 0,
-      "strict_recurrence": true,
-      "created_date": "2023-06-23",
-      "last_completed": "2023-07-20"
-    },
-    {
-      "title": "eeeee",
-      "notes": "stnrei",
-      "length": 0,
-      "start_date": "2023-07-17",
-      "period": 0,
-      "strict_recurrence": false,
-      "created_date": "2023-07-17",
-      "last_completed": "2023-07-20"
-    },
-    {
       "title": "call anthem blue cross",
-      "notes": "8004074627",
+      "notes": "8004074627 - called. gave this new number to call: 4087583800",
       "length": 30,
       "start_date": "2023-07-20",
       "period": 0,
       "strict_recurrence": false,
       "created_date": "2023-07-20",
+      "last_completed": "2023-07-21"
+    },
+    {
+      "title": "sign up for headspace",
+      "notes": "",
+      "length": 5,
+      "start_date": "2023-07-21",
+      "period": 0,
+      "strict_recurrence": false,
+      "created_date": "2023-07-21",
+      "last_completed": "2023-07-21"
+    },
+    {
+      "title": "wash bedding",
+      "notes": "",
+      "length": 10,
+      "start_date": "2023-07-22",
+      "period": 14,
+      "strict_recurrence": true,
+      "created_date": "2023-07-21",
       "last_completed": null
     }
   ],

@@ -159,7 +159,10 @@ class Task:
     @property
     def is_due(self):
         if self.last_completed is None:
-            return True
+            if date.today() >= self.start_date:
+                return True
+            else:
+                return False
 
         if self.period:
 
