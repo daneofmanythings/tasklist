@@ -24,6 +24,7 @@ class Task:
             notes=None,
             length='0',
             start_date=None,
+            deadline=None,
             period=None,
             strict_recurrence=None,
             created_date=None,
@@ -35,6 +36,7 @@ class Task:
         self.notes: str = notes
         self.length: int = length  # validates to be non-negative
         self.start_date: date = start_date  # defaults to today()
+        self.deadline: date = deadline  # defaults to None
         self.period: int = period  # validates to be non-negative
         self.strict_recurrence: bool = strict_recurrence  # validates to be bool
         self.created_date: date = created_date
@@ -81,6 +83,22 @@ class Task:
         else:
             try:
                 self._start_date = date.fromisoformat(val)
+            except Exception:
+                raise ValueError(f'Invalid date string (YYYY-MM-DD): "{val}"')
+
+    @property
+    def deadline(self):
+        return self._deadline
+
+    @deadline.setter
+    def deadline(self, val):
+        if not val:
+            self._deadline = None
+        elif isinstance(val, date):
+            self._deadline = val
+        else:
+            try:
+                self._deadline = date.fromisoformat(val)
             except Exception:
                 raise ValueError(f'Invalid date string (YYYY-MM-DD): "{val}"')
 
