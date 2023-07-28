@@ -3,23 +3,19 @@ from datetime import date, datetime, timedelta
 import json
 
 
-def putter(val):
-    return lambda: val
-
-
 @total_ordering
 class Task:
 
     recurrence_responses = {
-        'y': True,
-        'yes': True,
-        'n': False,
-        'no': False
+        't': True,
+        'true': True,
+        'f': False,
+        'false': False
     }
 
     private_attrs = (
         '_created_date',
-        '_last_completed'
+        '_last_completed',
     )
 
     def __init__(
@@ -70,7 +66,7 @@ class Task:
                     self._length = int_val
                     return
             except Exception:
-                raise ValueError('Length must be a non-negative integer (1)')
+                raise ValueError('Length must be a non-negative integer')
 
     @property
     def start_date(self):
@@ -153,6 +149,8 @@ class Task:
 
         if val is None or isinstance(val, date):
             self._last_completed = val
+        elif val == '':
+            self._last_completed = date.today()
         else:
             raise ValueError(f'Invalid date string (YYYY-MM-DD): "{val}"')
 

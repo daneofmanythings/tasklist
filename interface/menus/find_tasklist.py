@@ -1,7 +1,7 @@
 from interface import utils
 from interface.menu import PreviousMenu, NextMenu
 from interface.menus.view_all_tasklists import ViewAllTasklists
-from interface.menus.search_tasklist_titles import SearchTasklistTitles
+# from interface.menus.search_tasklist_titles import SearchTasklistTitles
 
 
 __all__ = ['FindTasklist']

@@ -1,8 +1,7 @@
 from interface import utils
 
-from interface.menu import ReplaceCurrent, NextMenu, PreviousMenu
+from interface.menu import ReplaceCurrent, NextMenu, PreviousMenu, BackToMain
 from interface.menus.view_task import ViewTask
-from interface.menus.save_registry_confirmation import SaveRegistryConfirmation
 
 
 class ViewTasklist:
@@ -19,11 +18,20 @@ class ViewTasklist:
         self.header_list = header_list
         self.tasklist = tasklist
 
-        self.sub_menu = [
-            f"{utils.hotkey('s')}ave",
+    @property
+    def sub_menu(self):
+        result = list()
+
+        if not self.registry.current_tasklist or self.registry.current_tasklist != self.tasklist:
+            result.append(f"{utils.hotkey('s')}et to current")
+
+        result.extend([
             f"{utils.hotkey('d')}elete",
             f"{utils.hotkey('g')}o back",
-        ]
+            f"{utils.hotkey('h')}ome",
+
+        ])
+        return result
 
     @property
     def optionals(self):
@@ -31,10 +39,20 @@ class ViewTasklist:
                   for i, task_name in enumerate(self.tasklist.tasks.keys())
                   if task_name in self.registry._tasks}
         result.update({
-            's': ReplaceCurrent(SaveRegistryConfirmation, tasklist_save=self.tasklist),
-            'd': ReplaceCurrent(SaveRegistryConfirmation, tasklist_delete=self.tasklist),
+            'd': PreviousMenu(execute=lambda: self.registry.save(tasklist_delete=self.tasklist)),
             'g': PreviousMenu(),
+            'h': BackToMain()
         })
+        if not self.registry.current_tasklist or self.registry.current_tasklist != self.tasklist:
+            result.update({
+                's': ReplaceCurrent(
+                    ViewTasklist,
+                    tasklist=self.tasklist,
+                    execute=lambda: self.registry.save(
+                        current_tasklist_set=self.tasklist
+                    )
+                )
+            })
         return result
 
     def display_string(self):
@@ -51,4 +69,3 @@ class ViewTasklist:
         print(self.display_string())
 
         return utils.get_menu_input(self.optionals)
-    pass

@@ -32,12 +32,13 @@ class CreateTask:
         return result
 
     def run_instance(self):
+        # TODO: maybe incorporate get_user_inputs into the options paradigm somehow
         self.task = self.get_user_inputs(self.task)
 
         if self.task is None:
             return PreviousMenu()
 
-        return ReplaceCurrent(ViewTask, task=self.task)
+        return ReplaceCurrent(ViewTask, task=self.task, execute=lambda: self.registry.save(task_save=self.task))
 
     def get_user_inputs(self, task) -> Optional[Task]:
         cancel_text = utils.paint_text(' [-c]ancel', GREYED_OUT)
@@ -58,6 +59,12 @@ class CreateTask:
                 response = input(PROMPT)
                 if response == '-c':
                     return None
+
+                if attr_trimmed == "title" and response in self.registry._tasks:
+                    self.help_string = MENU_PADDING + utils.paint_text(
+                        "title already exists in registry", ERROR
+                    )
+                    continue
 
                 try:
                     setattr(task, attr_trimmed, response)

@@ -1,5 +1,5 @@
 from interface import utils
-from interface.menu import PreviousMenu, NextMenu, BackToMain
+from interface.menu import PreviousMenu, NextMenu, BackToMain, ReplaceCurrent
 from interface.menus.view_task import ViewTask
 
 
@@ -34,7 +34,7 @@ class SearchTaskTitles:
 
     @property
     def options(self):
-        result = {str(i + 1): NextMenu(ViewTask, task=t)
+        result = {str(i + 1): ReplaceCurrent(ViewTask, task=t)
                   for i, t in enumerate(self.tasks)}
         result['g'] = PreviousMenu()
         result['h'] = BackToMain()

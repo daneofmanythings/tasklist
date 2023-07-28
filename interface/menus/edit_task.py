@@ -1,9 +1,8 @@
 from datetime import date
-from copy import copy
 from config.theme import ERROR, EDITING_HIGHLIGHT, GREYED_OUT, CONFIRMATION
 from config.globals import PROMPT, MENU_PADDING
 from interface import utils
-from interface.menu import PreviousMenu, BackToMain
+from interface.menu import PreviousMenu, BackToMain, NextMenu
 
 __all__ = ['EditTask']
 
@@ -23,21 +22,22 @@ class EditTask:
         self.header_list = header_list
         self.help_string = ''
         self.task = task
-        self.pre_edit_task = copy(task)
-        self.task_attributes = list(self.task.public_vars().keys())
 
         self.sub_menu = [
-            f"{utils.hotkey('f')}inished",
-            f"{utils.hotkey('m')}ark completion date",
-            f"{utils.hotkey('c')}ancel edits",
+            f"{utils.hotkey('g')}o back",
             f"{utils.hotkey('h')}ome",
         ]
 
     @property
+    def task_attributes(self):
+        result = list(self.task.public_vars().keys())
+        result.append('last_completetd')
+        return result
+
+    @property
     def options(self):
         return {
-            'f': PreviousMenu(task=self.task),
-            'c': PreviousMenu(task=self.pre_edit_task),
+            'g': PreviousMenu(),
             'h': BackToMain()
         }
 
@@ -57,24 +57,13 @@ class EditTask:
         while True:
             utils.clear_terminal()
             print(self.display_string())
+            # sub_menu is not in display_string because it changes when editing a field
             print(utils.sub_menu_string(self.sub_menu))
+
             response = input(PROMPT)
 
             if response in self.options:
                 return self.options[response]
-
-            # TODO: FIX THIS IT IS ANNOYING. Try to incorperate it into options
-            if response == 'm':
-                if self.task.last_completed is None:
-                    self.task.last_completed = date.today()
-                    self.help_string = utils.paint_text(
-                        "last completed set to today", CONFIRMATION)
-                    continue
-                else:
-                    self.task.last_completed = None
-                    self.help_string = utils.paint_text(
-                        "last completed removed", CONFIRMATION)
-                    continue
 
             try:
                 field = self.task_attributes[int(response) - 1]
@@ -99,11 +88,22 @@ class EditTask:
                 response = input(PROMPT)
 
                 if response == "-c":
+                    self.help_string = ''
                     break
+
+                if field_trimmed == "title" and response in self.registry._tasks:
+                    self.help_string = utils.paint_text(
+                        "title already in registry", ERROR
+                    )
+                    continue
 
                 try:
                     setattr(self.task, field_trimmed, response)
                     self.help_string = ''
+
+                    # saving registry
+                    self.registry.save(task_save=self.task)
+
                     break
                 except ValueError as e:
                     self.help_string = utils.paint_text(str(e), ERROR)

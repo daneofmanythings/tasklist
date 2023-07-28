@@ -5,7 +5,6 @@ from interface.menus.find_tasks import FindTasks
 from interface.menus.generate_tl_parameters import GenerateTasklistParameters
 from interface.menus.current_tasklist import CurrentTasklist
 from interface.menus.find_tasklist import FindTasklist
-# from interface.menus.current_tasklist import ViewTasklist
 
 
 __all__ = ['MainMenu']
@@ -36,11 +35,11 @@ class MainMenu:
             '4': NextMenu(GenerateTasklistParameters),
         }
 
-        if self.registry._current_tasklist:
+        if self.registry.current_tasklist:
             self.menu.append(f"{utils.hotkey('5')} Open Current Tasklist")
             self.options['5'] = NextMenu(CurrentTasklist)
 
-    def display_string_instance(self):
+    def display_string(self):
         result = "\n"
         painted_header = utils.paint_header(self.header_list)
         result += utils.header_string(painted_header)
@@ -50,5 +49,5 @@ class MainMenu:
 
     def run_instance(self):
         utils.clear_terminal()
-        print(self.display_string_instance())
+        print(self.display_string())
         return utils.get_menu_input(self.options)

@@ -24,13 +24,13 @@ def ReplaceCurrent(menu, **optionals):
     return MenuReturn(MenuReturnState.ReplaceCurrent, menu), optionals
 
 
-def PreviousMenu(menu=None, **optionals):
+def PreviousMenu(**optionals):
     return MenuReturn(MenuReturnState.PreviousMenu, None), optionals
 
 
-def StayCurrent(menu=None, **optionals):
+def StayCurrent(**optionals):
     return MenuReturn(MenuReturnState.StayCurrent, None), optionals
 
 
-def BackToMain(menu=None, **optionals):
+def BackToMain(**optionals):
     return MenuReturn(MenuReturnState.BackToMain, None), optionals

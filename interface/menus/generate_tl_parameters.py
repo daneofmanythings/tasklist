@@ -60,6 +60,12 @@ class GenerateTasklistParameters:
                 if response == '-c':
                     return None
 
+                if attr_trimmed == "title" and response in self.registry._tasklists:
+                    self.help_string == utils.paint_text(
+                        "title already in registry", ERROR
+                    )
+                    continue
+
                 try:
                     setattr(parameters, attr_trimmed, response)
                     self.help_string = ''

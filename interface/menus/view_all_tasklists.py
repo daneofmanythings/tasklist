@@ -1,5 +1,5 @@
 from interface import utils
-from interface.menu import PreviousMenu, NextMenu, BackToMain
+from interface.menu import PreviousMenu, ReplaceCurrent, BackToMain
 from interface.menus.view_tasklist import ViewTasklist
 
 
@@ -32,7 +32,7 @@ class ViewAllTasklists:
 
     @property
     def options(self):
-        result = {str(i + 1): NextMenu(ViewTasklist, tasklist=t)
+        result = {str(i + 1): ReplaceCurrent(ViewTasklist, tasklist=t)
                   for i, t in enumerate(self.tasklists)}
         result['g'] = PreviousMenu()
         result['h'] = BackToMain()
@@ -48,8 +48,6 @@ class ViewAllTasklists:
         return result
 
     def run_instance(self):
-
-        while True:
-            utils.clear_terminal()
-            print(self.display_string())
-            return utils.get_menu_input(self.options)
+        utils.clear_terminal()
+        print(self.display_string())
+        return utils.get_menu_input(self.options)

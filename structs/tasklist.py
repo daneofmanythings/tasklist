@@ -79,6 +79,8 @@ class Tasklist:
         return hash(self.title)
 
     def __eq__(self, other):
+        if isinstance(other, str):
+            return self.title == other
         if not isinstance(other, Tasklist):
             raise NotImplementedError(
                 "Equality only implemented on type Tasklist.")

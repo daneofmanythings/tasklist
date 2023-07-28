@@ -1,6 +1,5 @@
 from interface import utils
-from interface.menu import ReplaceCurrent, NextMenu, PreviousMenu, BackToMain
-from interface.menus.save_registry_confirmation import SaveRegistryConfirmation
+from interface.menu import ReplaceCurrent, NextMenu, PreviousMenu, BackToMain, StayCurrent
 from interface.menus.edit_task import EditTask
 
 
@@ -10,23 +9,29 @@ class ViewTask:
 
     @classmethod
     def run(self, registry, header_list, **optionals):
-        M = ViewTask(registry, header_list, optionals['task'])
+        M = ViewTask(registry, header_list, **optionals)
         return M.run_instance()
 
-    def __init__(self, registry, header_list, task):
+    def __init__(self, registry, header_list, task, refresh=None):
         self.registry = registry
         self.header_list = header_list
         self.task = task
+        self.refresh = refresh
+        if self.refresh:
+            self.task.last_completed = None
+
+            # saving registry
+            self.registry.save(task_save=self.task)
 
     @property
     def sub_menu(self):
         result = [
-            f"{utils.hotkey('s')}ave",
             f"{utils.hotkey('e')}dit",
+            f"{utils.hotkey('d')}elete",
         ]
 
-        if self.task in self.registry.tasks:
-            result.append(f"{utils.hotkey('d')}elete")
+        if self.task.last_completed:
+            result.append(f"{utils.hotkey('r')}efresh")
 
         result.extend([
             f"{utils.hotkey('g')}o back",
@@ -38,14 +43,15 @@ class ViewTask:
     @property
     def options(self):
         result = {
-            's': ReplaceCurrent(SaveRegistryConfirmation, task_save=self.task),
             'e': NextMenu(EditTask, task=self.task),
-            'g': PreviousMenu(task=self.task),
+            'd': PreviousMenu(execute=lambda: self.registry.save(task_delete=self.task)),
+            'g': PreviousMenu(),
             'h': BackToMain()
         }
-        if self.task in self.registry.tasks:
-            result['d'] = ReplaceCurrent(
-                SaveRegistryConfirmation, task_delete=self.task)
+
+        if self.task.last_completed:
+            result['r'] = StayCurrent(
+                execute=lambda: self.registry.save(task_refresh=self.task.title))
 
         return result
 

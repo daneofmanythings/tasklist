@@ -1,6 +1,5 @@
 from interface import utils
 from interface.menu import PreviousMenu, ReplaceCurrent
-from interface.menus.save_registry_confirmation import SaveRegistryConfirmation
 
 
 class ProcessTasklist:
@@ -15,7 +14,7 @@ class ProcessTasklist:
     def __init__(self, registry, header):
         self.registry = registry
         self.header = header
-        self.tasklist = registry._current_tasklist
+        self.tasklist = registry.current_tasklist
 
         self.sub_menu = [
             f"Process and {utils.hotkey('d')}elete",
@@ -24,8 +23,8 @@ class ProcessTasklist:
         ]
 
         self.options = {
-            'd': ReplaceCurrent(SaveRegistryConfirmation, current_tasklist_process_delete=self.tasklist),
-            's': ReplaceCurrent(SaveRegistryConfirmation, current_tasklist_process_save=self.tasklist),
+            # 'd': ReplaceCurrent(SaveRegistryConfirmation, current_tasklist_process_delete=self.tasklist),
+            # 's': ReplaceCurrent(SaveRegistryConfirmation, current_tasklist_process_save=self.tasklist),
             'g': PreviousMenu()
         }
 
