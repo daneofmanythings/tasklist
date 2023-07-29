@@ -35,4 +35,13 @@ class GenerateTasklist:
                 duration -= int(task.length)
 
     def run_instance(self):
-        return ReplaceCurrent(CurrentTasklist, execute=lambda: self.registry.save(current_tasklist_set=self.tasklist))
+        return ReplaceCurrent(CurrentTasklist, execute=Setter(self.registry, self.tasklist))
+
+
+class Setter:
+    def __init__(self, registry, tasklist):
+        self.registry = registry
+        self.tasklist = tasklist
+
+    def __call__(self):
+        return self.registry.w_current_tasklist_set(self.tasklist)

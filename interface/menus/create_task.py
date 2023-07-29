@@ -38,7 +38,7 @@ class CreateTask:
         if self.task is None:
             return PreviousMenu()
 
-        return ReplaceCurrent(ViewTask, task=self.task, execute=lambda: self.registry.save(task_save=self.task))
+        return ReplaceCurrent(ViewTask, task=self.task, execute=Saver(self.registry, self.task))
 
     def get_user_inputs(self, task) -> Optional[Task]:
         cancel_text = utils.paint_text(' [-c]ancel', GREYED_OUT)
@@ -75,3 +75,12 @@ class CreateTask:
                         utils.paint_text(str(ex), ERROR)
                     continue
         return task
+
+
+class Saver:
+    def __init__(self, registry, task):
+        self.registry = registry
+        self.task = task
+
+    def __call__(self):
+        return self.registry.w_task_save(self.task)

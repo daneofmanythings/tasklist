@@ -25,14 +25,17 @@ class CurrentTasklist:
             f"{utils.hotkey('g')}o back",
         ]
 
+    def f(self, s):
+        return self.registry.toggle_task_current_tasklist(s)
+
     @property
     def optionals(self):
-        result = {f"{i + 1}": StayCurrent(execute=lambda: self.registry.save(current_tasklist_toggle_task=task_name))
-                  for i, task_name in enumerate(self.tasklist.tasks.keys())}
+        result = {f"{i + 1}": StayCurrent(execute=Toggler(self.registry, task_name))
+                  for i, task_name in enumerate(self.tasklist.tasks)}
         result.update({
             'v': NextMenu(ViewTasklist, tasklist=self.tasklist),
-            'f': PreviousMenu(execute=lambda: self.registry.save(current_tasklist_process_delete=self.tasklist)),
-            'r': PreviousMenu(execute=lambda: self.registry.save(current_tasklist_process_save=self.tasklist)),
+            'f': PreviousMenu(execute=Deleter(self.registry)),
+            'r': PreviousMenu(execute=Saver(self.registry)),
             'g': PreviousMenu(),
         })
         return result
@@ -53,3 +56,28 @@ class CurrentTasklist:
         print(self.display_string())
 
         return utils.get_menu_input(self.optionals)
+
+
+class Toggler:
+    def __init__(self, registry, task_name):
+        self.registry = registry
+        self.task_name = task_name
+
+    def __call__(self):
+        return self.registry.w_current_tasklist_toggle_task(self.task_name)
+
+
+class Saver:
+    def __init__(self, registry):
+        self.registry = registry
+
+    def __call__(self):
+        return self.registry.w_current_tasklist_process_save()
+
+
+class Deleter:
+    def __init__(self, registry):
+        self.registry = registry
+
+    def __call__(self):
+        return self.registry.w_current_tasklist_process_delete()

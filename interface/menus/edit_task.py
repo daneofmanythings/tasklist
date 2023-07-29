@@ -102,7 +102,7 @@ class EditTask:
                     self.help_string = ''
 
                     # saving registry
-                    self.registry.save(task_save=self.task)
+                    self.registry.w_task_save(self.task)
 
                     break
                 except ValueError as e:

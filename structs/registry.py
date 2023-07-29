@@ -3,7 +3,6 @@ from structs.tasklist import Tasklist, TasklistEncoder, TasklistDecoder
 from config.globals import SAVE_PATH
 import os
 import json
-from datetime import date
 
 
 class Registry:
@@ -41,9 +40,6 @@ class Registry:
     def remove_tasklist(self, tasklist) -> None:
         del self._tasklists[tasklist.title]
 
-    def toggle_task_current_tasklist(self, task_name):
-        self.current_tasklist.toggle_completion(task_name)
-
     def process_current_tasklist(self):
         task_list = self.current_tasklist.tasks
         for task_name in task_list:
@@ -62,43 +58,44 @@ class Registry:
         self.remove_tasklist(self.current_tasklist)
         self.current_tasklist = None
 
-    def save(
-        self,
-        task_save=None,
-        task_delete=None,
-        task_refresh=None,
-        tasklist_save=None,
-        tasklist_delete=None,
-        current_tasklist_set=None,
-        current_tasklist_process_save=None,
-        current_tasklist_process_delete=None,
-        current_tasklist_toggle_task=None,
-    ):
-        if task_save:
-            self.add_task(task_save)
-        if task_delete:
-            self.remove_task(task_delete)
-        if task_refresh:
-            self.refresh_task(task_refresh)
-        if tasklist_save:
-            self.add_tasklist(tasklist_save)
-        if tasklist_delete:
-            if self.current_tasklist and tasklist_delete == self.current_tasklist:
-                self.remove_current_tasklist()
-            else:
-                self.remove_tasklist(tasklist_delete)
-        if current_tasklist_set:
-            self.add_tasklist(current_tasklist_set)
-            self.set_current_tasklist(current_tasklist_set)
-        if current_tasklist_process_save:
-            self.process_current_tasklist()
-            self.current_tasklist = None
-        if current_tasklist_process_delete:
-            self.process_current_tasklist()
-            self.remove_current_tasklist()
-        if current_tasklist_toggle_task:
-            self.toggle_task_current_tasklist(current_tasklist_toggle_task)
+    def w_task_save(self, task):
+        self.add_task(task)
+        write_to_disk(self, SAVE_PATH)
 
+    def w_task_delete(self, task):
+        self.remove_task(task)
+        write_to_disk(self, SAVE_PATH)
+
+    def w_task_refresh(self, task_name):
+        self.refresh_task(task_name)
+        write_to_disk(self, SAVE_PATH)
+
+    def w_tasklist_save(self, tasklist):
+        self.add_tasklist(tasklist)
+        write_to_disk(self, SAVE_PATH)
+
+    def w_tasklist_delete(self, tasklist):
+        if self.current_tasklist and tasklist == self.current_tasklist:
+            self.remove_current_tasklist()
+        else:
+            self.remove_tasklist(tasklist)
+        write_to_disk(self, SAVE_PATH)
+
+    def w_current_tasklist_set(self, tasklist):
+        self.add_tasklist(tasklist)
+        self.set_current_tasklist(tasklist)
+        write_to_disk(self, SAVE_PATH)
+
+    def w_current_tasklist_process_save(self):
+        self.process_current_tasklist()
+        self.current_tasklist = None
+
+    def w_current_tasklist_process_delete(self):
+        self.process_current_tasklist()
+        self.remove_current_tasklist()
+
+    def w_current_tasklist_toggle_task(self, task_name):
+        self.current_tasklist.toggle_completion(task_name)
         write_to_disk(self, SAVE_PATH)
 
     def __str__(self):

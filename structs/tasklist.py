@@ -27,7 +27,7 @@ class Tasklist:
         self.tasks[task_name] = None
 
     def toggle_completion(self, task_name: str):
-        # letting potential key errors leak
+        # letting potential key errors leak. Should always be fed valid task
         if self.tasks[task_name]:
             self.tasks[task_name] = None
         else:
