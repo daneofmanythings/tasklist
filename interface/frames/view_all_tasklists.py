@@ -1,5 +1,5 @@
 from interface import utils
-from interface.returns import PreviousMenu, ReplaceCurrent, BackToMain
+from interface.returns import PreviousFrame, ReplaceCurrent, BackToMain
 from interface.frames.view_tasklist import ViewTasklist
 
 
@@ -34,7 +34,7 @@ class ViewAllTasklists:
     def options(self):
         result = {str(i + 1): ReplaceCurrent(ViewTasklist, tasklist=t)
                   for i, t in enumerate(self.tasklists)}
-        result['g'] = PreviousMenu()
+        result['g'] = PreviousFrame()
         result['h'] = BackToMain()
         return result
 

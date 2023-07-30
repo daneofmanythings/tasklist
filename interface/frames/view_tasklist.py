@@ -1,6 +1,6 @@
 from interface import utils
 
-from interface.returns import ReplaceCurrent, NextMenu, PreviousMenu, BackToMain
+from interface.returns import ReplaceCurrent, NextFrame, PreviousFrame, BackToMain
 from interface.frames.view_task import ViewTask
 
 
@@ -35,12 +35,12 @@ class ViewTasklist:
 
     @property
     def optionals(self):
-        result = {f"{i + 1}": NextMenu(ViewTask, task=self.registry._tasks[task_name])
-                  for i, task_name in enumerate(self.tasklist.tasks.keys())
+        result = {f"{i + 1}": NextFrame(ViewTask, task=self.registry._tasks[task_name])
+                  for i, task_name in enumerate(self.tasklist.tasks)
                   if task_name in self.registry._tasks}
         result.update({
-            'd': PreviousMenu(execute=lambda: self.registry.save(tasklist_delete=self.tasklist)),
-            'g': PreviousMenu(),
+            'd': PreviousFrame(execute=Deleter(self.registry, self.tasklist)),
+            'g': PreviousFrame(),
             'h': BackToMain()
         })
         if not self.registry.current_tasklist or self.registry.current_tasklist != self.tasklist:
@@ -48,9 +48,7 @@ class ViewTasklist:
                 's': ReplaceCurrent(
                     ViewTasklist,
                     tasklist=self.tasklist,
-                    execute=lambda: self.registry.save(
-                        current_tasklist_set=self.tasklist
-                    )
+                    execute=Setter(self.registry, self.tasklist)
                 )
             })
         return result
@@ -69,3 +67,21 @@ class ViewTasklist:
         print(self.display_string())
 
         return utils.get_menu_input(self.optionals)
+
+
+class Deleter:
+    def __init__(self, registry, tasklist):
+        self.registry = registry
+        self.tasklist = tasklist
+
+    def __call__(self):
+        return self.registry.w_tasklist_delete(self.tasklist)
+
+
+class Setter:
+    def __init__(self, registry, tasklist):
+        self.registry = registry
+        self.tasklist = tasklist
+
+    def __call__(self):
+        return self.registry.w_current_tasklist_set(self.tasklist)

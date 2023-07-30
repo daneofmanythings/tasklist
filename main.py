@@ -10,11 +10,7 @@ def main():
     Tasklist.REGISTRY = registry
     app = App(registry, MainMenu)
 
-    try:
-        while True:
-            app.run_current()
-    except KeyboardInterrupt:
-        pass
+    app.run()
 
 
 if __name__ == "__main__":

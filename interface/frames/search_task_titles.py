@@ -1,5 +1,5 @@
 from interface import utils
-from interface.returns import PreviousMenu, NextMenu, BackToMain, ReplaceCurrent
+from interface.returns import PreviousFrame, NextFrame, BackToMain, ReplaceCurrent
 from interface.frames.view_task import ViewTask
 
 
@@ -36,7 +36,7 @@ class SearchTaskTitles:
     def options(self):
         result = {str(i + 1): ReplaceCurrent(ViewTask, task=t)
                   for i, t in enumerate(self.tasks)}
-        result['g'] = PreviousMenu()
+        result['g'] = PreviousFrame()
         result['h'] = BackToMain()
         return result
 
@@ -55,4 +55,3 @@ class SearchTaskTitles:
             utils.clear_terminal()
             print(self.display_string())
             return utils.get_menu_input(self.options)
-    pass

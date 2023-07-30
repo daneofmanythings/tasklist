@@ -1,5 +1,5 @@
 from interface import utils
-from interface.returns import PreviousMenu, NextMenu
+from interface.returns import PreviousFrame, NextFrame
 from interface.frames.view_all_tasklists import ViewAllTasklists
 
 
@@ -27,9 +27,9 @@ class FindTasklist:
         ]
 
         self.options = {
-            '1': NextMenu(ViewAllTasklists),
+            '1': NextFrame(ViewAllTasklists),
             # '2': NextMenu(SearchTasklistTitles),
-            'g': PreviousMenu(),
+            'g': PreviousFrame(),
         }
 
     def display_string(self):

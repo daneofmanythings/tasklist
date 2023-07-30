@@ -1,5 +1,5 @@
 from interface import utils
-from interface.returns import NextMenu
+from interface.returns import NextFrame
 from interface.frames.create_task import CreateTask
 from interface.frames.find_tasks import FindTasks
 from interface.frames.generate_tl_parameters import GenerateTasklistParameters
@@ -29,15 +29,15 @@ class MainMenu:
         ]
 
         self.options = {
-            '1': NextMenu(CreateTask),
-            '2': NextMenu(FindTasks),
-            '3': NextMenu(FindTasklist),
-            '4': NextMenu(GenerateTasklistParameters),
+            '1': NextFrame(CreateTask),
+            '2': NextFrame(FindTasks),
+            '3': NextFrame(FindTasklist),
+            '4': NextFrame(GenerateTasklistParameters),
         }
 
         if self.registry.current_tasklist:
             self.menu.append(f"{utils.hotkey('5')} Open Current Tasklist")
-            self.options['5'] = NextMenu(CurrentTasklist)
+            self.options['5'] = NextFrame(CurrentTasklist)
 
     def display_string(self):
         result = "\n"

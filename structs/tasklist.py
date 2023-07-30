@@ -5,6 +5,7 @@ from functools import total_ordering
 from interface import utils
 # TODO: put these colors into the theming file
 from config.themes.rosepine import PINE, ROSE, HIGHLIGHT_HIGH
+from config.theme import HIGHLIGHT
 
 
 @total_ordering
@@ -122,9 +123,13 @@ def task_completed(task_name: str):
 
 
 def task_in_progress(task_name: str):
-    return task_name + utils.paint_text(" (in progress)", PINE)
+    return task_name + utils.paint_text(" (in progress)", HIGHLIGHT)
 
 
 def task_not_found(task_name: str):
     result = task_name + " (NOT FOUND)"
     return utils.paint_text(result, ROSE)
+
+
+def task_not_due(task_name: str):
+    return task_name + utils.paint_text(" (not due)", PINE)

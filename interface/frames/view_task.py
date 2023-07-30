@@ -1,5 +1,5 @@
 from interface import utils
-from interface.returns import ReplaceCurrent, NextMenu, PreviousMenu, BackToMain, StayCurrent
+from interface.returns import ReplaceCurrent, NextFrame, PreviousFrame, BackToMain, StayCurrent
 from interface.frames.edit_task import EditTask
 
 
@@ -12,16 +12,10 @@ class ViewTask:
         M = ViewTask(registry, header_list, **optionals)
         return M.run_instance()
 
-    def __init__(self, registry, header_list, task, refresh=None):
+    def __init__(self, registry, header_list, task):
         self.registry = registry
         self.header_list = header_list
         self.task = task
-        self.refresh = refresh
-        if self.refresh:
-            self.task.last_completed = None
-
-            # saving registry
-            self.registry.save(task_save=self.task)
 
     @property
     def sub_menu(self):
@@ -43,15 +37,15 @@ class ViewTask:
     @property
     def options(self):
         result = {
-            'e': NextMenu(EditTask, task=self.task),
-            'd': PreviousMenu(execute=lambda: self.registry.save(task_delete=self.task)),
-            'g': PreviousMenu(),
+            'e': NextFrame(EditTask, task=self.task),
+            'd': PreviousFrame(execute=Deleter(self.registry, self.task)),
+            'g': PreviousFrame(),
             'h': BackToMain()
         }
 
         if self.task.last_completed:
             result['r'] = StayCurrent(
-                execute=lambda: self.registry.save(task_refresh=self.task.title))
+                execute=Refresher(self.registry, self.task))
 
         return result
 
@@ -68,3 +62,21 @@ class ViewTask:
         utils.clear_terminal()
         print(self.display_string())
         return utils.get_menu_input(self.options)
+
+
+class Deleter:
+    def __init__(self, registry, task):
+        self.registry = registry
+        self.task = task
+
+    def __call__(self):
+        return self.registry.w_task_delete(self.task)
+
+
+class Refresher:
+    def __init__(self, registry, task):
+        self.registry = registry
+        self.task = task
+
+    def __call__(self):
+        return self.registry.w_task_refresh(self.task)

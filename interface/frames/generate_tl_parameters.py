@@ -3,8 +3,8 @@ from typing import Optional
 from interface import utils
 from structs.tasklist_parameters import TasklistParameters
 from interface.frames.generate_tasklist import GenerateTasklist
-from interface.returns import ReplaceCurrent, PreviousMenu
-from config.theme import GREYED_OUT, EDITING_HIGHLIGHT, ERROR
+from interface.returns import ReplaceCurrent, PreviousFrame
+from config.theme import GREYED_OUT, HIGHLIGHT, ERROR
 from config.globals import MENU_PADDING, PROMPT
 
 
@@ -35,7 +35,7 @@ class GenerateTasklistParameters:
         self.parameters = self.parameter_creation(self.parameters)
 
         if self.parameters is None:
-            return PreviousMenu()
+            return PreviousFrame()
 
         return ReplaceCurrent(GenerateTasklist, parameters=self.parameters)
 
@@ -45,7 +45,7 @@ class GenerateTasklistParameters:
         for attr in parameters.public_vars():
             # Accesses properties correctly
             attr_trimmed = attr.removeprefix('_')
-            attr_painted = utils.paint_text(attr_trimmed, EDITING_HIGHLIGHT)
+            attr_painted = utils.paint_text(attr_trimmed, HIGHLIGHT)
 
             while True:
                 utils.clear_terminal()

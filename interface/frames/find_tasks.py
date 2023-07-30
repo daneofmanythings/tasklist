@@ -1,5 +1,5 @@
 from interface import utils
-from interface.returns import PreviousMenu, NextMenu
+from interface.returns import PreviousFrame, NextFrame
 from interface.frames.view_all_tasks import ViewAllTasks
 from interface.frames.search_task_titles_parameters import SearchTaskTitlesParameters
 
@@ -28,9 +28,9 @@ class FindTasks:
         ]
 
         self.options = {
-            '1': NextMenu(ViewAllTasks),
-            '2': NextMenu(SearchTaskTitlesParameters),
-            'g': PreviousMenu(),
+            '1': NextFrame(ViewAllTasks),
+            '2': NextFrame(SearchTaskTitlesParameters),
+            'g': PreviousFrame(),
         }
 
     def display_string(self):

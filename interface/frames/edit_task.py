@@ -1,8 +1,8 @@
 from datetime import date
-from config.theme import ERROR, EDITING_HIGHLIGHT, GREYED_OUT, CONFIRMATION
+from config.theme import ERROR, HIGHLIGHT, GREYED_OUT, CONFIRMATION
 from config.globals import PROMPT, MENU_PADDING
 from interface import utils
-from interface.returns import PreviousMenu, BackToMain, NextMenu
+from interface.returns import PreviousFrame, BackToMain, NextFrame
 
 __all__ = ['EditTask']
 
@@ -37,7 +37,7 @@ class EditTask:
     @property
     def options(self):
         return {
-            'g': PreviousMenu(),
+            'g': PreviousFrame(),
             'h': BackToMain()
         }
 
@@ -71,7 +71,7 @@ class EditTask:
                 continue
 
             field_trimmed = field.removeprefix('_')
-            field_colored = utils.paint_text(field_trimmed, EDITING_HIGHLIGHT)
+            field_colored = utils.paint_text(field_trimmed, HIGHLIGHT)
 
             field_prompt = MENU_PADDING + \
                 "Enter new value for {0} " + \

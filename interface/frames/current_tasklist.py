@@ -1,6 +1,6 @@
 from interface import utils
 
-from interface.returns import ReplaceCurrent, NextMenu, PreviousMenu, StayCurrent
+from interface.returns import ReplaceCurrent, NextFrame, PreviousFrame, StayCurrent
 from interface.frames.view_tasklist import ViewTasklist
 
 
@@ -33,10 +33,10 @@ class CurrentTasklist:
         result = {f"{i + 1}": StayCurrent(execute=Toggler(self.registry, task_name))
                   for i, task_name in enumerate(self.tasklist.tasks)}
         result.update({
-            'v': NextMenu(ViewTasklist, tasklist=self.tasklist),
-            'f': PreviousMenu(execute=Deleter(self.registry)),
-            'r': PreviousMenu(execute=Saver(self.registry)),
-            'g': PreviousMenu(),
+            'v': NextFrame(ViewTasklist, tasklist=self.tasklist),
+            'f': PreviousFrame(execute=Deleter(self.registry)),
+            'r': PreviousFrame(execute=Saver(self.registry)),
+            'g': PreviousFrame(),
         })
         return result
 
@@ -51,7 +51,7 @@ class CurrentTasklist:
 
     def run_instance(self):
         if not self.tasklist:
-            return PreviousMenu()
+            return PreviousFrame()
         utils.clear_terminal()
         print(self.display_string())
 

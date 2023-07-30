@@ -2,35 +2,35 @@ from enum import Enum, auto
 from collections import namedtuple
 
 
-class MenuReturnState(Enum):
-    NextMenu = auto()
+class FrameReturnState(Enum):
+    NextFrame = auto()
     ReplaceCurrent = auto()
-    PreviousMenu = auto()
+    PreviousFrame = auto()
     StayCurrent = auto()
     BackToMain = auto()
 
 
 # Mimicing rust enums
-MenuReturn = namedtuple('MenuReturn', 'return_state returned_menu')
+FrameReturn = namedtuple('FrameReturn', 'return_state returned_frame')
 
 
 # The return 'types' for menus.
 # TODO: optionals put into the 'rust enum'?
-def NextMenu(menu, **optionals):
-    return MenuReturn(MenuReturnState.NextMenu, menu), optionals
+def NextFrame(menu, **optionals):
+    return FrameReturn(FrameReturnState.NextFrame, menu), optionals
 
 
 def ReplaceCurrent(menu, **optionals):
-    return MenuReturn(MenuReturnState.ReplaceCurrent, menu), optionals
+    return FrameReturn(FrameReturnState.ReplaceCurrent, menu), optionals
 
 
-def PreviousMenu(**optionals):
-    return MenuReturn(MenuReturnState.PreviousMenu, None), optionals
+def PreviousFrame(**optionals):
+    return FrameReturn(FrameReturnState.PreviousFrame, None), optionals
 
 
 def StayCurrent(**optionals):
-    return MenuReturn(MenuReturnState.StayCurrent, None), optionals
+    return FrameReturn(FrameReturnState.StayCurrent, None), optionals
 
 
 def BackToMain(**optionals):
-    return MenuReturn(MenuReturnState.BackToMain, None), optionals
+    return FrameReturn(FrameReturnState.BackToMain, None), optionals

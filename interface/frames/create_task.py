@@ -1,9 +1,9 @@
 from interface import utils
 from typing import Optional
-from config.theme import GREYED_OUT, EDITING_HIGHLIGHT, ERROR
+from config.theme import GREYED_OUT, HIGHLIGHT, ERROR
 from config.globals import PROMPT, MENU_PADDING
 from structs.task import Task
-from interface.returns import ReplaceCurrent, PreviousMenu
+from interface.returns import ReplaceCurrent, PreviousFrame
 from interface.frames.view_task import ViewTask
 
 __all__ = ['CreateTask']
@@ -36,7 +36,7 @@ class CreateTask:
         self.task = self.get_user_inputs(self.task)
 
         if self.task is None:
-            return PreviousMenu()
+            return PreviousFrame()
 
         return ReplaceCurrent(ViewTask, task=self.task, execute=Saver(self.registry, self.task))
 
@@ -45,7 +45,7 @@ class CreateTask:
         for attr in task.public_vars():
             # Accesses properties correctly
             attr_trimmed = attr.removeprefix('_')
-            attr_painted = utils.paint_text(attr_trimmed, EDITING_HIGHLIGHT)
+            attr_painted = utils.paint_text(attr_trimmed, HIGHLIGHT)
 
             while True:
                 utils.clear_terminal()
