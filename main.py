@@ -1,4 +1,4 @@
-from interface.menus.main_menu import MainMenu
+from interface.frames.main_menu import MainMenu
 from structs.app import App
 from structs.tasklist import Tasklist
 from structs.registry import load_registry
@@ -15,8 +15,6 @@ def main():
             app.run_current()
     except KeyboardInterrupt:
         pass
-
-    # print(eegistry)
 
 
 if __name__ == "__main__":

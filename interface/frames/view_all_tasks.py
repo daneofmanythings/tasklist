@@ -1,31 +1,29 @@
 from interface import utils
-from interface.menu import PreviousMenu, NextMenu, BackToMain, ReplaceCurrent
-from interface.menus.view_task import ViewTask
+from interface.returns import PreviousMenu, NextMenu, BackToMain, ReplaceCurrent
+from interface.frames.view_task import ViewTask
 
 
-__all__ = ['SearchTaskTitles']
+__all__ = ['ViewAllTasks']
 
 
-class SearchTaskTitles:
+class ViewAllTasks:
 
-    TITLE = "VIEW SEARCH RESULTS"
+    TITLE = "VIEW ALL TASKS"
 
     @classmethod
     def run(self, registry, header_list, **optionals):
-        M = SearchTaskTitles(registry, header_list, **optionals)
+        M = ViewAllTasks(registry, header_list)
         return M.run_instance()
 
-    def __init__(self, registry, header_list, search_term):
+    def __init__(self, registry, header_list):
         self.registry = registry
         self.header_list = header_list
-        self.search_term = search_term
 
         self.tasks = list(self.registry.tasks)
         self.tasks.sort()
 
         self.task_menu = [f"{utils.hotkey(i + 1)} {t.title}"
-                          for i, t in enumerate(self.tasks)
-                          if self.search_term in t.title]
+                          for i, t in enumerate(self.tasks)]
 
         self.sub_menu = [
             f"{utils.hotkey('g')}o back",
@@ -55,4 +53,3 @@ class SearchTaskTitles:
             utils.clear_terminal()
             print(self.display_string())
             return utils.get_menu_input(self.options)
-    pass

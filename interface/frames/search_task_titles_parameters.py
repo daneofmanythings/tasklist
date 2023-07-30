@@ -1,6 +1,6 @@
 from interface import utils
-from interface.menus.search_task_titles import SearchTaskTitles
-from interface.menu import ReplaceCurrent
+from interface.frames.search_task_titles import SearchTaskTitles
+from interface.returns import ReplaceCurrent
 from config.globals import PROMPT
 
 

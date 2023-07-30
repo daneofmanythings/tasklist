@@ -1,6 +1,6 @@
 from interface import utils
-from interface.menu import ReplaceCurrent, NextMenu, PreviousMenu, BackToMain, StayCurrent
-from interface.menus.edit_task import EditTask
+from interface.returns import ReplaceCurrent, NextMenu, PreviousMenu, BackToMain, StayCurrent
+from interface.frames.edit_task import EditTask
 
 
 class ViewTask:

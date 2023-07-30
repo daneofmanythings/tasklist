@@ -1,7 +1,7 @@
 from datetime import date
 from structs.tasklist import Tasklist
-from interface.menu import ReplaceCurrent
-from interface.menus.current_tasklist import CurrentTasklist
+from interface.returns import ReplaceCurrent
+from interface.frames.current_tasklist import CurrentTasklist
 
 
 __all__ = ['GenerateTasklist']

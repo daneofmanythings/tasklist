@@ -1,6 +1,6 @@
 from interface import utils
-from interface.menu import PreviousMenu, ReplaceCurrent, BackToMain
-from interface.menus.view_tasklist import ViewTasklist
+from interface.returns import PreviousMenu, ReplaceCurrent, BackToMain
+from interface.frames.view_tasklist import ViewTasklist
 
 
 __all__ = ['ViewAllTasklists']

@@ -2,7 +2,7 @@ from datetime import date
 from config.theme import ERROR, EDITING_HIGHLIGHT, GREYED_OUT, CONFIRMATION
 from config.globals import PROMPT, MENU_PADDING
 from interface import utils
-from interface.menu import PreviousMenu, BackToMain, NextMenu
+from interface.returns import PreviousMenu, BackToMain, NextMenu
 
 __all__ = ['EditTask']
 

@@ -3,8 +3,8 @@ from typing import Optional
 from config.theme import GREYED_OUT, EDITING_HIGHLIGHT, ERROR
 from config.globals import PROMPT, MENU_PADDING
 from structs.task import Task
-from interface.menu import ReplaceCurrent, PreviousMenu
-from interface.menus.view_task import ViewTask
+from interface.returns import ReplaceCurrent, PreviousMenu
+from interface.frames.view_task import ViewTask
 
 __all__ = ['CreateTask']
 

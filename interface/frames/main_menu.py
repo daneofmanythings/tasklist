@@ -1,10 +1,10 @@
 from interface import utils
-from interface.menu import NextMenu
-from interface.menus.create_task import CreateTask
-from interface.menus.find_tasks import FindTasks
-from interface.menus.generate_tl_parameters import GenerateTasklistParameters
-from interface.menus.current_tasklist import CurrentTasklist
-from interface.menus.find_tasklist import FindTasklist
+from interface.returns import NextMenu
+from interface.frames.create_task import CreateTask
+from interface.frames.find_tasks import FindTasks
+from interface.frames.generate_tl_parameters import GenerateTasklistParameters
+from interface.frames.current_tasklist import CurrentTasklist
+from interface.frames.find_tasklist import FindTasklist
 
 
 __all__ = ['MainMenu']

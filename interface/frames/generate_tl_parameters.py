@@ -2,8 +2,8 @@ from datetime import datetime
 from typing import Optional
 from interface import utils
 from structs.tasklist_parameters import TasklistParameters
-from interface.menus.generate_tasklist import GenerateTasklist
-from interface.menu import ReplaceCurrent, PreviousMenu
+from interface.frames.generate_tasklist import GenerateTasklist
+from interface.returns import ReplaceCurrent, PreviousMenu
 from config.theme import GREYED_OUT, EDITING_HIGHLIGHT, ERROR
 from config.globals import MENU_PADDING, PROMPT
 

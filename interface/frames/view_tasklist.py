@@ -1,7 +1,7 @@
 from interface import utils
 
-from interface.menu import ReplaceCurrent, NextMenu, PreviousMenu, BackToMain
-from interface.menus.view_task import ViewTask
+from interface.returns import ReplaceCurrent, NextMenu, PreviousMenu, BackToMain
+from interface.frames.view_task import ViewTask
 
 
 class ViewTasklist:

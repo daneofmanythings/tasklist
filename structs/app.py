@@ -1,4 +1,4 @@
-from interface.menu import MenuReturnState as state
+from interface.returns import MenuReturnState as state
 from collections import namedtuple
 
 

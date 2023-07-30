@@ -1,7 +1,7 @@
 from interface import utils
 
-from interface.menu import ReplaceCurrent, NextMenu, PreviousMenu, StayCurrent
-from interface.menus.view_tasklist import ViewTasklist
+from interface.returns import ReplaceCurrent, NextMenu, PreviousMenu, StayCurrent
+from interface.frames.view_tasklist import ViewTasklist
 
 
 class CurrentTasklist:
