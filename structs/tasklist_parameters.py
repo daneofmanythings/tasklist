@@ -3,14 +3,10 @@ from datetime import datetime
 
 class TasklistParameters:
 
-    private_attrs = {
-        'tags'
-    }
-
     def __init__(self):
         self.title = datetime.utcnow()
         self.duration = 60
-        self.tags = set()
+        # self.tags = list()
 
     @property
     def title(self):
@@ -42,19 +38,19 @@ class TasklistParameters:
             except Exception:
                 raise ValueError('Duration must be a non-negative integer (1)')
 
-    def add_tag(self, tag):
-        self.tags.add(tag)
-
-    def remove_tag(self, tag):
-        self.tags.remove(tag)
-
-    def public_listify(self):
-        result = list()
-        for attr, val in vars(self).items():
-            if attr in self.private_attrs:
-                continue
-            result.append(f"{attr.removeprefix('_')}: {val}")
-        return result
+    # @property
+    # def tags(self):
+    #     return self._tags
+    #
+    # @tags.setter
+    # def tags(self, val):
+    #     if isinstance(val, str):
+    #         val_strip = val.strip()
+    #         self._tags = list(set(val_strip.split(' ')))
+    #     elif isinstance(val, list):
+    #         self._tags = list(set(val))
+    #     else:
+    #         self._tags = list()
 
     def listify(self):
         result = list()

@@ -50,8 +50,6 @@ class SearchTaskTitles:
         return result
 
     def run_instance(self):
-
-        while True:
-            utils.clear_terminal()
-            print(self.display_string())
-            return utils.get_menu_input(self.options)
+        utils.clear_terminal()
+        print(self.display_string())
+        return utils.get_menu_input(self.options)

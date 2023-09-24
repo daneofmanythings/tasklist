@@ -23,16 +23,16 @@ class GenerateTasklistParameters:
         self.help_string = ''
         self.parameters = TasklistParameters()
 
-    def display_string(self, parameters):
+    def display_string(self):
         result = "\n"
         result += utils.header_string(self.header_list)
         result += "\n"
-        result += utils.menu_string(parameters.public_listify())
+        result += utils.menu_string(self.parameters.listify())
         result += self.help_string
         return result
 
     def run_instance(self):
-        self.parameters = self.parameter_creation(self.parameters)
+        self.parameter_creation(self.parameters)
 
         if self.parameters is None:
             return PreviousFrame()
@@ -42,14 +42,14 @@ class GenerateTasklistParameters:
     def parameter_creation(self, parameters) -> Optional[TasklistParameters]:
         cancel_text = utils.paint_text(' [-c]ancel', GREYED_OUT)
 
-        for attr in parameters.public_vars():
+        for attr in vars(parameters).keys():
             # Accesses properties correctly
             attr_trimmed = attr.removeprefix('_')
             attr_painted = utils.paint_text(attr_trimmed, HIGHLIGHT)
 
             while True:
                 utils.clear_terminal()
-                print(self.display_string(parameters).replace(
+                print(self.display_string().replace(
                     f'{MENU_PADDING}{attr_trimmed}:',
                     f'{MENU_PADDING}{attr_painted}:'))
 

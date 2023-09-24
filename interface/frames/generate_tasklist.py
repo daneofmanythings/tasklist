@@ -34,6 +34,16 @@ class GenerateTasklist:
                 self.tasklist.add_task(task.title)
                 duration -= int(task.length)
 
+    # def has_tags(self, task):
+    #     # when no tags are specified for filtering
+    #     if not self.parameters.tags:
+    #         return True
+    #
+    #     for tag in task.tags:
+    #         if tag not in self.parameters.tags:
+    #             return False
+    #     return True
+
     def run_instance(self):
         return ReplaceCurrent(CurrentTasklist, execute=Setter(self.registry, self.tasklist))
 

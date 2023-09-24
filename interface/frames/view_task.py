@@ -1,6 +1,6 @@
 from interface import utils
 from interface.returns import ReplaceCurrent, NextFrame, PreviousFrame, BackToMain, StayCurrent
-from interface.frames.edit_task import EditTask
+from interface.frames.edit_task import EditTaskSelectField
 
 
 class ViewTask:
@@ -37,7 +37,7 @@ class ViewTask:
     @property
     def options(self):
         result = {
-            'e': NextFrame(EditTask, task=self.task),
+            'e': NextFrame(EditTaskSelectField, task=self.task),
             'd': PreviousFrame(execute=Deleter(self.registry, self.task)),
             'g': PreviousFrame(),
             'h': BackToMain()

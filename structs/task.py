@@ -18,10 +18,22 @@ class Task:
         '_last_completed',
     )
 
+    help_strings = {
+        'title': '',
+        'notes': '',
+        'tags': 'use single words. separate tags with spaces',
+        'length': 'unit is minutes',
+        'start_date': 'defaults to todays date',
+        'deadline': '',
+        'period': 'how often to repeat the task in days',
+        'strict_recurrence': 'use start_date to calculate due status'
+    }
+
     def __init__(
             self,
             title=None,
             notes=None,
+            # tags=None,
             length='0',
             start_date=None,
             deadline=None,
@@ -34,6 +46,7 @@ class Task:
 
         self.title: str = title
         self.notes: str = notes
+        # self.tags: list[str] = tags
         self.length: int = length  # validates to be non-negative
         self.start_date: date = start_date  # defaults to today()
         self.deadline: date = deadline  # defaults to None
@@ -52,6 +65,20 @@ class Task:
             self._title = "task-" + str(abs(hash(datetime.utcnow())))
         else:
             self._title = val
+
+    # @property
+    # def tags(self):
+    #     return self._tags
+    #
+    # @tags.setter
+    # def tags(self, val):
+    #     if isinstance(val, str):
+    #         val_strip = val.strip()
+    #         self._tags = list(set(val_strip.split(' ')))
+    #     elif isinstance(val, list):
+    #         self._tags = list(set(val))
+    #     else:
+    #         self._tags = list()
 
     @property
     def length(self):

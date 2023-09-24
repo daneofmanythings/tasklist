@@ -23,16 +23,20 @@ class CreateTask:
         self.help_string = str()
         self.task = Task()
 
-    def display_string(self, task):
+    def display_string(self, attr):
+        if not self.help_string:
+            self.help_string = MENU_PADDING + \
+                utils.paint_text(Task.help_strings[attr], GREYED_OUT)
+
         result = "\n"
         result += utils.header_string(self.header_list)
         result += "\n"
-        result += utils.menu_string(task.public_listify())
+        result += utils.menu_string(self.task.public_listify())
         result += self.help_string
         return result
 
     def run_instance(self):
-        # TODO: maybe incorporate get_user_inputs into the options paradigm somehow
+        # TODO: incorporate get_user_inputs into the options paradigm
         self.task = self.get_user_inputs(self.task)
 
         if self.task is None:
@@ -40,7 +44,7 @@ class CreateTask:
 
         return ReplaceCurrent(ViewTask, task=self.task, execute=Saver(self.registry, self.task))
 
-    def get_user_inputs(self, task) -> Optional[Task]:
+    def get_user_inputs(self, task):
         cancel_text = utils.paint_text(' [-c]ancel', GREYED_OUT)
         for attr in task.public_vars():
             # Accesses properties correctly
@@ -49,7 +53,7 @@ class CreateTask:
 
             while True:
                 utils.clear_terminal()
-                print(self.display_string(task).replace(
+                print(self.display_string(attr_trimmed).replace(
                     f'{MENU_PADDING}{attr_trimmed}:',
                     f'{MENU_PADDING}{attr_painted}:'))
 

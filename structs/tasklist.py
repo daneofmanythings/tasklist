@@ -60,8 +60,13 @@ class Tasklist:
                     result.append(
                         f"{utils.hotkey(i + 1)} {task_completed(task_name)}")
                 else:
-                    result.append(
-                        f"{utils.hotkey(i + 1)} {task_in_progress(task_name)}")
+                    if Tasklist.REGISTRY._tasks[task_name].is_due:
+                        result.append(
+                            f"{utils.hotkey(i + 1)} {task_in_progress(task_name)}")
+                    else:
+                        result.append(
+                            f"{utils.hotkey(i + 1)} {task_not_due(task_name)}")
+
             else:
                 result.append(
                     f"{utils.hotkey(i + 1)} {task_not_found(task_name)}")
