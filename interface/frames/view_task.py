@@ -1,7 +1,6 @@
 from interface import utils
-from interface.menu import ReplaceCurrent, NextMenu, PreviousMenu, BackToMain
-from interface.menus.save_registry_confirmation import SaveRegistryConfirmation
-from interface.menus.edit_task import EditTask
+from interface.returns import ReplaceCurrent, NextFrame, PreviousFrame, BackToMain, StayCurrent
+from interface.frames.edit_task import EditTaskSelectField
 
 
 class ViewTask:
@@ -10,7 +9,7 @@ class ViewTask:
 
     @classmethod
     def run(self, registry, header_list, **optionals):
-        M = ViewTask(registry, header_list, optionals['task'])
+        M = ViewTask(registry, header_list, **optionals)
         return M.run_instance()
 
     def __init__(self, registry, header_list, task):
@@ -21,12 +20,12 @@ class ViewTask:
     @property
     def sub_menu(self):
         result = [
-            f"{utils.hotkey('s')}ave",
             f"{utils.hotkey('e')}dit",
+            f"{utils.hotkey('d')}elete",
         ]
 
-        if self.task in self.registry.tasks:
-            result.append(f"{utils.hotkey('d')}elete")
+        if self.task.last_completed:
+            result.append(f"{utils.hotkey('r')}efresh")
 
         result.extend([
             f"{utils.hotkey('g')}o back",
@@ -38,14 +37,15 @@ class ViewTask:
     @property
     def options(self):
         result = {
-            's': ReplaceCurrent(SaveRegistryConfirmation, task_save=self.task),
-            'e': NextMenu(EditTask, task=self.task),
-            'g': PreviousMenu(task=self.task),
+            'e': NextFrame(EditTaskSelectField, task=self.task),
+            'd': PreviousFrame(execute=Deleter(self.registry, self.task)),
+            'g': PreviousFrame(),
             'h': BackToMain()
         }
-        if self.task in self.registry.tasks:
-            result['d'] = ReplaceCurrent(
-                SaveRegistryConfirmation, task_delete=self.task)
+
+        if self.task.last_completed:
+            result['r'] = StayCurrent(
+                execute=Refresher(self.registry, self.task))
 
         return result
 
@@ -62,3 +62,21 @@ class ViewTask:
         utils.clear_terminal()
         print(self.display_string())
         return utils.get_menu_input(self.options)
+
+
+class Deleter:
+    def __init__(self, registry, task):
+        self.registry = registry
+        self.task = task
+
+    def __call__(self):
+        return self.registry.w_task_delete(self.task)
+
+
+class Refresher:
+    def __init__(self, registry, task):
+        self.registry = registry
+        self.task = task
+
+    def __call__(self):
+        return self.registry.w_task_refresh(self.task)

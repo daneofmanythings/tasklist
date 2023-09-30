@@ -4,7 +4,7 @@ import config.themes.rosepine as rp
 
 CURRENT_ACTIVE = rp.GOLD
 CURRENT_MENU = rp.FOAM
-EDITING_HIGHLIGHT = rp.GOLD
+HIGHLIGHT = rp.GOLD
 ERROR = rp.LOVE
 GREYED_OUT = rp.SUBTLE
 HOTKEY = rp.IRIS

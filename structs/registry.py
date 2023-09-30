@@ -1,15 +1,15 @@
 from structs.task import Task, TaskEncoder, TaskDecoder
 from structs.tasklist import Tasklist, TasklistEncoder, TasklistDecoder
+from config.globals import SAVE_PATH
 import os
 import json
-from datetime import date
 
 
 class Registry:
     def __init__(self):
         self._tasks = dict()
         self._tasklists = dict()
-        self._current_tasklist = None
+        self.current_tasklist = None
 
     @property
     def tasks(self):
@@ -28,11 +28,8 @@ class Registry:
     def remove_task(self, task):
         del self._tasks[task.title]
 
-    def process_current_tasklist(self):
-        task_list = self._current_tasklist.tasks
-        for task_name in task_list:
-            if task_list[task_name] and task_name in self._tasks:
-                self._tasks[task_name].last_completed = task_list[task_name]
+    def refresh_task(self, task_name):
+        self._tasks[task_name].last_completed = None
 
     def add_tasklist(self, tasklist) -> None:
         if not isinstance(tasklist, Tasklist):
@@ -43,16 +40,63 @@ class Registry:
     def remove_tasklist(self, tasklist) -> None:
         del self._tasklists[tasklist.title]
 
+    def process_current_tasklist(self):
+        task_list = self.current_tasklist.tasks
+        for task_name in task_list:
+            if task_list[task_name] and task_name in self._tasks:
+                self._tasks[task_name].last_completed = task_list[task_name]
+                task_list[task_name] = None
+
     def set_current_tasklist(self, tasklist) -> None:
         if tasklist is None or tasklist in self._tasklists.values():
-            self._current_tasklist = tasklist
+            self.current_tasklist = tasklist
         else:
             raise ValueError(
                 f"Tasklist: {tasklist} not found in registry")
 
     def remove_current_tasklist(self):
-        self.remove_tasklist(self._current_tasklist)
-        self._current_tasklist = None
+        self.remove_tasklist(self.current_tasklist)
+        self.current_tasklist = None
+
+    def w_task_save(self, task):
+        self.add_task(task)
+        write_to_disk(self, SAVE_PATH)
+
+    def w_task_delete(self, task):
+        self.remove_task(task)
+        write_to_disk(self, SAVE_PATH)
+
+    def w_task_refresh(self, task_name):
+        self.refresh_task(task_name)
+        write_to_disk(self, SAVE_PATH)
+
+    def w_tasklist_save(self, tasklist):
+        self.add_tasklist(tasklist)
+        write_to_disk(self, SAVE_PATH)
+
+    def w_tasklist_delete(self, tasklist):
+        if self.current_tasklist and tasklist == self.current_tasklist:
+            self.remove_current_tasklist()
+        else:
+            self.remove_tasklist(tasklist)
+        write_to_disk(self, SAVE_PATH)
+
+    def w_current_tasklist_set(self, tasklist):
+        self.add_tasklist(tasklist)
+        self.set_current_tasklist(tasklist)
+        write_to_disk(self, SAVE_PATH)
+
+    def w_current_tasklist_process_save(self):
+        self.process_current_tasklist()
+        self.current_tasklist = None
+
+    def w_current_tasklist_process_delete(self):
+        self.process_current_tasklist()
+        self.remove_current_tasklist()
+
+    def w_current_tasklist_toggle_task(self, task_name):
+        self.current_tasklist.toggle_completion(task_name)
+        write_to_disk(self, SAVE_PATH)
 
     def __str__(self):
         result = ''
@@ -76,7 +120,7 @@ class RegistryEncoder(TaskEncoder, TasklistEncoder):
             return {
                 'tasks': list(arg.tasks),
                 'tasklists': list(arg._tasklists.values()),
-                'current_tasklist': arg._current_tasklist
+                'current_tasklist': arg.current_tasklist
             }
 
         return super().default(arg)
@@ -102,6 +146,11 @@ class RegistryDecoder(TaskDecoder, TasklistDecoder):
         return result
 
 
+####################
+# HELPER FUNCTIONS #
+####################
+
+
 def load_registry(path):
     try:
         with open(path + 'data.json', 'r') as f:
@@ -115,7 +164,7 @@ def load_registry(path):
         return Registry()
 
 
-def save_registry(registry, path):
-    j_registry = json.dumps(registry, cls=RegistryEncoder, indent=2)
+def write_to_disk(registry, path):
+    json_string = json.dumps(registry, cls=RegistryEncoder, indent=2)
     with open(path + 'data.json', 'w') as f:
-        f.write(j_registry)
+        f.write(json_string)

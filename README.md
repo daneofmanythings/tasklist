@@ -8,8 +8,8 @@ Fully functional v1.
 
 ## **USAGE GUIDE**
 
-* Install the latest version of python. 
-* Run `python main.py` from the root of the repository in a terminal. Earlier versions of python may still work (back to 3.6), but have not been tested.
+* Install the latest version of python. Requires v3.10+
+* Run `python main.py` from the root of the repository in a terminal.
 
 ####    TASKS
     

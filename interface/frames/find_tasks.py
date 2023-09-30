@@ -1,18 +1,18 @@
 from interface import utils
-from interface.menu import PreviousMenu, NextMenu
-from interface.menus.view_all_tasklists import ViewAllTasklists
-from interface.menus.search_tasklist_titles import SearchTasklistTitles
+from interface.returns import PreviousFrame, NextFrame
+from interface.frames.view_all_tasks import ViewAllTasks
+from interface.frames.search_task_titles_parameters import SearchTaskTitlesParameters
 
 
-__all__ = ['FindTasklist']
+__all__ = ['FindTasks']
 
 
-class FindTasklist:
-    TITLE = "FIND TASKLIST"
+class FindTasks:
+    TITLE = "FIND TASKS"
 
     @classmethod
     def run(self, registry, header_list, **optionals):
-        M = FindTasklist(registry, header_list)
+        M = FindTasks(registry, header_list)
         return M.run_instance()
 
     def __init__(self, registry, header_list):
@@ -20,7 +20,7 @@ class FindTasklist:
         self.header_list = header_list
         self.menu = [
             f"{utils.hotkey('1')} View All",
-            # f"{utils.hotkey('2')} Search Titles",
+            f"{utils.hotkey('2')} Search Titles",
         ]
 
         self.sub_menu = [
@@ -28,9 +28,9 @@ class FindTasklist:
         ]
 
         self.options = {
-            '1': NextMenu(ViewAllTasklists),
-            # '2': NextMenu(SearchTasklistTitles),
-            'g': PreviousMenu(),
+            '1': NextFrame(ViewAllTasks),
+            '2': NextFrame(SearchTaskTitlesParameters),
+            'g': PreviousFrame(),
         }
 
     def display_string(self):
@@ -45,4 +45,5 @@ class FindTasklist:
     def run_instance(self):
         utils.clear_terminal()
         print(self.display_string())
-        return utils.get_menu_input(self.options)
+        result = utils.get_menu_input(self.options)
+        return result

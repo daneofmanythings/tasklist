@@ -3,31 +3,40 @@ from datetime import date, datetime, timedelta
 import json
 
 
-def putter(val):
-    return lambda: val
-
-
 @total_ordering
 class Task:
 
     recurrence_responses = {
-        'y': True,
-        'yes': True,
-        'n': False,
-        'no': False
+        't': True,
+        'true': True,
+        'f': False,
+        'false': False
     }
 
     private_attrs = (
         '_created_date',
-        '_last_completed'
+        '_last_completed',
     )
+
+    help_strings = {
+        'title': '',
+        'notes': '',
+        'tags': 'use single words. separate tags with spaces',
+        'length': 'unit is minutes',
+        'start_date': 'defaults to todays date',
+        'deadline': '',
+        'period': 'how often to repeat the task in days',
+        'strict_recurrence': 'use start_date to calculate due status'
+    }
 
     def __init__(
             self,
             title=None,
             notes=None,
+            # tags=None,
             length='0',
             start_date=None,
+            deadline=None,
             period=None,
             strict_recurrence=None,
             created_date=None,
@@ -37,8 +46,10 @@ class Task:
 
         self.title: str = title
         self.notes: str = notes
+        # self.tags: list[str] = tags
         self.length: int = length  # validates to be non-negative
         self.start_date: date = start_date  # defaults to today()
+        self.deadline: date = deadline  # defaults to None
         self.period: int = period  # validates to be non-negative
         self.strict_recurrence: bool = strict_recurrence  # validates to be bool
         self.created_date: date = created_date
@@ -55,6 +66,20 @@ class Task:
         else:
             self._title = val
 
+    # @property
+    # def tags(self):
+    #     return self._tags
+    #
+    # @tags.setter
+    # def tags(self, val):
+    #     if isinstance(val, str):
+    #         val_strip = val.strip()
+    #         self._tags = list(set(val_strip.split(' ')))
+    #     elif isinstance(val, list):
+    #         self._tags = list(set(val))
+    #     else:
+    #         self._tags = list()
+
     @property
     def length(self):
         return self._length
@@ -70,7 +95,7 @@ class Task:
                     self._length = int_val
                     return
             except Exception:
-                raise ValueError('Length must be a non-negative integer (1)')
+                raise ValueError('Length must be a non-negative integer')
 
     @property
     def start_date(self):
@@ -85,6 +110,22 @@ class Task:
         else:
             try:
                 self._start_date = date.fromisoformat(val)
+            except Exception:
+                raise ValueError(f'Invalid date string (YYYY-MM-DD): "{val}"')
+
+    @property
+    def deadline(self):
+        return self._deadline
+
+    @deadline.setter
+    def deadline(self, val):
+        if not val:
+            self._deadline = None
+        elif isinstance(val, date):
+            self._deadline = val
+        else:
+            try:
+                self._deadline = date.fromisoformat(val)
             except Exception:
                 raise ValueError(f'Invalid date string (YYYY-MM-DD): "{val}"')
 
@@ -153,6 +194,8 @@ class Task:
 
         if val is None or isinstance(val, date):
             self._last_completed = val
+        elif val == '':
+            self._last_completed = date.today()
         else:
             raise ValueError(f'Invalid date string (YYYY-MM-DD): "{val}"')
 

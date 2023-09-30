@@ -5,6 +5,7 @@ from functools import total_ordering
 from interface import utils
 # TODO: put these colors into the theming file
 from config.themes.rosepine import PINE, ROSE, HIGHLIGHT_HIGH
+from config.theme import HIGHLIGHT
 
 
 @total_ordering
@@ -27,7 +28,7 @@ class Tasklist:
         self.tasks[task_name] = None
 
     def toggle_completion(self, task_name: str):
-        # letting potential key errors leak
+        # letting potential key errors leak. Should always be fed valid task
         if self.tasks[task_name]:
             self.tasks[task_name] = None
         else:
@@ -59,8 +60,13 @@ class Tasklist:
                     result.append(
                         f"{utils.hotkey(i + 1)} {task_completed(task_name)}")
                 else:
-                    result.append(
-                        f"{utils.hotkey(i + 1)} {task_in_progress(task_name)}")
+                    if Tasklist.REGISTRY._tasks[task_name].is_due:
+                        result.append(
+                            f"{utils.hotkey(i + 1)} {task_in_progress(task_name)}")
+                    else:
+                        result.append(
+                            f"{utils.hotkey(i + 1)} {task_not_due(task_name)}")
+
             else:
                 result.append(
                     f"{utils.hotkey(i + 1)} {task_not_found(task_name)}")
@@ -79,6 +85,8 @@ class Tasklist:
         return hash(self.title)
 
     def __eq__(self, other):
+        if isinstance(other, str):
+            return self.title == other
         if not isinstance(other, Tasklist):
             raise NotImplementedError(
                 "Equality only implemented on type Tasklist.")
@@ -120,9 +128,13 @@ def task_completed(task_name: str):
 
 
 def task_in_progress(task_name: str):
-    return task_name + utils.paint_text(" (in progress)", PINE)
+    return task_name + utils.paint_text(" (in progress)", HIGHLIGHT)
 
 
 def task_not_found(task_name: str):
     result = task_name + " (NOT FOUND)"
     return utils.paint_text(result, ROSE)
+
+
+def task_not_due(task_name: str):
+    return task_name + utils.paint_text(" (not due)", PINE)

@@ -2,9 +2,9 @@ from datetime import datetime
 from typing import Optional
 from interface import utils
 from structs.tasklist_parameters import TasklistParameters
-from interface.menus.generate_tasklist import GenerateTasklist
-from interface.menu import ReplaceCurrent, PreviousMenu
-from config.theme import GREYED_OUT, EDITING_HIGHLIGHT, ERROR
+from interface.frames.generate_tasklist import GenerateTasklist
+from interface.returns import ReplaceCurrent, PreviousFrame
+from config.theme import GREYED_OUT, HIGHLIGHT, ERROR
 from config.globals import MENU_PADDING, PROMPT
 
 
@@ -23,33 +23,33 @@ class GenerateTasklistParameters:
         self.help_string = ''
         self.parameters = TasklistParameters()
 
-    def display_string(self, parameters):
+    def display_string(self):
         result = "\n"
         result += utils.header_string(self.header_list)
         result += "\n"
-        result += utils.menu_string(parameters.public_listify())
+        result += utils.menu_string(self.parameters.listify())
         result += self.help_string
         return result
 
     def run_instance(self):
-        self.parameters = self.parameter_creation(self.parameters)
+        self.parameter_creation(self.parameters)
 
         if self.parameters is None:
-            return PreviousMenu()
+            return PreviousFrame()
 
         return ReplaceCurrent(GenerateTasklist, parameters=self.parameters)
 
     def parameter_creation(self, parameters) -> Optional[TasklistParameters]:
         cancel_text = utils.paint_text(' [-c]ancel', GREYED_OUT)
 
-        for attr in parameters.public_vars():
+        for attr in vars(parameters).keys():
             # Accesses properties correctly
             attr_trimmed = attr.removeprefix('_')
-            attr_painted = utils.paint_text(attr_trimmed, EDITING_HIGHLIGHT)
+            attr_painted = utils.paint_text(attr_trimmed, HIGHLIGHT)
 
             while True:
                 utils.clear_terminal()
-                print(self.display_string(parameters).replace(
+                print(self.display_string().replace(
                     f'{MENU_PADDING}{attr_trimmed}:',
                     f'{MENU_PADDING}{attr_painted}:'))
 
@@ -59,6 +59,12 @@ class GenerateTasklistParameters:
                 response = input(PROMPT)
                 if response == '-c':
                     return None
+
+                if attr_trimmed == "title" and response in self.registry._tasklists:
+                    self.help_string == utils.paint_text(
+                        "title already in registry", ERROR
+                    )
+                    continue
 
                 try:
                     setattr(parameters, attr_trimmed, response)

@@ -1,10 +1,10 @@
 from interface import utils
 from typing import Optional
-from config.theme import GREYED_OUT, EDITING_HIGHLIGHT, ERROR
+from config.theme import GREYED_OUT, HIGHLIGHT, ERROR
 from config.globals import PROMPT, MENU_PADDING
 from structs.task import Task
-from interface.menu import ReplaceCurrent, PreviousMenu
-from interface.menus.view_task import ViewTask
+from interface.returns import ReplaceCurrent, PreviousFrame
+from interface.frames.view_task import ViewTask
 
 __all__ = ['CreateTask']
 
@@ -23,32 +23,37 @@ class CreateTask:
         self.help_string = str()
         self.task = Task()
 
-    def display_string(self, task):
+    def display_string(self, attr):
+        if not self.help_string:
+            self.help_string = MENU_PADDING + \
+                utils.paint_text(Task.help_strings[attr], GREYED_OUT)
+
         result = "\n"
         result += utils.header_string(self.header_list)
         result += "\n"
-        result += utils.menu_string(task.public_listify())
+        result += utils.menu_string(self.task.public_listify())
         result += self.help_string
         return result
 
     def run_instance(self):
+        # TODO: incorporate get_user_inputs into the options paradigm
         self.task = self.get_user_inputs(self.task)
 
         if self.task is None:
-            return PreviousMenu()
+            return PreviousFrame()
 
-        return ReplaceCurrent(ViewTask, task=self.task)
+        return ReplaceCurrent(ViewTask, task=self.task, execute=Saver(self.registry, self.task))
 
-    def get_user_inputs(self, task) -> Optional[Task]:
+    def get_user_inputs(self, task):
         cancel_text = utils.paint_text(' [-c]ancel', GREYED_OUT)
         for attr in task.public_vars():
             # Accesses properties correctly
             attr_trimmed = attr.removeprefix('_')
-            attr_painted = utils.paint_text(attr_trimmed, EDITING_HIGHLIGHT)
+            attr_painted = utils.paint_text(attr_trimmed, HIGHLIGHT)
 
             while True:
                 utils.clear_terminal()
-                print(self.display_string(task).replace(
+                print(self.display_string(attr_trimmed).replace(
                     f'{MENU_PADDING}{attr_trimmed}:',
                     f'{MENU_PADDING}{attr_painted}:'))
 
@@ -59,6 +64,12 @@ class CreateTask:
                 if response == '-c':
                     return None
 
+                if attr_trimmed == "title" and response in self.registry._tasks:
+                    self.help_string = MENU_PADDING + utils.paint_text(
+                        "title already exists in registry", ERROR
+                    )
+                    continue
+
                 try:
                     setattr(task, attr_trimmed, response)
                     self.help_string = ''
@@ -68,3 +79,12 @@ class CreateTask:
                         utils.paint_text(str(ex), ERROR)
                     continue
         return task
+
+
+class Saver:
+    def __init__(self, registry, task):
+        self.registry = registry
+        self.task = task
+
+    def __call__(self):
+        return self.registry.w_task_save(self.task)
